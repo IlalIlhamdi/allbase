@@ -3,13 +3,17 @@
    Static App Shell Caching & Offline Fallback Strategy
    ============================================================ */
 
-const CACHE_NAME = 'allbase-static-v4';
+const CACHE_NAME = 'allbase-static-v5';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './offline.html',
   './manifest.json',
-  './favicon.png',
+  './favicon.ico',
+  './favicon-96.png',
+  './apple-touch-icon.png',
+  './icon-192.png',
+  './icon-512.png',
   './profile.jpg',
   './rahmat_ilal.jpg',
   './data/projects.json',
