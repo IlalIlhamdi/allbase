@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subnet Calculator IPv4 — ALLBASE</title>
+  <meta name="description" content="Kalkulator Subnet IPv4 Presisi: Hitung CIDR, Subnet Mask, Network, Broadcast, Wildcard, First/Last Host, dan Usable Host.">
+  <link rel="icon" type="image/png" href="../../favicon.png">
+
+  <!-- Google Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+
+  <!-- Shared Subpage Styles & Engine -->
+  <link rel="stylesheet" href="../../assets/css/subpage.css">
+  <script defer src="../../assets/js/subpage.js"></script>
+</head>
+<body>
+
+  <!-- SHARED SUBPAGE HEADER -->
+  <header class="subpage-header">
+    <div class="subpage-header-inner">
+      <div class="header-left">
+        <a href="../../index.html#tools" class="btn btn-sm btn-secondary" title="Kembali ke ALLBASE Hub">
+          <i data-lucide="arrow-left"></i> Kembali ke ALLBASE
+        </a>
+        <span class="header-title-text">Subnet Calculator IPv4</span>
+      </div>
+
+      <div class="header-right">
+        <span class="badge badge-primary badge-hide-mobile"><i data-lucide="calculator"></i> Tool Statis</span>
+        <button class="btn btn-sm btn-secondary btn-icon theme-toggle-btn" title="Ganti Tema Light/Dark" aria-label="Toggle Mode Tema">
+          <i data-lucide="moon" style="width:18px;height:18px;"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="subpage-container">
+
+    <!-- INPUT CALCULATOR FORM CARD -->
+    <div class="card" style="margin-bottom:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <span class="badge badge-primary"><i data-lucide="network"></i> IP Subnetting</span>
+        <span style="font-size:0.8rem;color:var(--text-muted);font-family:var(--font-mono);">IPv4 Standard</span>
+      </div>
+
+      <h1 style="font-size:1.6rem;margin-bottom:6px;">Subnet Calculator IPv4</h1>
+      <p style="font-size:0.95rem;color:var(--text-secondary);margin-bottom:24px;">
+        Hitung pembagian blok subnet IPv4, Network Address, Broadcast Address, Wildcard Mask, dan usable host range secara presisi.
+      </p>
+
+      <form id="subnetForm" onsubmit="handleCalculate(event)">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:20px;margin-bottom:24px;">
+          <!-- IPv4 Input -->
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="ipInput">Alamat IPv4 *</label>
+            <input type="text" id="ipInput" class="form-control font-mono" placeholder="192.168.1.1" value="192.168.1.1" required>
+            <small style="color:var(--text-muted);font-size:0.75rem;">Contoh: 192.168.1.1 atau 10.0.0.1</small>
+          </div>
+
+          <!-- CIDR Prefix Select -->
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="prefixSelect">CIDR Prefix / Subnet Mask *</label>
+            <select id="prefixSelect" class="form-control font-mono">
+              <!-- Options populated dynamically by JS to prevent template bugs -->
+            </select>
+            <small style="color:var(--text-muted);font-size:0.75rem;">Pilih prefix /0 hingga /32</small>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button type="submit" class="btn btn-primary">
+            <i data-lucide="cpu"></i> Hitung Subnet
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="resetForm()">
+            <i data-lucide="rotate-ccw"></i> Reset
+          </button>
+          <button type="button" class="btn btn-outline" onclick="copyAllResults()">
+            <i data-lucide="copy"></i> Salin Semua Hasil
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- RESULT DETAILS CARD -->
+    <div class="card" id="resultCard">
+      <h3 style="margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+        <i data-lucide="activity" style="color:var(--success);"></i> Hasil Kalkulasi Subnet IPv4
+      </h3>
+
+      <div id="resultDetailsGrid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:16px;font-family:var(--font-mono);">
+        <!-- Dynamically rendered calculation results -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- SHARED SUBPAGE FOOTER -->
+  <footer class="subpage-footer">
+    <div>&copy; <span id="footerYear">2026</span> ALLBASE • Network Tools</div>
+    <div style="font-size:0.8rem;margin-top:4px;">Built by Ilal Ilhamdi</div>
+  </footer>
+
+  <!-- SUBNET CALCULATOR ENGINE -->
+  <script>
+    function prefixToMask(prefix) {
+      const p = parseInt(prefix, 10);
+      if (isNaN(p) || p < 0 || p > 32) return '255.255.255.0';
+      if (p === 0) return '0.0.0.0';
+      const maskBits = (0xFFFFFFFF << (32 - p)) >>> 0;
+      return [
+        (maskBits >>> 24) & 255,
+        (maskBits >>> 16) & 255,
+        (maskBits >>> 8) & 255,
+        maskBits & 255
+      ].join('.');
+    }
+
+    function initPrefixSelect() {
+      const select = document.getElementById('prefixSelect');
+      if (!select) return;
+      select.innerHTML = '';
+      for (let p = 32; p >= 0; p--) {
+        const option = document.createElement('option');
+        option.value = p;
+        option.textContent = `/${p} (${prefixToMask(p)})`;
+        if (p === 24) option.selected = true;
+        select.appendChild(option);
+      }
+    }
+
+    function isValidIPv4(ip) {
+      if (typeof ip !== 'string') return false;
+      const parts = ip.trim().split('.');
+      if (parts.length !== 4) return false;
+      return parts.every(p => {
+        const num = parseInt(p, 10);
+        return !isNaN(num) && num >= 0 && num <= 255 && p === num.toString();
+      });
+    }
+
+    function getIPClass(firstOctet) {
+      if (firstOctet >= 1 && firstOctet <= 126) return 'Kelas A';
+      if (firstOctet === 127) return 'Loopback';
+      if (firstOctet >= 128 && firstOctet <= 191) return 'Kelas B';
+      if (firstOctet >= 192 && firstOctet <= 223) return 'Kelas C';
+      if (firstOctet >= 224 && firstOctet <= 239) return 'Kelas D (Multicast)';
+      return 'Kelas E (Experimental)';
+    }
+
+    function handleCalculate(e) {
+      if (e) e.preventDefault();
+      const ip = document.getElementById('ipInput').value.trim();
+      const prefix = parseInt(document.getElementById('prefixSelect').value, 10);
+      const grid = document.getElementById('resultDetailsGrid');
+
+      if (!isValidIPv4(ip)) {
+        if (window.SubpageEngine) SubpageEngine.showToast("Format alamat IPv4 tidak valid (Contoh: 192.168.1.1).", "error");
+        return;
+      }
+
+      const parts = ip.split('.').map(n => parseInt(n, 10));
+      const ipNum = parts.reduce((acc, oct) => ((acc << 8) + oct) >>> 0, 0);
+      const maskNum = prefix === 0 ? 0 : ((0xFFFFFFFF << (32 - prefix)) >>> 0);
+      const netNum = (ipNum & maskNum) >>> 0;
+      const broadcastNum = (netNum | (~maskNum >>> 0)) >>> 0;
+
+      const netAddr = [ (netNum >>> 24) & 255, (netNum >>> 16) & 255, (netNum >>> 8) & 255, netNum & 255 ].join('.');
+      const broadcastAddr = [ (broadcastNum >>> 24) & 255, (broadcastNum >>> 16) & 255, (broadcastNum >>> 8) & 255, broadcastNum & 255 ].join('.');
+      const maskAddr = prefixToMask(prefix);
+      const wildcardAddr = [ (~maskNum >>> 24) & 255, (~maskNum >>> 16) & 255, (~maskNum >>> 8) & 255, ~maskNum & 255 ].join('.');
+      const ipClass = getIPClass(parts[0]);
+
+      let totalAddr = Math.pow(2, 32 - prefix);
+      let usableHosts = 0;
+      let firstHost = '-';
+      let lastHost = '-';
+
+      if (prefix <= 30) {
+        usableHosts = totalAddr - 2;
+        const firstNum = (netNum + 1) >>> 0;
+        const lastNum = (broadcastNum - 1) >>> 0;
+        firstHost = [ (firstNum >>> 24) & 255, (firstNum >>> 16) & 255, (firstNum >>> 8) & 255, firstNum & 255 ].join('.');
+        lastHost = [ (lastNum >>> 24) & 255, (lastNum >>> 16) & 255, (lastNum >>> 8) & 255, lastNum & 255 ].join('.');
+      } else if (prefix === 31) {
+        usableHosts = 2; // Point-to-Point link
+        firstHost = netAddr;
+        lastHost = broadcastAddr;
+      } else if (prefix === 32) {
+        usableHosts = 1; // Single Host
+        firstHost = netAddr;
+        lastHost = netAddr;
+      }
+
+      grid.innerHTML = `
+        <div style="padding:14px;background:var(--surface-secondary);border-radius:var(--radius-sm);border:1px solid var(--border);">
+          <div style="font-size:0.75rem;color:var(--text-muted);">IP Address / Kelas</div>
+          <div style="font-weight:700;color:var(--text-primary);">${ip} <span style="font-size:0.75rem;color:var(--primary);">(${ipClass})</span></div>
+        </div>
+
+        <div style="padding:14px;background:var(--surface-secondary);border-radius:var(--radius-sm);border:1px solid var(--border);">
+          <div style="font-size:0.75rem;color:var(--text-muted);">Subnet Mask</div>
+          <div style="font-weight:700;color:var(--text-primary);">${maskAddr} (/${prefix})</div>
+        </div>
+
+        <div style="padding:14px;background:var(--surface-secondary);border-radius:var(--radius-sm);border:1px solid var(--border);">
+          <div style="font-size:0.75rem;color:var(--text-muted);">Network Address</div>
+          <div style="font-weight:700;color:var(--primary);">${netAddr}</div>
+        </div>
+
+        <div style="padding:14px;background:var(--surface-secondary);border-radius:var(--radius-sm);border:1px solid var(--border);">
+          <div style="font-size:0.75rem;color:var(--text-muted);">Broadcast Address</div>
+          <div style="font-weight:700;color:var(--text-primary);">${broadcastAddr}</div>
+        </div>
+
+        <div style="padding:14px;background:var(--surface-secondary);border-radius:var(--radius-sm);border:1px solid var(--border);">
+          <div style="font-size:0.75rem;color:var(--text-muted);">Wildcard Mask</div>
+          <div style="font-weight:700;color:var(--text-primary);">${wildcardAddr}</div>
+        </div>
+
+        <div style="padding:14px;background:var(--surface-secondary);border-radius:var(--radius-sm);border:1px solid var(--border);">
+          <div style="font-size:0.75rem;color:var(--text-muted);">First Usable Host</div>
+          <div style="font-weight:700;color:var(--success);">${firstHost}</div>
+        </div>
+
+        <div style="padding:14px;background:var(--surface-secondary);border-radius:var(--radius-sm);border:1px solid var(--border);">
+          <div style="font-size:0.75rem;color:var(--text-muted);">Last Usable Host</div>
+          <div style="font-weight:700;color:var(--success);">${lastHost}</div>
+        </div>
+
+        <div style="padding:14px;background:var(--surface-secondary);border-radius:var(--radius-sm);border:1px solid var(--border);">
+          <div style="font-size:0.75rem;color:var(--text-muted);">Total Usable Host</div>
+          <div style="font-weight:700;color:var(--success);">${usableHosts.toLocaleString('id-ID')} Host ${prefix === 31 ? '(PtP)' : prefix === 32 ? '(Host)' : ''}</div>
+        </div>
+      `;
+    }
+
+    function resetForm() {
+      document.getElementById('ipInput').value = '192.168.1.1';
+      document.getElementById('prefixSelect').value = '24';
+      handleCalculate();
+      if (window.SubpageEngine) SubpageEngine.showToast("Form berhasil direset.");
+    }
+
+    function copyAllResults() {
+      const grid = document.getElementById('resultDetailsGrid');
+      if (!grid) return;
+      const text = Array.from(grid.children).map(div => div.innerText.replace('\n', ': ')).join('\n');
+      navigator.clipboard.writeText(text);
+      if (window.SubpageEngine) SubpageEngine.showToast("Seluruh hasil kalkulasi disalin ke clipboard!");
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initPrefixSelect();
+      handleCalculate();
+    });
+  </script>
+</body>
+</html>

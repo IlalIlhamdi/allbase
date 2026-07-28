@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>ALLBASE — Portfolio, Projects & Tools</title>
+  <meta name="description" content="ALLBASE adalah pusat portofolio, proyek jaringan, teknologi, dan berbagai tools yang dikembangkan oleh Ilal Ilhamdi.">
+  <meta name="author" content="Ilal Ilhamdi">
+  <meta name="theme-color" content="#2563EB">
+
+  <!-- Open Graph / Meta Social -->
+  <meta property="og:title" content="ALLBASE — Portfolio, Projects & Tools">
+  <meta property="og:description" content="Pusat portofolio, proyek jaringan, dan berbagai tools terpadu.">
+  <meta property="og:image" content="profile.jpg">
+  <meta property="og:type" content="website">
+
+  <!-- PWA Manifest & Favicon -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+
+  <!-- Google Fonts: Outfit, Sora, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+
+  <!-- ALLBASE CSS DESIGN SYSTEM -->
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+
+  <!-- MODULAR JS ENGINE -->
+  <script defer src="assets/js/utils.js"></script>
+  <script defer src="assets/js/theme.js"></script>
+  <script defer src="assets/js/projects.js"></script>
+  <script defer src="assets/js/filters.js"></script>
+  <script defer src="assets/js/app.js"></script>
+</head>
+<body>
+
+  <!-- SITE HEADER & NAVBAR -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="#hero" class="nav-brand">
+        <div class="brand-logo-icon">
+          <i data-lucide="layers" style="width:20px;height:20px;"></i>
+        </div>
+        <div class="brand-name">
+          ALLBASE <span>HUB</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <ul class="nav-menu">
+        <li><a href="#hero" class="nav-link active">Beranda</a></li>
+        <li><a href="#about" class="nav-link">Tentang Saya</a></li>
+        <li><a href="#skills" class="nav-link">Keahlian</a></li>
+        <li><a href="#projects" class="nav-link">Proyek</a></li>
+        <li><a href="#tools" class="nav-link">Tools</a></li>
+        <li><a href="#certifications" class="nav-link">Sertifikasi</a></li>
+        <li><a href="#contact" class="nav-link">Kontak</a></li>
+      </ul>
+
+      <div style="display:flex;align-items:center;gap:10px;">
+        <!-- Theme Toggle Button -->
+        <button class="btn btn-sm btn-secondary theme-toggle-btn" title="Toggle Light / Dark Mode" aria-label="Toggle Mode Tema">
+          <i data-lucide="moon" style="width:18px;height:18px;"></i>
+        </button>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button id="mobileMenuBtn" class="btn btn-sm btn-secondary mobile-toggle-btn" aria-label="Buka Menu Mobile">
+          <i data-lucide="menu" style="width:20px;height:20px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Overlay Menu -->
+    <div id="mobileDrawer" class="mobile-drawer">
+      <ul class="mobile-nav-list">
+        <li><a href="#hero" class="mobile-nav-link"><i data-lucide="home"></i> Beranda</a></li>
+        <li><a href="#about" class="mobile-nav-link"><i data-lucide="user"></i> Tentang Saya</a></li>
+        <li><a href="#skills" class="mobile-nav-link"><i data-lucide="code"></i> Keahlian</a></li>
+        <li><a href="#projects" class="mobile-nav-link"><i data-lucide="folder"></i> Proyek Saya</a></li>
+        <li><a href="#tools" class="mobile-nav-link"><i data-lucide="wrench"></i> Web Tools</a></li>
+        <li><a href="#certifications" class="mobile-nav-link"><i data-lucide="award"></i> Sertifikasi</a></li>
+        <li><a href="#contact" class="mobile-nav-link"><i data-lucide="mail"></i> Hubungi Saya</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main>
+
+    <!-- HERO SECTION (2-COLUMN DESKTOP) -->
+    <section id="hero" class="section bg-network-grid scanner-effect" style="padding-top:48px;padding-bottom:64px;">
+      <div class="container">
+        <div class="hero-grid">
+          
+          <!-- Left Column -->
+          <div class="hero-left">
+            <div class="badge badge-primary" style="margin-bottom:16px;">
+              <span class="status-pulse-dot"></span> Network • Technology • Development
+            </div>
+
+            <h1 class="hero-title">
+              Semua Proyek dan Tool, <br>Dalam <span>Satu Base.</span>
+            </h1>
+
+            <p class="hero-desc">
+              ALLBASE adalah pusat portofolio, proyek, dan berbagai tool yang saya bangun untuk pembelajaran jaringan telekomunikasi, teknologi, dan pengembangan aplikasi web modern.
+            </p>
+
+            <div class="hero-buttons">
+              <a href="#projects" class="btn btn-primary">
+                <i data-lucide="grid" style="width:18px;height:18px;"></i> Lihat Proyek
+              </a>
+              <a href="#tools" class="btn btn-secondary">
+                <i data-lucide="wrench" style="width:18px;height:18px;"></i> Buka Tools
+              </a>
+              <a href="#contact" class="btn btn-outline">
+                <i data-lucide="send" style="width:18px;height:18px;"></i> Hubungi Saya
+              </a>
+            </div>
+
+            <div class="social-links">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-link-btn" title="GitHub Profile" aria-label="GitHub Profile">
+                <i data-lucide="git-branch" style="width:18px;height:18px;"></i>
+              </a>
+              <a href="https://wa.me/6282322085606" target="_blank" rel="noopener noreferrer" class="social-link-btn" title="WhatsApp Chat" aria-label="WhatsApp Chat">
+                <i data-lucide="message-circle" style="width:18px;height:18px;"></i>
+              </a>
+              <a href="mailto:ilal@example.com" class="social-link-btn" title="Kirim Email" aria-label="Kirim Email">
+                <i data-lucide="mail" style="width:18px;height:18px;"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column (Integrated Profile Visual) -->
+          <div class="hero-right">
+            <!-- Visual Bridge Element connecting Social Icons & Photo on Mobile -->
+            <div class="profile-bridge"></div>
+
+            <div class="profile-visual">
+              <div class="profile-float">
+                <!-- Status Badge (Top Right) -->
+                <div class="profile-status-tag font-mono">
+                  <span class="status-pulse-dot" style="background:#16A34A;"></span> SYSTEM PROFILE ONLINE
+                </div>
+
+                <!-- Main Photo Frame -->
+                <div class="profile-photo-frame">
+                  <img src="profile.jpg" alt="Ilal Ilhamdi" class="profile-img" onerror="this.src='favicon.png'">
+                  <div class="profile-scan-line"></div>
+
+                  <!-- Internal Photo Overlay -->
+                  <div class="profile-photo-overlay">
+                    <h3>Ilal Ilhamdi</h3>
+                    <p>Network &amp; Technology Enthusiast</p>
+                  </div>
+                </div>
+
+                <!-- Network Connection Line -->
+                <div class="profile-connection profile-conn-1"></div>
+
+                <!-- Decorative Network Nodes -->
+                <div class="profile-node profile-node-1"></div>
+                <div class="profile-node profile-node-2"></div>
+                <div class="profile-node profile-node-3"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- TENTANG SAYA SECTION -->
+    <section id="about" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary" style="margin-bottom:8px;">Profil Singkat</span>
+          <h2 class="section-title">Tentang Saya</h2>
+          <p class="section-subtitle">Dedikasi dalam rekayasa jaringan telekomunikasi dan pengembangan perangkat lunak.</p>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:24px;">
+          <div class="card card-hover">
+            <h3 style="margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+              <i data-lucide="book-open" style="color:var(--primary);"></i> Bidang Studi
+            </h3>
+            <p style="font-size:0.9rem;">Mahasiswa Teknik Telekomunikasi & Jaringan yang berfokus pada desain infrastruktur jaringan, IP routing, dan pemantauan sistem.</p>
+          </div>
+
+          <div class="card card-hover">
+            <h3 style="margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+              <i data-lucide="activity" style="color:var(--primary);"></i> Fokus Pembelajaran
+            </h3>
+            <p style="font-size:0.9rem;">Pengembangan alat pemindai jaringan (Network Scanner), subnet calculator IPv4, serta otomatisasi monitoring dengan Prometheus & Grafana.</p>
+          </div>
+
+          <div class="card card-hover">
+            <h3 style="margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+              <i data-lucide="code-2" style="color:var(--primary);"></i> Web & Software
+            </h3>
+            <p style="font-size:0.9rem;">Mengembangkan aplikasi web berbasis murni HTML, CSS, dan JavaScript ES6+ yang responsif, cepat, serta mudah dipelihara.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KEAHLIAN & TEKNOLOGI SECTION -->
+    <section id="skills" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary" style="margin-bottom:8px;">Tech Stack</span>
+          <h2 class="section-title">Keahlian & Teknologi</h2>
+          <p class="section-subtitle">Perangkat lunak, hardware jaringan, dan bahasa pemrosesan yang saya gunakan.</p>
+        </div>
+
+        <div id="skillsGridContainer" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:24px;">
+          <!-- Dynamically populated by projects.js from data/skills.json -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PROYEK UNGGULAN SECTION -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary" style="margin-bottom:8px;">Highlight</span>
+          <h2 class="section-title">Proyek Unggulan</h2>
+          <p class="section-subtitle">Karya utama dalam bidang jaringan dan sistem web terpadu.</p>
+        </div>
+
+        <div id="featuredProjectsContainer" class="projects-grid">
+          <!-- Dynamically populated by projects.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PROYEK SAYA (PROJECT LIBRARY) SECTION -->
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary" style="margin-bottom:8px;">Perpustakaan Karya</span>
+          <h2 class="section-title">Semua Proyek Saya</h2>
+          <p class="section-subtitle">Jelajahi seluruh proyek yang telah dan sedang saya kembangkan.</p>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:32px;">
+          <div class="search-box">
+            <i data-lucide="search"></i>
+            <input type="text" id="projectSearchInput" placeholder="Cari nama proyek, deskripsi, atau tag teknologi..." autocomplete="off">
+          </div>
+
+          <div class="filter-tabs">
+            <button class="filter-btn active" data-category="all">Semua Kategori</button>
+            <button class="filter-btn" data-category="Networking">Networking</button>
+            <button class="filter-btn" data-category="Web Development">Web Development</button>
+            <button class="filter-btn" data-category="Tools">Tools</button>
+            <button class="filter-btn" data-category="Pendidikan">Pendidikan</button>
+          </div>
+        </div>
+
+        <!-- Dynamic Projects Grid -->
+        <div id="projectsGridContainer" class="projects-grid">
+          <!-- Dynamically populated by projects.js from data/projects.json -->
+        </div>
+      </div>
+    </section>
+
+    <!-- WEB TOOLS SECTION -->
+    <section id="tools" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary" style="margin-bottom:8px;">Produktivitas</span>
+          <h2 class="section-title">Web Tools & Utility</h2>
+          <p class="section-subtitle">Alat praktis berbasis web untuk kalkulasi subnet, jaringan, dan utilitas teknis.</p>
+        </div>
+
+        <div id="toolsGridContainer" class="projects-grid">
+          <!-- Dynamically populated by projects.js (type: tool) -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SERTIFIKASI SECTION -->
+    <section id="certifications" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary" style="margin-bottom:8px;">Kredensial</span>
+          <h2 class="section-title">Sertifikasi & Pencapaian</h2>
+          <p class="section-subtitle">Sertifikasi resmi dan pendidikan yang saya selesaikan.</p>
+        </div>
+
+        <div id="certificationsContainer" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:24px;">
+          <!-- Dynamically populated by projects.js from data/experience.json -->
+        </div>
+      </div>
+    </section>
+
+    <!-- BESTO FRIENDO / FRIENDS SECTION -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="card" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:32px;align-items:center;padding:32px;">
+          <div>
+            <span class="badge badge-primary" style="margin-bottom:12px;">Galeri Personal</span>
+            <h2 style="font-size:1.6rem;margin-bottom:12px;">Kolaborasi & Sahabat</h2>
+            <p style="font-size:0.95rem;color:var(--text-secondary);margin-bottom:16px;">
+              Kebersamaan dan kolaborasi erat dalam memecahkan tantangan proyek jaringan serta pengembangan solusi teknologi.
+            </p>
+            <div style="font-weight:700;font-size:1rem;color:var(--primary);">Besto Friendo — Rahmat & Ilal</div>
+          </div>
+          <div style="text-align:center;">
+            <img src="rahmat_ilal.jpg" alt="Rahmat & Ilal" style="max-width:100%;max-height:300px;border-radius:var(--radius-md);object-fit:cover;border:3px solid var(--surface);box-shadow:var(--shadow-md);" onerror="this.src='profile.jpg'">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KONTAK SECTION -->
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary" style="margin-bottom:8px;">Hubungi Saya</span>
+          <h2 class="section-title">Mari Berdiskusi</h2>
+          <p class="section-subtitle">Tertarik untuk berkolaborasi dalam proyek jaringan atau pengembangan web? Kontak saya secara langsung.</p>
+        </div>
+
+        <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+          <a href="https://wa.me/6282322085606" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            <i data-lucide="message-circle"></i> Hubungi via WhatsApp
+          </a>
+          <a href="mailto:ilal@example.com" class="btn btn-secondary">
+            <i data-lucide="mail"></i> Kirim Email Direct
+          </a>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+            <i data-lucide="git-branch"></i> GitHub Profile
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SITE FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="brand-logo-icon">
+            <i data-lucide="layers" style="width:20px;height:20px;"></i>
+          </div>
+          <div class="brand-name">ALLBASE <span>HUB</span></div>
+        </div>
+        <a href="#hero" class="btn btn-sm btn-secondary" title="Kembali ke Atas">
+          <i data-lucide="arrow-up"></i> Kembali ke Atas
+        </a>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; <span id="currentYear">2026</span> Ilal Ilhamdi. Seluruh Hak Cipta Dilindungi.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- SERVICE WORKER REGISTRATION (PWA) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(reg => console.log('ALLBASE PWA Registered:', reg.scope))
+          .catch(err => console.log('ALLBASE PWA Failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>

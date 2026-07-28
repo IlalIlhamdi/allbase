@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konversi Kecepatan Internet — ALLBASE</title>
+  <meta name="description" content="Alat konversi kecepatan internet dua arah: Megabit per detik (Mbps) ke Megabyte per detik (MB/s).">
+  <link rel="icon" type="image/png" href="../favicon.png">
+
+  <!-- Google Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+
+  <!-- Shared Subpage Styles & Engine -->
+  <link rel="stylesheet" href="../assets/css/subpage.css">
+  <script defer src="../assets/js/subpage.js"></script>
+</head>
+<body>
+
+  <!-- SHARED SUBPAGE HEADER -->
+  <header class="subpage-header">
+    <div class="subpage-header-inner">
+      <div class="header-left">
+        <a href="../index.html#tools" class="btn btn-sm btn-secondary" title="Kembali ke ALLBASE Hub">
+          <i data-lucide="arrow-left"></i> Kembali ke ALLBASE
+        </a>
+        <span class="header-title-text">Konversi Kecepatan Internet</span>
+      </div>
+
+      <div class="header-right">
+        <span class="badge badge-primary badge-hide-mobile"><i data-lucide="binary"></i> Network Tool</span>
+        <button class="btn btn-sm btn-secondary btn-icon theme-toggle-btn" title="Ganti Tema Light/Dark" aria-label="Toggle Mode Tema">
+          <i data-lucide="moon" style="width:18px;height:18px;"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="subpage-container">
+
+    <!-- MAIN CONVERTER CARD -->
+    <div class="card" style="margin-bottom:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <span class="badge badge-primary"><i data-lucide="zap"></i> Network Tool</span>
+        <span style="font-size:0.8rem;color:var(--text-muted);font-family:var(--font-mono);">1 Byte = 8 bit</span>
+      </div>
+
+      <h1 style="font-size:1.6rem;margin-bottom:6px;">Konversi Mbps ke MB/s</h1>
+      <p style="font-size:0.95rem;color:var(--text-secondary);margin-bottom:24px;">
+        Konversikan kecepatan internet Anda antara Megabit per detik (Mbps) dan Megabyte per detik (MB/s) secara real-time.
+      </p>
+
+      <form id="converterForm" onsubmit="event.preventDefault();">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:20px;align-items:center;margin-bottom:24px;">
+          <!-- Input Mbps -->
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="mbpsInput">Kecepatan (Mbps - Megabit/s) *</label>
+            <input type="number" id="mbpsInput" class="form-control font-mono" placeholder="100" min="0" step="any" oninput="convertFromMbps(this.value)">
+            <small style="color:var(--text-muted);font-size:0.75rem;">Kecepatan dari ISP / Provider</small>
+          </div>
+
+          <!-- Conversion Icon Indicator -->
+          <div style="text-align:center;color:var(--primary);font-size:1.2rem;display:flex;justify-content:center;align-items:center;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;">
+              <i data-lucide="repeat" style="width:20px;height:20px;"></i>
+            </div>
+          </div>
+
+          <!-- Input MB/s -->
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="mBpsInput">Kecepatan Download (MB/s - Megabyte/s) *</label>
+            <input type="number" id="mBpsInput" class="form-control font-mono" placeholder="12.5" min="0" step="any" oninput="convertFromMBps(this.value)">
+            <small style="color:var(--text-muted);font-size:0.75rem;">Kecepatan unduh file asli</small>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-primary" onclick="convertFromMbps(document.getElementById('mbpsInput').value || 100)">
+            <i data-lucide="cpu"></i> Konversi
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="resetForm()">
+            <i data-lucide="rotate-ccw"></i> Reset
+          </button>
+          <button type="button" class="btn btn-outline" onclick="copyResult()">
+            <i data-lucide="copy"></i> Salin Hasil
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- RESULT PREVIEW CARD -->
+    <div class="card" id="resultPreviewCard">
+      <h3 style="margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+        <i data-lucide="activity" style="color:var(--success);"></i> Hasil Konversi Kecepatan
+      </h3>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;font-family:var(--font-mono);">
+        <div style="padding:16px;background:var(--surface-secondary);border-radius:var(--radius-sm);border:1px solid var(--border);">
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">Kecepatan ISP</div>
+          <div id="resMbpsText" style="font-size:1.3rem;font-weight:700;color:var(--primary);">100 Mbps</div>
+        </div>
+
+        <div style="padding:16px;background:var(--surface-secondary);border-radius:var(--radius-sm);border:1px solid var(--border);">
+          <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">Estimasi Unduh Berkas</div>
+          <div id="resMBpsText" style="font-size:1.3rem;font-weight:700;color:var(--success);">12.5 MB/s</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- SHARED SUBPAGE FOOTER -->
+  <footer class="subpage-footer">
+    <div>&copy; <span id="footerYear">2026</span> ALLBASE • Network Tools</div>
+    <div style="font-size:0.8rem;margin-top:4px;">Built by Ilal Ilhamdi</div>
+  </footer>
+
+  <!-- CONVERTER LOGIC -->
+  <script>
+    function roundClean(val) {
+      if (isNaN(val) || !isFinite(val)) return 0;
+      return Math.round(val * 10000) / 10000;
+    }
+
+    function convertFromMbps(val) {
+      const mbps = parseFloat(val);
+      if (isNaN(mbps) || mbps < 0) {
+        document.getElementById('mBpsInput').value = '';
+        document.getElementById('resMbpsText').textContent = '0 Mbps';
+        document.getElementById('resMBpsText').textContent = '0 MB/s';
+        return;
+      }
+
+      const mBps = roundClean(mbps / 8);
+      document.getElementById('mBpsInput').value = mBps;
+      document.getElementById('resMbpsText').textContent = `${roundClean(mbps)} Mbps`;
+      document.getElementById('resMBpsText').textContent = `${mBps} MB/s`;
+    }
+
+    function convertFromMBps(val) {
+      const mBps = parseFloat(val);
+      if (isNaN(mBps) || mBps < 0) {
+        document.getElementById('mbpsInput').value = '';
+        document.getElementById('resMbpsText').textContent = '0 Mbps';
+        document.getElementById('resMBpsText').textContent = '0 MB/s';
+        return;
+      }
+
+      const mbps = roundClean(mBps * 8);
+      document.getElementById('mbpsInput').value = mbps;
+      document.getElementById('resMbpsText').textContent = `${mbps} Mbps`;
+      document.getElementById('resMBpsText').textContent = `${roundClean(mBps)} MB/s`;
+    }
+
+    function resetForm() {
+      document.getElementById('mbpsInput').value = '';
+      document.getElementById('mBpsInput').value = '';
+      document.getElementById('resMbpsText').textContent = '0 Mbps';
+      document.getElementById('resMBpsText').textContent = '0 MB/s';
+      if (window.SubpageEngine) SubpageEngine.showToast("Form berhasil direset.");
+    }
+
+    function copyResult() {
+      const mbps = document.getElementById('resMbpsText').textContent;
+      const mBps = document.getElementById('resMBpsText').textContent;
+      const text = `${mbps} = ${mBps}`;
+      navigator.clipboard.writeText(text);
+      if (window.SubpageEngine) SubpageEngine.showToast("Hasil konversi disalin ke clipboard!");
+    }
+
+    // Default initial conversion (100 Mbps)
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('mbpsInput').value = '100';
+      convertFromMbps('100');
+    });
+  </script>
+</body>
+</html>

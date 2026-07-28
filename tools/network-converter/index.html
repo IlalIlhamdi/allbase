@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konversi Satuan Jaringan - ALLBASE Tools</title>
+  <link rel="icon" type="image/png" href="../../favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="../../assets/css/variables.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/components.css">
+  <link rel="stylesheet" href="../../assets/css/layout.css">
+</head>
+<body>
+  <header style="background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="../../index.html#tools" class="btn btn-sm btn-secondary"><i data-lucide="arrow-left"></i> Kembali ke ALLBASE</a>
+      <span style="font-family:var(--font-heading);font-weight:700;font-size:1.1rem;">Konversi Satuan Jaringan</span>
+    </div>
+  </header>
+
+  <main style="max-width:800px;margin:32px auto;padding:0 20px;">
+    <div class="card card-scanner">
+      <h2 style="font-size:1.3rem;margin-bottom:16px;"><i data-lucide="binary" style="color:var(--primary);"></i> Konversi Desimal, Biner, dan Heksadesimal</h2>
+      <div class="form-group">
+        <label class="form-label">Angka Desimal</label>
+        <input type="number" id="decInput" class="form-control font-mono" value="192" oninput="convertNum(this.value)">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;font-family:var(--font-mono);">
+        <div style="padding:14px;background:var(--surface-secondary);border-radius:8px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);">Format Biner (8-bit)</div>
+          <div id="binRes" style="font-weight:700;color:var(--primary);">11000000</div>
+        </div>
+        <div style="padding:14px;background:var(--surface-secondary);border-radius:8px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);">Format Heksadesimal</div>
+          <div id="hexRes" style="font-weight:700;color:var(--success);">C0</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function convertNum(val) {
+      const num = parseInt(val, 10) || 0;
+      document.getElementById('binRes').textContent = num.toString(2).padStart(8, '0');
+      document.getElementById('hexRes').textContent = num.toString(16).toUpperCase();
+    }
+    if(window.lucide) lucide.createIcons();
+  </script>
+</body>
+</html>

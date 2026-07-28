@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengelola Tugas Kuliah — ALLBASE</title>
+  <meta name="description" content="Aplikasi pencatatan dan manajemen daftar tugas perkuliahan harian dengan reminder deadline interaktif.">
+  <link rel="icon" type="image/png" href="../favicon.png">
+
+  <!-- Google Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+
+  <!-- Shared Subpage Styles & Engine -->
+  <link rel="stylesheet" href="../assets/css/subpage.css">
+  <script defer src="../assets/js/subpage.js"></script>
+
+  <style>
+    .text-helper-btn {
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      border-radius: var(--radius-sm);
+      background: var(--surface-secondary);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-family: var(--font-mono);
+    }
+    .text-helper-btn:hover {
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+    .task-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all var(--transition-normal);
+    }
+    .task-card.completed-task {
+      opacity: 0.75;
+      background: var(--surface-secondary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SHARED SUBPAGE HEADER -->
+  <header class="subpage-header">
+    <div class="subpage-header-inner">
+      <div class="header-left">
+        <a href="../index.html#tools" class="btn btn-sm btn-secondary" title="Kembali ke ALLBASE Hub">
+          <i data-lucide="arrow-left"></i> Kembali ke ALLBASE
+        </a>
+        <span class="header-title-text">Pengelola Tugas Kuliah</span>
+      </div>
+
+      <div class="header-right">
+        <span class="badge badge-primary badge-hide-mobile"><i data-lucide="book-open"></i> Aplikasi Pendidikan</span>
+        <button class="btn btn-sm btn-secondary btn-icon theme-toggle-btn" title="Ganti Tema Light/Dark" aria-label="Toggle Mode Tema">
+          <i data-lucide="moon" style="width:18px;height:18px;"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="subpage-container">
+
+    <!-- INPUT TASK FORM CARD -->
+    <div class="card" style="margin-bottom:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <span class="badge badge-primary"><i data-lucide="check-square"></i> Form Catatan Tugas</span>
+        <span style="font-size:0.75rem;color:var(--text-muted);">Penyimpanan Lokal Browser</span>
+      </div>
+
+      <h1 style="font-size:1.6rem;margin-bottom:6px;" id="formTitle">Tambah Tugas Kuliah</h1>
+      <p style="font-size:0.92rem;color:var(--text-secondary);margin-bottom:20px;">
+        Catat tugas perkuliahan, atur deadline, dan pantau prioritas pengerjaan tugas Anda.
+      </p>
+
+      <form id="taskForm" onsubmit="handleTaskSubmit(event)">
+        <input type="hidden" id="editTaskId" value="">
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:16px;">
+          <!-- Mata Kuliah -->
+          <div class="form-group">
+            <label class="form-label" for="taskCourse">Mata Kuliah *</label>
+            <input type="text" id="taskCourse" class="form-control" placeholder="Contoh: Jaringan Komputer" required>
+          </div>
+
+          <!-- Pertemuan Ke -->
+          <div class="form-group">
+            <label class="form-label" for="taskMeeting">Pertemuan Ke-</label>
+            <input type="text" id="taskMeeting" class="form-control" placeholder="Contoh: Pertemuan 4">
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;">
+          <!-- Tanggal Diberikan -->
+          <div class="form-group">
+            <label class="form-label" for="taskGivenDate">Tanggal Diberikan</label>
+            <input type="date" id="taskGivenDate" class="form-control">
+          </div>
+
+          <!-- Tanggal Dikumpulkan / Deadline -->
+          <div class="form-group">
+            <label class="form-label" for="taskDeadline">Deadline Dikumpulkan *</label>
+            <input type="date" id="taskDeadline" class="form-control" required>
+          </div>
+
+          <!-- Prioritas -->
+          <div class="form-group">
+            <label class="form-label" for="taskPriority">Prioritas</label>
+            <select id="taskPriority" class="form-control">
+              <option value="Tinggi">Tinggi (High)</option>
+              <option value="Sedang" selected>Sedang (Medium)</option>
+              <option value="Rendah">Rendah (Low)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Deskripsi Tugas dengan Format Text Helper Toolbar -->
+        <div class="form-group">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <label class="form-label" for="taskDesc">Deskripsi & Rincian Tugas *</label>
+            <div style="display:flex;gap:6px;">
+              <button type="button" class="text-helper-btn" onclick="formatText('upper')">UPPER</button>
+              <button type="button" class="text-helper-btn" onclick="formatText('capitalize')">Capitalize</button>
+              <button type="button" class="text-helper-btn" onclick="formatText('title')">Title Case</button>
+            </div>
+          </div>
+          <textarea id="taskDesc" class="form-control" placeholder="Tuliskan petunjuk tugas, soal, atau catatan pengerjaan..." required></textarea>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button type="submit" class="btn btn-primary" id="saveBtn">
+            <i data-lucide="plus-circle"></i> Simpan Tugas
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="resetTaskForm()">
+            <i data-lucide="rotate-ccw"></i> Reset Form
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- TASK LIST & FILTERS SECTION -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
+      <h2 style="font-size:1.3rem;display:flex;align-items:center;gap:8px;">
+        <i data-lucide="list-todo" style="color:var(--primary);"></i> Daftar Tugas Kuliah
+      </h2>
+      <small style="color:var(--text-muted);font-size:0.8rem;">Data disimpan secara lokal pada browser ini.</small>
+    </div>
+
+    <!-- Controls: Search & Tabs -->
+    <div class="card" style="padding:16px;margin-bottom:20px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;align-items:center;">
+        <input type="text" id="taskSearchInput" class="form-control" placeholder="Cari mata kuliah atau deskripsi..." oninput="renderTasksList()">
+
+        <select id="taskStatusFilter" class="form-control" onchange="renderTasksList()">
+          <option value="all">Semua Status</option>
+          <option value="pending">Belum Selesai</option>
+          <option value="completed">Selesai</option>
+          <option value="urgent">Deadline Terdekat</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- TASK CARDS LIST CONTAINER -->
+    <div id="tasksListContainer" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));gap:20px;">
+      <!-- Dynamically populated by JS from localStorage -->
+    </div>
+
+  </main>
+
+  <!-- SHARED SUBPAGE FOOTER -->
+  <footer class="subpage-footer">
+    <div>&copy; <span id="footerYear">2026</span> ALLBASE • Applications</div>
+    <div style="font-size:0.8rem;margin-top:4px;">Built by Ilal Ilhamdi</div>
+  </footer>
+
+  <!-- TASK MANAGER LOGIC -->
+  <script>
+    const STORAGE_KEY = 'allbase-college-tasks';
+    let tasksData = [];
+
+    function loadTasks() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        tasksData = saved ? JSON.parse(saved) : [];
+      } catch(e) {
+        tasksData = [];
+      }
+    }
+
+    function saveTasks() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasksData));
+    }
+
+    function calculateDaysLeft(deadlineStr) {
+      if (!deadlineStr) return 0;
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const deadline = new Date(deadlineStr);
+      deadline.setHours(0,0,0,0);
+      const diff = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24));
+      return diff;
+    }
+
+    function renderTasksList() {
+      const container = document.getElementById('tasksListContainer');
+      if (!container) return;
+
+      const search = (document.getElementById('taskSearchInput').value || '').toLowerCase().trim();
+      const filter = document.getElementById('taskStatusFilter').value;
+
+      let filtered = tasksData.filter(t => {
+        const matchesSearch = !search || t.course.toLowerCase().includes(search) || t.desc.toLowerCase().includes(search);
+        if (!matchesSearch) return false;
+
+        if (filter === 'pending') return !t.completed;
+        if (filter === 'completed') return t.completed;
+        if (filter === 'urgent') return !t.completed && calculateDaysLeft(t.deadline) <= 3;
+        return true;
+      });
+
+      // Sort: Pending first, then by deadline
+      filtered.sort((a, b) => {
+        if (a.completed !== b.completed) return a.completed ? 1 : -1;
+        return new Date(a.deadline) - new Date(b.deadline);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="card" style="grid-column:1/-1;text-align:center;padding:40px;">
+            <i data-lucide="check-circle-2" style="width:40px;height:40px;color:var(--text-muted);margin-bottom:12px;"></i>
+            <h3>Belum Ada Tugas yang Disimpan</h3>
+            <p style="font-size:0.9rem;">Gunakan form di atas untuk mencatat tugas perkuliahan baru Anda.</p>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = filtered.map(t => {
+        const daysLeft = calculateDaysLeft(t.deadline);
+        let daysBadge = '';
+        if (t.completed) {
+          daysBadge = `<span class="badge badge-success">Selesai</span>`;
+        } else if (daysLeft < 0) {
+          daysBadge = `<span class="badge badge-danger">Lewat ${Math.abs(daysLeft)} hari</span>`;
+        } else if (daysLeft === 0) {
+          daysBadge = `<span class="badge badge-danger">Hari Ini!</span>`;
+        } else if (daysLeft <= 3) {
+          daysBadge = `<span class="badge badge-warning">Sisa ${daysLeft} hari</span>`;
+        } else {
+          daysBadge = `<span class="badge badge-secondary">Sisa ${daysLeft} hari</span>`;
+        }
+
+        const priorityBadge = {
+          'Tinggi': `<span class="badge badge-danger">High</span>`,
+          'Sedang': `<span class="badge badge-warning">Medium</span>`,
+          'Rendah': `<span class="badge badge-secondary">Low</span>`
+        }[t.priority] || '';
+
+        return `
+          <div class="card task-card ${t.completed ? 'completed-task' : ''}">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+              <div>
+                <h3 style="font-size:1.1rem;${t.completed ? 'text-decoration:line-through;color:var(--text-muted);' : ''}">${SubpageEngine.escapeHtml(t.course)}</h3>
+                <span class="badge badge-secondary" style="margin-top:4px;">${SubpageEngine.escapeHtml(t.meeting || 'Tugas')}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                ${priorityBadge}
+                ${daysBadge}
+              </div>
+            </div>
+
+            <p style="font-size:0.9rem;white-space:pre-wrap;${t.completed ? 'color:var(--text-muted);' : ''}">${SubpageEngine.escapeHtml(t.desc)}</p>
+
+            <div style="font-size:0.78rem;color:var(--text-muted);display:flex;justify-content:space-between;margin-top:auto;padding-top:12px;border-top:1px solid var(--border);">
+              <span>Diberikan: ${SubpageEngine.escapeHtml(t.givenDate || '-')}</span>
+              <span>Deadline: <strong>${SubpageEngine.escapeHtml(t.deadline)}</strong></span>
+            </div>
+
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="btn btn-sm ${t.completed ? 'btn-secondary' : 'btn-primary'}" style="flex:1;" onclick="toggleTaskComplete('${t.id}')">
+                <i data-lucide="${t.completed ? 'rotate-ccw' : 'check'}" style="width:14px;height:14px;"></i>
+                ${t.completed ? 'Batal Selesai' : 'Tandai Selesai'}
+              </button>
+              <button class="btn btn-sm btn-secondary btn-icon" onclick="editTask('${t.id}')" title="Edit Tugas">
+                <i data-lucide="edit-3" style="width:14px;height:14px;"></i>
+              </button>
+              <button class="btn btn-sm btn-danger btn-icon" onclick="deleteTask('${t.id}')" title="Hapus Tugas">
+                <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function handleTaskSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('editTaskId').value;
+      const course = document.getElementById('taskCourse').value.trim();
+      const meeting = document.getElementById('taskMeeting').value.trim();
+      const givenDate = document.getElementById('taskGivenDate').value;
+      const deadline = document.getElementById('taskDeadline').value;
+      const priority = document.getElementById('taskPriority').value;
+      const desc = document.getElementById('taskDesc').value.trim();
+
+      if (!course || !deadline || !desc) {
+        if (window.SubpageEngine) SubpageEngine.showToast("Mata kuliah, deadline, dan deskripsi wajib diisi.", "error");
+        return;
+      }
+
+      if (givenDate && deadline && new Date(deadline) < new Date(givenDate)) {
+        if (window.SubpageEngine) SubpageEngine.showToast("Deadline tidak boleh sebelum tanggal diberikan.", "error");
+        return;
+      }
+
+      if (id) {
+        // Update existing task
+        const idx = tasksData.findIndex(t => t.id === id);
+        if (idx !== -1) {
+          tasksData[idx] = { ...tasksData[idx], course, meeting, givenDate, deadline, priority, desc };
+          if (window.SubpageEngine) SubpageEngine.showToast("Tugas berhasil diperbarui!", "success");
+        }
+      } else {
+        // Create new task
+        const newTask = {
+          id: 'task_' + Date.now(),
+          course, meeting, givenDate, deadline, priority, desc,
+          completed: false,
+          createdAt: new Date().toISOString()
+        };
+        tasksData.push(newTask);
+        if (window.SubpageEngine) SubpageEngine.showToast("Tugas baru berhasil disimpan secara lokal!", "success");
+      }
+
+      saveTasks();
+      resetTaskForm();
+      renderTasksList();
+    }
+
+    function toggleTaskComplete(id) {
+      const idx = tasksData.findIndex(t => t.id === id);
+      if (idx !== -1) {
+        tasksData[idx].completed = !tasksData[idx].completed;
+        saveTasks();
+        renderTasksList();
+        if (window.SubpageEngine) SubpageEngine.showToast(tasksData[idx].completed ? "Tugas ditandai selesai!" : "Status tugas dikembalikan.");
+      }
+    }
+
+    function editTask(id) {
+      const task = tasksData.find(t => t.id === id);
+      if (!task) return;
+
+      document.getElementById('editTaskId').value = task.id;
+      document.getElementById('taskCourse').value = task.course;
+      document.getElementById('taskMeeting').value = task.meeting || '';
+      document.getElementById('taskGivenDate').value = task.givenDate || '';
+      document.getElementById('taskDeadline').value = task.deadline || '';
+      document.getElementById('taskPriority').value = task.priority || 'Sedang';
+      document.getElementById('taskDesc').value = task.desc;
+
+      document.getElementById('formTitle').textContent = 'Edit Tugas Kuliah';
+      document.getElementById('saveBtn').innerHTML = `<i data-lucide="check"></i> Update Tugas`;
+      if (window.lucide) lucide.createIcons();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function deleteTask(id) {
+      if (!confirm("Apakah Anda yakin ingin menghapus tugas ini?")) return;
+      tasksData = tasksData.filter(t => t.id !== id);
+      saveTasks();
+      renderTasksList();
+      if (window.SubpageEngine) SubpageEngine.showToast("Tugas berhasil dihapus.");
+    }
+
+    function resetTaskForm() {
+      document.getElementById('taskForm').reset();
+      document.getElementById('editTaskId').value = '';
+      document.getElementById('formTitle').textContent = 'Tambah Tugas Kuliah';
+      document.getElementById('saveBtn').innerHTML = `<i data-lucide="plus-circle"></i> Simpan Tugas`;
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function formatText(type) {
+      const area = document.getElementById('taskDesc');
+      if (!area || !area.value) return;
+      let text = area.value;
+      if (type === 'upper') {
+        text = text.toUpperCase();
+      } else if (type === 'capitalize') {
+        text = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+      } else if (type === 'title') {
+        text = text.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+      }
+      area.value = text;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Default today date for given date
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('taskGivenDate').value = today;
+      loadTasks();
+      renderTasksList();
+    });
+  </script>
+</body>
+</html>
