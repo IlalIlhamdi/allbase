@@ -142,6 +142,7 @@ html[data-theme="dark"] .site-header {
 .hero-title span {
   color: var(--primary);
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
