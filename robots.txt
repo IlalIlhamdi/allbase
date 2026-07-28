@@ -1,8 +1,4 @@
 User-agent: *
 Allow: /
-Allow: /assets/
-Allow: /data/
-Allow: /tools/
-Disallow: /_archive/
 
-Sitemap: https://allbase.vercel.app/sitemap.xml
+Sitemap: https://allbase.my.id/sitemap.xml

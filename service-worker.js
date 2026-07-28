@@ -3,7 +3,7 @@
    Static App Shell Caching & Offline Fallback Strategy
    ============================================================ */
 
-const CACHE_NAME = 'allbase-static-v3.2.0';
+const CACHE_NAME = 'allbase-static-v4';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -62,6 +62,12 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const request = event.request;
+
+  // Never cache robots.txt or sitemap.xml
+  if (request.url.includes('robots.txt') || request.url.includes('sitemap.xml')) {
+    event.respondWith(fetch(request));
+    return;
+  }
 
   // Network-first with cache fallback strategy
   event.respondWith(

@@ -195,7 +195,7 @@ ALLBASE dirancang khusus untuk kemudahan deployment gratis di Vercel:
 
 Setelah deployment di Vercel selesai dan Anda mendapatkan domain kustom (misal: `https://allbase.id` atau `https://namaanda.vercel.app`):
 
-1. **Update Sitemap (`sitemap.xml`):** Ganti `https://allbase.vercel.app/` dengan domain asli Anda.
+1. **Update Sitemap (`sitemap.xml`):** Ganti `https://allbase.my.id/` dengan domain asli Anda.
 2. **Update Manifest (`manifest.json`):** Sesuaikan `name` dan `description` jika diperlukan.
 3. **Update Robots (`robots.txt`):** Ganti link sitemap pada baris terakhir `Sitemap: https://domain-anda.vercel.app/sitemap.xml`.
 
