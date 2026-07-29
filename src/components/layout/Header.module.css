@@ -1,7 +1,7 @@
 .header {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1100;
   height: var(--header-height);
   background-color: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
@@ -20,7 +20,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   height: 100%;
 }
 

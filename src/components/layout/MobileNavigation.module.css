@@ -1,94 +1,147 @@
-.drawerOverlay {
+.mobileMenuOverlay {
   position: fixed;
-  inset: var(--header-height) 0 0 0;
-  background-color: rgba(7, 19, 38, 0.6);
+  inset: var(--mobile-header-height, 86px) 0 0;
+  z-index: 999;
+  background: rgba(3, 15, 35, 0.55);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  z-index: 98;
   opacity: 0;
   visibility: hidden;
-  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    visibility 180ms ease;
 }
 
-.drawerOverlay.open {
+.mobileMenuOverlayOpen {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
-.drawer {
+.mobileMenu {
   position: fixed;
-  inset: var(--header-height) 0 0 0;
-  max-height: calc(100dvh - var(--header-height));
-  width: 100%;
-  background-color: var(--color-surface);
-  border-top: 1px solid var(--color-border);
-  z-index: 99;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
+  top: var(--mobile-header-height, 86px);
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  max-height: calc(100dvh - var(--mobile-header-height, 86px));
   overflow-y: auto;
-  transform: translateY(-10px);
+  padding:
+    18px
+    max(18px, env(safe-area-inset-right))
+    max(24px, calc(env(safe-area-inset-bottom) + 16px))
+    max(18px, env(safe-area-inset-left));
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  transform: translateY(-12px);
   opacity: 0;
   visibility: hidden;
-  transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+  pointer-events: none;
+  transition:
+    transform 180ms ease,
+    opacity 180ms ease,
+    visibility 180ms ease;
 }
 
-.drawer.open {
+.mobileMenuOpen {
+  transform: translateY(0);
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
-}
-
-.drawerHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.closeBtn {
-  min-width: 44px;
-  min-height: 44px;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-text-primary);
+  pointer-events: auto;
 }
 
 .navList {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
 }
 
-.navItem a {
+.navItem {
+  width: 100%;
+}
+
+.mobileNavLink {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
+  min-height: 48px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 1rem;
   font-weight: 600;
-  font-size: 0.95rem;
   color: var(--color-text-primary);
   transition: background-color var(--transition-fast), color var(--transition-fast);
-  min-height: 44px;
 }
 
-.navItem a:hover,
-.navItem a:focus-visible {
-  background-color: var(--color-primary-50);
+.mobileNavLink:hover,
+.mobileNavLink:focus-visible {
+  background-color: var(--color-surface-soft);
   color: var(--color-primary-600);
 }
 
-[data-theme="dark"] .navItem a:hover,
-[data-theme="dark"] .navItem a:focus-visible {
+[data-theme="dark"] .mobileNavLink:hover,
+[data-theme="dark"] .mobileNavLink:focus-visible {
   background-color: var(--color-surface-soft);
   color: var(--color-primary-400);
+}
+
+.mobileQuickActions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.btnLihatProyek {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background-color: var(--color-primary-600);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color var(--transition-fast);
+}
+
+.btnLihatProyek:hover {
+  background-color: var(--color-primary-700);
+}
+
+.btnBukaTools {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background-color: rgba(37, 99, 235, 0.08);
+  border: 1px solid var(--color-primary-600);
+  color: var(--color-primary-600);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+[data-theme="dark"] .btnBukaTools {
+  background-color: rgba(37, 99, 235, 0.15);
+  color: var(--color-primary-400);
+  border-color: var(--color-primary-500);
+}
+
+.btnBukaTools:hover {
+  background-color: rgba(37, 99, 235, 0.16);
 }

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Layers, Moon, Sun, Menu } from "lucide-react";
+import { Layers, Moon, Sun, Menu, X } from "lucide-react";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { mainNavItems } from "@/data/navigation";
 import MobileNavigation from "./MobileNavigation";
@@ -10,7 +10,7 @@ import styles from "./Header.module.css";
 
 export default function Header() {
   const { theme, toggleTheme } = useTheme();
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <header className={styles.header}>
@@ -36,6 +36,7 @@ export default function Header() {
         {/* Header Controls */}
         <div className={styles.controls}>
           <button
+            type="button"
             className={styles.iconBtn}
             onClick={toggleTheme}
             title="Ganti Mode Terang/Gelap"
@@ -45,16 +46,19 @@ export default function Header() {
           </button>
 
           <button
+            type="button"
             className={`${styles.iconBtn} ${styles.menuBtn}`}
-            onClick={() => setMobileOpen(true)}
-            aria-label="Buka Menu Mobile"
+            aria-label={isMenuOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setIsMenuOpen((previous) => !previous)}
           >
-            <Menu size={20} />
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
 
-      <MobileNavigation isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
+      <MobileNavigation isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </header>
   );
 }
