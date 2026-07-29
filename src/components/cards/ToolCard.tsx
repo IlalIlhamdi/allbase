@@ -24,7 +24,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
         backgroundColor: "var(--color-surface)",
         border: "1px solid var(--color-border)",
         borderRadius: "var(--radius-md)",
-        padding: "24px",
+        padding: "clamp(18px, 4vw, 24px)",
         display: "flex",
         flexDirection: "column",
         gap: "16px",
@@ -32,7 +32,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
         transition: "transform var(--transition-normal), border-color var(--transition-normal)",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
         <div
           style={{
             width: "44px",
@@ -64,7 +64,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
 
       <div>
         <h3 style={{ fontSize: "1.15rem", marginBottom: "6px" }}>{tool.title}</h3>
-        <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)" }}>{tool.description}</p>
+        <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>{tool.description}</p>
       </div>
 
       <div style={{ marginTop: "auto", paddingTop: "12px", borderTop: "1px solid var(--color-border)" }}>
@@ -76,6 +76,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
             display: "inline-flex",
             alignItems: "center",
             gap: "8px",
+            minHeight: "44px",
             fontWeight: 600,
             fontSize: "0.9rem",
             color: "var(--color-primary-600)",

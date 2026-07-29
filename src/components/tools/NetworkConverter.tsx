@@ -58,10 +58,10 @@ export default function NetworkConverter() {
           backgroundColor: "var(--color-surface)",
           border: "1px solid var(--color-border)",
           borderRadius: "var(--radius-md)",
-          padding: "28px 24px",
+          padding: "clamp(18px, 4vw, 28px)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "12px" }}>
           <span
             style={{
               padding: "4px 10px",
@@ -82,18 +82,19 @@ export default function NetworkConverter() {
           </span>
         </div>
 
-        <h1 style={{ fontSize: "1.6rem", marginBottom: "6px" }}>Konversi Satuan Jaringan</h1>
-        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", marginBottom: "24px" }}>
+        <h1 style={{ fontSize: "clamp(1.4rem, 4vw, 1.8rem)", marginBottom: "6px" }}>Konversi Satuan Jaringan</h1>
+        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", marginBottom: "24px", lineHeight: 1.6 }}>
           Konversikan kecepatan bandwidth (Mbps ke MB/s) dan format bilangan desimal, biner, serta heksadesimal secara real-time.
         </p>
 
         {/* Converter Tabs */}
-        <div style={{ display: "flex", gap: "8px", borderBottom: "1px solid var(--color-border)", paddingBottom: "12px" }}>
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", borderBottom: "1px solid var(--color-border)", paddingBottom: "12px" }}>
           <button
             onClick={() => setActiveTab("speed")}
             aria-pressed={activeTab === "speed"}
             style={{
               padding: "8px 16px",
+              minHeight: "44px",
               borderRadius: "var(--radius-sm)",
               fontWeight: 600,
               fontSize: "0.88rem",
@@ -111,6 +112,7 @@ export default function NetworkConverter() {
             aria-pressed={activeTab === "bases"}
             style={{
               padding: "8px 16px",
+              minHeight: "44px",
               borderRadius: "var(--radius-sm)",
               fontWeight: 600,
               fontSize: "0.88rem",
@@ -132,13 +134,13 @@ export default function NetworkConverter() {
             backgroundColor: "var(--color-surface)",
             border: "1px solid var(--color-border)",
             borderRadius: "var(--radius-md)",
-            padding: "24px",
+            padding: "clamp(18px, 4vw, 24px)",
           }}
         >
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))",
               gap: "20px",
               alignItems: "center",
               marginBottom: "24px",
@@ -156,11 +158,12 @@ export default function NetworkConverter() {
                 placeholder="100"
                 style={{
                   width: "100%",
-                  padding: "10px 14px",
+                  padding: "12px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
                   fontFamily: "var(--font-mono)",
+                  fontSize: "1rem",
                 }}
               />
             </div>
@@ -194,23 +197,26 @@ export default function NetworkConverter() {
                 placeholder="12.5"
                 style={{
                   width: "100%",
-                  padding: "10px 14px",
+                  padding: "12px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
                   fontFamily: "var(--font-mono)",
+                  fontSize: "1rem",
                 }}
               />
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "24px" }}>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "24px" }}>
             <button
               onClick={resetSpeedForm}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "8px",
+                minHeight: "44px",
                 padding: "10px 20px",
                 borderRadius: "var(--radius-sm)",
                 backgroundColor: "var(--color-surface-soft)",
@@ -218,6 +224,7 @@ export default function NetworkConverter() {
                 color: "var(--color-text-primary)",
                 fontWeight: 600,
                 fontSize: "0.92rem",
+                flex: "1 1 120px",
               }}
             >
               <RotateCcw size={16} /> Reset
@@ -228,7 +235,9 @@ export default function NetworkConverter() {
               style={{
                 display: "inline-flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "8px",
+                minHeight: "44px",
                 padding: "10px 20px",
                 borderRadius: "var(--radius-sm)",
                 border: "1px solid var(--color-border)",
@@ -236,6 +245,7 @@ export default function NetworkConverter() {
                 color: "var(--color-text-primary)",
                 fontWeight: 600,
                 fontSize: "0.92rem",
+                flex: "1 1 140px",
               }}
             >
               {copied ? <CheckCircle size={16} color="var(--color-success)" /> : <Copy size={16} />}
@@ -250,10 +260,11 @@ export default function NetworkConverter() {
               backgroundColor: "var(--color-surface-soft)",
               borderRadius: "var(--radius-sm)",
               border: "1px solid var(--color-border)",
+              overflowWrap: "anywhere",
             }}
           >
             <div style={{ fontSize: "0.85rem", color: "var(--color-text-muted)", marginBottom: "4px" }}>Hasil Konversi Kecepatan</div>
-            <div style={{ fontSize: "1.4rem", fontWeight: 800, fontFamily: "var(--font-mono)", color: "var(--color-primary-600)" }}>
+            <div style={{ fontSize: "clamp(1.2rem, 4vw, 1.4rem)", fontWeight: 800, fontFamily: "var(--font-mono)", color: "var(--color-primary-600)" }}>
               {mbps || 0} Mbps = {mBps || 0} MB/s
             </div>
           </div>
@@ -267,7 +278,7 @@ export default function NetworkConverter() {
             backgroundColor: "var(--color-surface)",
             border: "1px solid var(--color-border)",
             borderRadius: "var(--radius-md)",
-            padding: "24px",
+            padding: "clamp(18px, 4vw, 24px)",
           }}
         >
           <div style={{ marginBottom: "20px" }}>
@@ -282,11 +293,12 @@ export default function NetworkConverter() {
               placeholder="192"
               style={{
                 width: "100%",
-                padding: "10px 14px",
+                padding: "12px 14px",
                 borderRadius: "var(--radius-sm)",
                 border: "1px solid var(--color-border)",
                 backgroundColor: "var(--color-surface)",
                 fontFamily: "var(--font-mono)",
+                fontSize: "1rem",
               }}
             />
           </div>
@@ -294,7 +306,7 @@ export default function NetworkConverter() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))",
               gap: "16px",
               fontFamily: "var(--font-mono)",
             }}
@@ -305,10 +317,11 @@ export default function NetworkConverter() {
                 backgroundColor: "var(--color-surface-soft)",
                 borderRadius: "var(--radius-sm)",
                 border: "1px solid var(--color-border)",
+                overflowWrap: "anywhere",
               }}
             >
               <div style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", marginBottom: "4px" }}>Format Biner (8-bit)</div>
-              <div style={{ fontSize: "1.3rem", fontWeight: 700, color: "var(--color-primary-600)" }}>
+              <div style={{ fontSize: "clamp(1.1rem, 4vw, 1.3rem)", fontWeight: 700, color: "var(--color-primary-600)" }}>
                 {baseResults.binary}
               </div>
             </div>
@@ -319,10 +332,11 @@ export default function NetworkConverter() {
                 backgroundColor: "var(--color-surface-soft)",
                 borderRadius: "var(--radius-sm)",
                 border: "1px solid var(--color-border)",
+                overflowWrap: "anywhere",
               }}
             >
               <div style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", marginBottom: "4px" }}>Format Heksadesimal</div>
-              <div style={{ fontSize: "1.3rem", fontWeight: 700, color: "var(--color-success)" }}>
+              <div style={{ fontSize: "clamp(1.1rem, 4vw, 1.3rem)", fontWeight: 700, color: "var(--color-success)" }}>
                 {baseResults.hex}
               </div>
             </div>

@@ -101,7 +101,7 @@ export default function IlalGps() {
           backgroundColor: "var(--color-surface)",
           border: "1px solid var(--color-border)",
           borderRadius: "var(--radius-md)",
-          padding: "32px 24px",
+          padding: "clamp(18px, 4vw, 32px)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
@@ -122,8 +122,8 @@ export default function IlalGps() {
           </span>
         </div>
 
-        <h1 style={{ fontSize: "1.6rem", marginBottom: "6px" }}>Deteksi Lokasi GPS</h1>
-        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", marginBottom: "24px" }}>
+        <h1 style={{ fontSize: "clamp(1.4rem, 4vw, 1.8rem)", marginBottom: "6px" }}>Deteksi Lokasi GPS</h1>
+        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", marginBottom: "24px", lineHeight: 1.6 }}>
           Ambil koordinat presisi real-time dan deskripsi alamat perangkat Anda setelah penekanan tombol izin.
         </p>
 
@@ -136,9 +136,10 @@ export default function IlalGps() {
             border: "1px dashed var(--color-border)",
             textAlign: "center",
             fontFamily: "var(--font-mono)",
-            fontSize: "1.1rem",
+            fontSize: "clamp(0.95rem, 3.5vw, 1.1rem)",
             fontWeight: 700,
             marginBottom: "12px",
+            overflowWrap: "anywhere",
           }}
         >
           {coords}
@@ -153,6 +154,8 @@ export default function IlalGps() {
             textAlign: "center",
             fontSize: "0.9rem",
             marginBottom: "20px",
+            lineHeight: 1.5,
+            overflowWrap: "anywhere",
           }}
         >
           {address}
@@ -173,27 +176,30 @@ export default function IlalGps() {
               alignItems: "center",
               justifyContent: "center",
               gap: "8px",
+              minHeight: "48px",
               padding: "12px 24px",
               borderRadius: "var(--radius-sm)",
               backgroundColor: "var(--color-primary-600)",
               color: "#ffffff",
               fontWeight: 600,
               fontSize: "0.95rem",
+              width: "100%",
             }}
           >
             <Navigation size={18} /> {loading ? "Mengambil Lokasi..." : "📍 Ambil Lokasi Saya"}
           </button>
 
           {lastLat !== null && (
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
               <button
                 onClick={openGoogleMaps}
                 style={{
-                  flex: 1,
+                  flex: "1 1 140px",
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "8px",
+                  minHeight: "44px",
                   padding: "10px 16px",
                   borderRadius: "var(--radius-sm)",
                   backgroundColor: "var(--color-surface-soft)",
@@ -208,11 +214,12 @@ export default function IlalGps() {
               <button
                 onClick={shareWhatsApp}
                 style={{
-                  flex: 1,
+                  flex: "1 1 140px",
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "8px",
+                  minHeight: "44px",
                   padding: "10px 16px",
                   borderRadius: "var(--radius-sm)",
                   backgroundColor: "#25D366",
@@ -233,7 +240,7 @@ export default function IlalGps() {
           backgroundColor: "var(--color-surface)",
           border: "1px solid var(--color-border)",
           borderRadius: "var(--radius-md)",
-          padding: "24px",
+          padding: "clamp(18px, 4vw, 24px)",
         }}
       >
         <h3 style={{ fontSize: "1.1rem", marginBottom: "12px" }}>Cari Alamat Manual</h3>
@@ -249,11 +256,12 @@ export default function IlalGps() {
             placeholder="Contoh: -6.2, 106.8"
             style={{
               width: "100%",
-              padding: "10px 14px",
+              padding: "12px 14px",
               borderRadius: "var(--radius-sm)",
               border: "1px solid var(--color-border)",
               backgroundColor: "var(--color-surface)",
               fontFamily: "var(--font-mono)",
+              fontSize: "1rem",
             }}
           />
         </div>
@@ -261,6 +269,7 @@ export default function IlalGps() {
           onClick={searchManual}
           style={{
             width: "100%",
+            minHeight: "44px",
             padding: "10px 16px",
             borderRadius: "var(--radius-sm)",
             backgroundColor: "var(--color-surface-soft)",

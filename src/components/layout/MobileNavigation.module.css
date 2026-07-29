@@ -1,9 +1,10 @@
 .drawerOverlay {
   position: fixed;
-  inset: 0;
+  inset: var(--header-height) 0 0 0;
   background-color: rgba(7, 19, 38, 0.6);
   backdrop-filter: blur(4px);
-  z-index: 200;
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 98;
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition-normal), visibility var(--transition-normal);
@@ -16,32 +17,40 @@
 
 .drawer {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: min(300px, 85vw);
+  inset: var(--header-height) 0 0 0;
+  max-height: calc(100dvh - var(--header-height));
+  width: 100%;
   background-color: var(--color-surface);
-  border-left: 1px solid var(--color-border);
-  z-index: 201;
-  padding: 24px;
+  border-top: 1px solid var(--color-border);
+  z-index: 99;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  transform: translateX(100%);
-  transition: transform var(--transition-slow);
+  overflow-y: auto;
+  transform: translateY(-10px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
 }
 
 .drawer.open {
-  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .drawerHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .closeBtn {
+  min-width: 44px;
+  min-height: 44px;
   width: 44px;
   height: 44px;
   border-radius: var(--radius-sm);
@@ -56,7 +65,7 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 .navItem a {
@@ -66,17 +75,20 @@
   padding: 12px 16px;
   border-radius: var(--radius-sm);
   font-weight: 600;
+  font-size: 0.95rem;
   color: var(--color-text-primary);
   transition: background-color var(--transition-fast), color var(--transition-fast);
   min-height: 44px;
 }
 
-.navItem a:hover {
+.navItem a:hover,
+.navItem a:focus-visible {
   background-color: var(--color-primary-50);
   color: var(--color-primary-600);
 }
 
-[data-theme="dark"] .navItem a:hover {
+[data-theme="dark"] .navItem a:hover,
+[data-theme="dark"] .navItem a:focus-visible {
   background-color: var(--color-surface-soft);
   color: var(--color-primary-400);
 }

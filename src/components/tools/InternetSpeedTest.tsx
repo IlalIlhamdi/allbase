@@ -174,10 +174,10 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
           backgroundColor: "var(--color-surface)",
           border: "1px solid var(--color-border)",
           borderRadius: "var(--radius-md)",
-          padding: "24px",
+          padding: "clamp(18px, 4vw, 24px)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "8px" }}>
           <span
             style={{
               padding: "4px 10px",
@@ -191,14 +191,14 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
               gap: "6px",
             }}
           >
-            <Gauge size={14} /> Cloudflare Measurement Engine
+            <Gauge size={14} /> Cloudflare Engine
           </span>
           <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", fontFamily: "var(--font-mono)" }}>
             Edge Network API
           </span>
         </div>
-        <h1 style={{ fontSize: "1.6rem", marginBottom: "6px" }}>Internet Speed Test</h1>
-        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)" }}>
+        <h1 style={{ fontSize: "clamp(1.4rem, 4vw, 1.8rem)", marginBottom: "6px" }}>Internet Speed Test</h1>
+        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
           Uji performa bandwidth Download, Upload, Ping, Jitter, serta penilaian kualitas koneksi real-time.
         </p>
       </div>
@@ -218,7 +218,7 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
         <AlertTriangle size={20} color="var(--color-warning)" style={{ flexShrink: 0, marginTop: "2px" }} />
         <div>
           <div style={{ fontWeight: 700, fontSize: "0.92rem", marginBottom: "2px" }}>Peringatan Penggunaan Data</div>
-          <div style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)" }}>
+          <div style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
             Tes kecepatan dapat menggunakan kuota data dalam jumlah cukup besar. Pastikan Anda memperhatikan batas kuota internet seluler Anda.
           </div>
         </div>
@@ -228,12 +228,12 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
           gap: "24px",
           backgroundColor: "var(--color-surface)",
           border: "1px solid var(--color-border)",
           borderRadius: "var(--radius-md)",
-          padding: "32px 24px",
+          padding: "clamp(20px, 4vw, 32px)",
         }}
       >
         {/* Left Gauge Display */}
@@ -264,7 +264,7 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
           </div>
 
           {/* SVG Speedometer Gauge */}
-          <div style={{ position: "relative", width: "240px", height: "160px" }}>
+          <div style={{ position: "relative", width: "min(100%, 240px)", height: "160px" }}>
             <svg viewBox="0 0 320 200" style={{ width: "100%", height: "100%" }}>
               <path
                 d="M 40 160 A 120 120 0 0 1 280 160"
@@ -293,7 +293,7 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
                 textAlign: "center",
               }}
             >
-              <div style={{ fontSize: "2.2rem", fontWeight: 800, fontFamily: "var(--font-mono)", lineHeight: 1 }}>
+              <div style={{ fontSize: "clamp(1.8rem, 5vw, 2.2rem)", fontWeight: 800, fontFamily: "var(--font-mono)", lineHeight: 1 }}>
                 {currentSpeed.toFixed(2)}
               </div>
               <div style={{ fontSize: "0.85rem", color: "var(--color-text-muted)", fontWeight: 600 }}>Mbps</div>
@@ -305,7 +305,7 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           <div>
             <h2 style={{ fontSize: "1.2rem", marginBottom: "6px" }}>Analisis Koneksi Real-time</h2>
-            <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)" }}>
+            <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
               {testState === "idle"
                 ? "Klik Mulai Tes untuk menguji performa koneksi internet."
                 : testState === "completed"
@@ -318,20 +318,23 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
             </p>
           </div>
 
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginTop: "auto" }}>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "auto" }}>
             {testState === "idle" || testState === "completed" ? (
               <button
                 onClick={runTest}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
+                  justifyContent: "center",
                   gap: "8px",
+                  minHeight: "48px",
                   padding: "10px 20px",
                   borderRadius: "var(--radius-sm)",
                   backgroundColor: "var(--color-primary-600)",
                   color: "#ffffff",
                   fontWeight: 600,
                   fontSize: "0.92rem",
+                  flex: "1 1 140px",
                 }}
               >
                 <Play size={16} /> {testState === "completed" ? "Tes Ulang" : "Mulai Tes"}
@@ -342,13 +345,16 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
+                  justifyContent: "center",
                   gap: "8px",
+                  minHeight: "48px",
                   padding: "10px 20px",
                   borderRadius: "var(--radius-sm)",
                   backgroundColor: "var(--color-primary-600)",
                   color: "#ffffff",
                   fontWeight: 600,
                   fontSize: "0.92rem",
+                  flex: "1 1 140px",
                 }}
               >
                 <RotateCcw size={16} /> Mulai Ulang Tes
@@ -359,13 +365,16 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
+                  justifyContent: "center",
                   gap: "8px",
+                  minHeight: "48px",
                   padding: "10px 20px",
                   borderRadius: "var(--radius-sm)",
                   backgroundColor: "var(--color-danger)",
                   color: "#ffffff",
                   fontWeight: 600,
                   fontSize: "0.92rem",
+                  flex: "1 1 140px",
                 }}
               >
                 <XCircle size={16} /> Batalkan
@@ -378,7 +387,9 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
               style={{
                 display: "inline-flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "8px",
+                minHeight: "48px",
                 padding: "10px 20px",
                 borderRadius: "var(--radius-sm)",
                 border: "1px solid var(--color-border)",
@@ -387,6 +398,7 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
                 fontWeight: 600,
                 fontSize: "0.92rem",
                 cursor: testState === "completed" ? "pointer" : "not-allowed",
+                flex: "1 1 140px",
               }}
             >
               {copied ? <CheckCircle size={16} color="var(--color-success)" /> : <Copy size={16} />}
@@ -397,22 +409,22 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
       </div>
 
       {/* Metrics Cards Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 140px), 1fr))", gap: "12px" }}>
         <div
           style={{
             backgroundColor: "var(--color-surface)",
             border: "1px solid var(--color-border)",
             borderRadius: "var(--radius-md)",
-            padding: "20px",
+            padding: "16px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--color-primary-600)", marginBottom: "8px" }}>
-            <ArrowDownCircle size={18} />
-            <span style={{ fontWeight: 600, fontSize: "0.9rem" }}>Download</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--color-primary-600)", marginBottom: "6px" }}>
+            <ArrowDownCircle size={16} />
+            <span style={{ fontWeight: 600, fontSize: "0.85rem" }}>Download</span>
           </div>
-          <div style={{ fontSize: "1.6rem", fontWeight: 800, fontFamily: "var(--font-mono)" }}>
+          <div style={{ fontSize: "clamp(1.3rem, 4vw, 1.6rem)", fontWeight: 800, fontFamily: "var(--font-mono)" }}>
             {results.downloadMbps ? results.downloadMbps.toFixed(2) : "—"}{" "}
-            <span style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>Mbps</span>
+            <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Mbps</span>
           </div>
         </div>
 
@@ -421,16 +433,16 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
             backgroundColor: "var(--color-surface)",
             border: "1px solid var(--color-border)",
             borderRadius: "var(--radius-md)",
-            padding: "20px",
+            padding: "16px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--color-success)", marginBottom: "8px" }}>
-            <ArrowUpCircle size={18} />
-            <span style={{ fontWeight: 600, fontSize: "0.9rem" }}>Upload</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--color-success)", marginBottom: "6px" }}>
+            <ArrowUpCircle size={16} />
+            <span style={{ fontWeight: 600, fontSize: "0.85rem" }}>Upload</span>
           </div>
-          <div style={{ fontSize: "1.6rem", fontWeight: 800, fontFamily: "var(--font-mono)" }}>
+          <div style={{ fontSize: "clamp(1.3rem, 4vw, 1.6rem)", fontWeight: 800, fontFamily: "var(--font-mono)" }}>
             {results.uploadMbps ? results.uploadMbps.toFixed(2) : "—"}{" "}
-            <span style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>Mbps</span>
+            <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Mbps</span>
           </div>
         </div>
 
@@ -439,16 +451,16 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
             backgroundColor: "var(--color-surface)",
             border: "1px solid var(--color-border)",
             borderRadius: "var(--radius-md)",
-            padding: "20px",
+            padding: "16px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--color-warning)", marginBottom: "8px" }}>
-            <Activity size={18} />
-            <span style={{ fontWeight: 600, fontSize: "0.9rem" }}>Ping (Latency)</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--color-warning)", marginBottom: "6px" }}>
+            <Activity size={16} />
+            <span style={{ fontWeight: 600, fontSize: "0.85rem" }}>Ping</span>
           </div>
-          <div style={{ fontSize: "1.6rem", fontWeight: 800, fontFamily: "var(--font-mono)" }}>
+          <div style={{ fontSize: "clamp(1.3rem, 4vw, 1.6rem)", fontWeight: 800, fontFamily: "var(--font-mono)" }}>
             {results.pingMs ? results.pingMs.toFixed(1) : "—"}{" "}
-            <span style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>ms</span>
+            <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>ms</span>
           </div>
         </div>
 
@@ -457,16 +469,16 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
             backgroundColor: "var(--color-surface)",
             border: "1px solid var(--color-border)",
             borderRadius: "var(--radius-md)",
-            padding: "20px",
+            padding: "16px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--color-primary-400)", marginBottom: "8px" }}>
-            <Radio size={18} />
-            <span style={{ fontWeight: 600, fontSize: "0.9rem" }}>Jitter</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--color-primary-400)", marginBottom: "6px" }}>
+            <Radio size={16} />
+            <span style={{ fontWeight: 600, fontSize: "0.85rem" }}>Jitter</span>
           </div>
-          <div style={{ fontSize: "1.6rem", fontWeight: 800, fontFamily: "var(--font-mono)" }}>
+          <div style={{ fontSize: "clamp(1.3rem, 4vw, 1.6rem)", fontWeight: 800, fontFamily: "var(--font-mono)" }}>
             {results.jitterMs ? results.jitterMs.toFixed(1) : "—"}{" "}
-            <span style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>ms</span>
+            <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>ms</span>
           </div>
         </div>
       </div>
@@ -477,20 +489,20 @@ Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
           backgroundColor: "var(--color-surface)",
           border: "1px solid var(--color-border)",
           borderRadius: "var(--radius-md)",
-          padding: "24px",
+          padding: "clamp(18px, 4vw, 24px)",
         }}
       >
         <h3 style={{ fontSize: "1.1rem", marginBottom: "16px", display: "flex", alignItems: "center", gap: "8px" }}>
           <Award size={20} color="var(--color-primary-600)" /> Rating Kualitas Koneksi
         </h3>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
-          <div style={{ padding: "16px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: "12px" }}>
+          <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)" }}>
             <div style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", marginBottom: "4px" }}>Streaming Video</div>
             <div style={{ fontWeight: 700, color: "var(--color-primary-600)" }}>{getStreamingQuality()}</div>
           </div>
 
-          <div style={{ padding: "16px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)" }}>
+          <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)" }}>
             <div style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", marginBottom: "4px" }}>Gaming Online</div>
             <div style={{ fontWeight: 700, color: "var(--color-success)" }}>{getGamingQuality()}</div>
           </div>

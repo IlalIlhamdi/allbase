@@ -20,17 +20,10 @@ export default function Contact() {
         >
           Hubungi Saya
         </span>
-        <h2 id="contact-title" style={{ fontSize: "2rem", marginBottom: "12px" }}>
+        <h2 id="contact-title" className="sectionTitle">
           Mari Berdiskusi
         </h2>
-        <p
-          style={{
-            color: "var(--color-text-secondary)",
-            maxWidth: "560px",
-            marginInline: "auto",
-            marginBottom: "32px",
-          }}
-        >
+        <p className="sectionDescription" style={{ marginBottom: "32px" }}>
           Tertarik untuk berkolaborasi dalam proyek jaringan atau pengembangan web? Kontak saya secara langsung.
         </p>
 
@@ -38,8 +31,10 @@ export default function Contact() {
           style={{
             display: "flex",
             justifyContent: "center",
-            gap: "16px",
+            gap: "12px",
             flexWrap: "wrap",
+            maxWidth: "680px",
+            marginInline: "auto",
           }}
         >
           <a
@@ -49,13 +44,16 @@ export default function Contact() {
             style={{
               display: "inline-flex",
               alignItems: "center",
+              justifyContent: "center",
               gap: "8px",
+              minHeight: "48px",
               padding: "12px 24px",
               borderRadius: "var(--radius-sm)",
               backgroundColor: "var(--color-primary-600)",
               color: "#ffffff",
               fontWeight: 600,
               fontSize: "0.95rem",
+              flex: "1 1 200px",
             }}
             aria-label="Hubungi via WhatsApp Chat"
           >
@@ -67,7 +65,9 @@ export default function Contact() {
             style={{
               display: "inline-flex",
               alignItems: "center",
+              justifyContent: "center",
               gap: "8px",
+              minHeight: "48px",
               padding: "12px 24px",
               borderRadius: "var(--radius-sm)",
               backgroundColor: "var(--color-surface)",
@@ -75,6 +75,8 @@ export default function Contact() {
               color: "var(--color-text-primary)",
               fontWeight: 600,
               fontSize: "0.95rem",
+              overflowWrap: "anywhere",
+              flex: "1 1 200px",
             }}
             aria-label="Kirim Email Direct"
           >
@@ -88,13 +90,16 @@ export default function Contact() {
             style={{
               display: "inline-flex",
               alignItems: "center",
+              justifyContent: "center",
               gap: "8px",
+              minHeight: "48px",
               padding: "12px 24px",
               borderRadius: "var(--radius-sm)",
               border: "1px solid var(--color-border)",
               color: "var(--color-text-primary)",
               fontWeight: 600,
               fontSize: "0.95rem",
+              flex: "1 1 200px",
             }}
             aria-label="Kunjungi Profil GitHub"
           >

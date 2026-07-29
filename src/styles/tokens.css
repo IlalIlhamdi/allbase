@@ -50,6 +50,12 @@
   --transition-slow: 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+@media (max-width: 768px) {
+  :root {
+    --header-height: 64px;
+  }
+}
+
 [data-theme="dark"] {
   --color-background: #071326;
   --color-surface: #0d1e3a;

@@ -23,7 +23,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         backgroundColor: "var(--color-surface)",
         border: "1px solid var(--color-border)",
         borderRadius: "var(--radius-md)",
-        padding: "24px",
+        padding: "clamp(18px, 4vw, 24px)",
         display: "flex",
         flexDirection: "column",
         gap: "16px",
@@ -31,7 +31,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         transition: "transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal)",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
         <div
           style={{
             width: "44px",
@@ -62,7 +62,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
       <div>
         <h3 style={{ fontSize: "1.15rem", marginBottom: "6px" }}>{project.title}</h3>
-        <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)" }}>{project.description}</p>
+        <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>{project.description}</p>
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "auto" }}>
@@ -72,7 +72,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             style={{
               fontSize: "0.75rem",
               fontFamily: "var(--font-mono)",
-              padding: "2px 8px",
+              padding: "3px 9px",
               borderRadius: "var(--radius-sm)",
               backgroundColor: "var(--color-surface-soft)",
               border: "1px solid var(--color-border)",
@@ -84,7 +84,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         ))}
       </div>
 
-      <div style={{ display: "flex", gap: "12px", paddingTop: "12px", borderTop: "1px solid var(--color-border)" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", paddingTop: "12px", borderTop: "1px solid var(--color-border)" }}>
         {project.href && (
           <Link
             href={project.href}
@@ -93,13 +93,16 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             style={{
               display: "inline-flex",
               alignItems: "center",
+              justifyContent: "center",
               gap: "6px",
+              minHeight: "44px",
               padding: "8px 16px",
               borderRadius: "var(--radius-sm)",
               backgroundColor: "var(--color-primary-600)",
               color: "#ffffff",
               fontSize: "0.88rem",
               fontWeight: 600,
+              flex: 1,
             }}
           >
             Lihat Proyek <ExternalLink size={14} />
@@ -113,7 +116,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             style={{
               display: "inline-flex",
               alignItems: "center",
+              justifyContent: "center",
               gap: "6px",
+              minHeight: "44px",
               padding: "8px 16px",
               borderRadius: "var(--radius-sm)",
               border: "1px solid var(--color-border)",

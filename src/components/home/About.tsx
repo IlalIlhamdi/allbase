@@ -4,7 +4,7 @@ export default function About() {
   return (
     <section id="about" className="section section-alt" aria-labelledby="about-title">
       <div className="container">
-        <div style={{ textAlign: "center", marginBottom: "48px" }}>
+        <div style={{ textAlign: "center", marginBottom: "clamp(32px, 5vw, 48px)" }}>
           <span
             style={{
               padding: "4px 12px",
@@ -20,27 +20,21 @@ export default function About() {
           >
             Profil Singkat
           </span>
-          <h2 id="about-title" style={{ fontSize: "2rem", marginBottom: "12px" }}>
+          <h2 id="about-title" className="sectionTitle">
             Tentang Saya
           </h2>
-          <p style={{ color: "var(--color-text-secondary)", maxWidth: "600px", marginInline: "auto" }}>
+          <p className="sectionDescription">
             Dedikasi dalam rekayasa jaringan telekomunikasi dan pengembangan perangkat lunak terpadu.
           </p>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "24px",
-          }}
-        >
+        <div className="cardsGrid">
           <div
             style={{
               backgroundColor: "var(--color-surface)",
               border: "1px solid var(--color-border)",
               borderRadius: "var(--radius-md)",
-              padding: "28px",
+              padding: "clamp(20px, 4vw, 28px)",
               boxShadow: "var(--shadow-sm)",
             }}
           >
@@ -57,7 +51,7 @@ export default function About() {
               backgroundColor: "var(--color-surface)",
               border: "1px solid var(--color-border)",
               borderRadius: "var(--radius-md)",
-              padding: "28px",
+              padding: "clamp(20px, 4vw, 28px)",
               boxShadow: "var(--shadow-sm)",
             }}
           >
@@ -74,7 +68,7 @@ export default function About() {
               backgroundColor: "var(--color-surface)",
               border: "1px solid var(--color-border)",
               borderRadius: "var(--radius-md)",
-              padding: "28px",
+              padding: "clamp(20px, 4vw, 28px)",
               boxShadow: "var(--shadow-sm)",
             }}
           >
