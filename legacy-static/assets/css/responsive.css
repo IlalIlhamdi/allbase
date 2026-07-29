@@ -1,0 +1,251 @@
+/* ============================================================
+   ALLBASE RESPONSIVE STYLES
+   Optimized for Android & iOS (320px to 1920px)
+   ============================================================ */
+
+.mobile-toggle-btn {
+  display: none;
+}
+
+.mobile-drawer {
+  display: none;
+}
+
+/* --- DESKTOP LARGE (< 1200px) --- */
+@media (max-width: 1199px) {
+  .hero-grid {
+    gap: 36px;
+  }
+  .hero-title {
+    font-size: 2.3rem;
+  }
+}
+
+/* --- LAPTOP / TABLET / MOBILE (< 992px) --- */
+@media (max-width: 991px) {
+  #hero {
+    min-height: auto;
+    padding-top: clamp(72px, 14vw, 96px);
+    padding-bottom: 64px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 36px;
+    width: min(100% - 32px, 680px);
+    margin-inline: auto;
+  }
+
+  .hero-left {
+    order: 1;
+    align-items: center;
+  }
+
+  .hero-right {
+    order: 2;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+
+  .hero-desc {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .profile-visual {
+    width: min(82vw, 305px);
+    margin: 32px auto 0;
+  }
+
+  .profile-photo-frame {
+    border-radius: 22px;
+  }
+
+  .profile-photo-overlay {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    text-align: center;
+  }
+
+  .profile-status-tag {
+    display: none;
+  }
+
+  .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+/* --- TABLET / MOBILE (< 768px) --- */
+@media (max-width: 767px) {
+  .site-header {
+    height: 62px;
+  }
+
+  .header-container {
+    height: 62px;
+    padding: 0 16px;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .mobile-toggle-btn {
+    display: inline-flex;
+  }
+
+  /* Mobile Drawer Overlay */
+  .mobile-drawer {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 62px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--surface);
+    z-index: 99;
+    padding: 24px;
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .mobile-drawer.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    background: var(--surface-secondary);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .section {
+    padding: 52px 16px;
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
+  }
+
+  .hero-desc {
+    font-size: 0.95rem;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* --- SMALL MOBILE (< 480px) --- */
+@media (max-width: 479px) {
+  .profile-visual::before {
+    width: 108%;
+    height: 94%;
+    opacity: 0.55;
+  }
+
+  .profile-node:nth-of-type(n + 4) {
+    display: none;
+  }
+
+  .profile-node {
+    pointer-events: none;
+  }
+
+  .hero-title {
+    font-size: 1.6rem;
+  }
+
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .hero-buttons .btn {
+    width: 100%;
+    min-height: 46px;
+  }
+}
+
+/* --- EXTRA SMALL MOBILE (< 360px) --- */
+@media (max-width: 360px) {
+  .profile-visual {
+    width: min(84vw, 285px);
+  }
+
+  .profile-photo-frame img, .profile-img {
+    object-position: center 40%;
+  }
+
+  .profile-photo-overlay h3 {
+    font-size: 0.92rem;
+  }
+
+  .profile-photo-overlay p {
+    font-size: 0.64rem;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* --- TOUCH DEVICE OPTIMIZATION --- */
+@media (hover: none), (pointer: coarse) {
+  .profile-photo-frame {
+    transform: none !important;
+  }
+
+  .profile-float {
+    animation-duration: 6.5s;
+  }
+}
+
+/* --- REDUCED MOTION ACCESSIBILITY --- */
+@media (prefers-reduced-motion: reduce) {
+  .profile-visual,
+  .profile-float,
+  .profile-visual::before,
+  .profile-node,
+  .profile-scan-line,
+  .profile-connection::after,
+  .social-link-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .profile-visual {
+    opacity: 1;
+    transform: none;
+  }
+}

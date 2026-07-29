@@ -1,12 +1,27 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Environment files
 .env
 .env.*
-.vercel
-node_modules/
-__pycache__/
-*.pyc
+!.env.example
+
+# Vercel
+.vercel/
+
+# IDE / Editor
+.vscode/
+
+# Testing & Logs
+coverage/
+playwright-report/
+test-results/
+*.log
+
+# System files
 .DS_Store
 Thumbs.db
-*.log
-_archive/
-
-.vscode/
