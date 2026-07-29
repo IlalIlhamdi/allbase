@@ -5,7 +5,7 @@ import { constructMetadata } from "@/lib/metadata";
 export const metadata: Metadata = constructMetadata({
   title: "Deteksi Lokasi GPS — ALLBASE",
   description: "Alat pelacak lokasi geolokasi real-time dan pemetaan koordinat GPS perangkat.",
-  canonical: "/ilal-gps/",
+  canonical: "/ilal-gps",
 });
 
 export default function IlalGpsPage() {

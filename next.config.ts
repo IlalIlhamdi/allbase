@@ -1,17 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  trailingSlash: true,
+  trailingSlash: false,
   async redirects() {
     return [
       {
         source: "/network-converter",
-        destination: "/tools/network-converter/",
+        destination: "/tools/network-converter",
         permanent: true,
       },
       {
         source: "/network-converter/",
-        destination: "/tools/network-converter/",
+        destination: "/tools/network-converter",
         permanent: true,
       },
     ];

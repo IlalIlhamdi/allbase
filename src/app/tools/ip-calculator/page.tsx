@@ -5,7 +5,7 @@ import { constructMetadata } from "@/lib/metadata";
 export const metadata: Metadata = constructMetadata({
   title: "IP & Mask Calculator — ALLBASE",
   description: "Alat pembagi alokasi blok IP address dan perincian wildcard mask untuk analisis jaringan telekomunikasi.",
-  canonical: "/tools/ip-calculator/",
+  canonical: "/tools/ip-calculator",
 });
 
 export default function IpCalculatorPage() {

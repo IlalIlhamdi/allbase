@@ -145,7 +145,7 @@ export default function InternetSpeedTest() {
 - Upload: ${results.uploadMbps ? results.uploadMbps.toFixed(2) : "—"} Mbps
 - Ping: ${results.pingMs ? results.pingMs.toFixed(1) : "—"} ms
 - Jitter: ${results.jitterMs ? results.jitterMs.toFixed(1) : "—"} ms
-Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test/`;
+Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test`;
 
     navigator.clipboard.writeText(text);
     setCopied(true);

@@ -5,7 +5,7 @@ import { constructMetadata } from "@/lib/metadata";
 export const metadata: Metadata = constructMetadata({
   title: "Konversi Satuan Jaringan — ALLBASE",
   description: "Alat konversi kecepatan internet dua arah (Mbps ke MB/s) serta format bilangan desimal, biner, dan heksadesimal.",
-  canonical: "/tools/network-converter/",
+  canonical: "/tools/network-converter",
 });
 
 export default function NetworkConverterPage() {
