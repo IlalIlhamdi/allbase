@@ -25,24 +25,17 @@ export default function Hero() {
               ALLBASE adalah pusat portofolio, proyek, dan berbagai tool yang saya bangun untuk pembelajaran jaringan telekomunikasi, teknologi, dan pengembangan aplikasi web modern.
             </p>
 
-            {/* Mobile Primary Action (Hubungi Saya CTA) */}
-            <div className={styles.mobilePrimaryActionContainer}>
-              <Link href="#contact" className={styles.mobilePrimaryAction}>
-                <Send size={20} /> Hubungi Saya
-              </Link>
-            </div>
-
             {/* Desktop Hero Actions */}
             <div className={styles.desktopHeroActions}>
-              <Link href="#projects" className={styles.btnPrimary}>
+              <Link href="/#projects" className={styles.btnPrimary}>
                 <Grid size={20} /> Lihat Proyek
               </Link>
 
-              <Link href="#tools" className={styles.btnSecondary}>
+              <Link href="/#tools" className={styles.btnSecondary}>
                 <Wrench size={20} /> Buka Tools
               </Link>
 
-              <Link href="#contact" className={styles.btnOutline}>
+              <Link href="/#contact" className={styles.btnOutline}>
                 <Send size={20} /> Hubungi Saya
               </Link>
             </div>
@@ -57,7 +50,7 @@ export default function Hero() {
                   alt="Ilal Ilhamdi"
                   fill
                   priority
-                  sizes="(max-width: 430px) 86vw, (max-width: 768px) 340px, 380px"
+                  sizes="(max-width: 430px) 86vw, (max-width: 768px) 330px, 380px"
                   style={{
                     objectFit: "cover",
                     objectPosition: "center 35%",
