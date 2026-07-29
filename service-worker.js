@@ -3,7 +3,7 @@
    Static App Shell Caching & Offline Fallback Strategy
    ============================================================ */
 
-const CACHE_NAME = 'allbase-static-v5';
+const CACHE_NAME = 'allbase-static-v6';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -32,8 +32,13 @@ const STATIC_ASSETS = [
   './assets/js/filters.js',
   './assets/js/app.js',
   './assets/js/subpage.js',
+  './assets/vendor/cloudflare-speedtest/speedtest.js',
   './network-converter/index.html',
   './tools/subnet-calculator/index.html',
+  './tools/ip-calculator/index.html',
+  './tools/internet-speed-test/index.html',
+  './tools/internet-speed-test/speed-test.css',
+  './tools/internet-speed-test/speed-test.js',
   './college-tasks/index.html',
   './friendship-page/index.html'
 ];
@@ -66,14 +71,27 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const request = event.request;
+  const url = request.url;
 
-  // Never cache robots.txt or sitemap.xml
-  if (request.url.includes('robots.txt') || request.url.includes('sitemap.xml')) {
+  // Never cache robots.txt, sitemap.xml, or non-GET requests
+  if (url.includes('robots.txt') || url.includes('sitemap.xml') || request.method !== 'GET') {
     event.respondWith(fetch(request));
     return;
   }
 
-  // Network-first with cache fallback strategy
+  // Bypass service worker interception for Cloudflare SpeedTest measurement endpoints
+  if (
+    url.includes('speed.cloudflare.com') ||
+    url.includes('__down') ||
+    url.includes('__up') ||
+    url.includes('__results') ||
+    url.includes('turn-creds')
+  ) {
+    event.respondWith(fetch(request));
+    return;
+  }
+
+  // Network-first with cache fallback strategy for static app shell
   event.respondWith(
     fetch(request)
       .then((networkResponse) => {

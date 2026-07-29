@@ -211,4 +211,17 @@ Setelah deployment di Vercel selesai dan Anda mendapatkan domain kustom (misal: 
 - [x] Light / Dark mode switcher berjalan lancar dan tersimpan di `localStorage`.
 - [x] Tampilan responsif sempurna di Desktop, Tablet, dan Smartphone (tanpa overflow horizontal).
 - [x] PWA Service Worker dan halaman `offline.html` siap digunakan.
+- [x] Internet Speed Test Tool menggunakan engine resmi `@cloudflare/speedtest` (ESM lokal).
 - [x] Siap dideploy ke Vercel via GitHub Automatic Deployment.
+
+---
+
+## ⚡ 10. Tool Internet Speed Test
+
+ALLBASE menyertakan tool penguji kecepatan Internet statis (`tools/internet-speed-test/`) dengan fitur:
+- **Engine:** Distribution ESM resmi `@cloudflare/speedtest` versi pinned yang disimpan secara lokal di `assets/vendor/cloudflare-speedtest/speedtest.js`.
+- **Pengujian:** Jaringan edge Cloudflare (Download Mbps, Upload Mbps, Ping ms, Jitter ms, serta Connection Quality Score).
+- **Penggunaan Data:** Menampilkan peringatan kuota data & deteksi otomatis koneksi seluler.
+- **Privasi:** 100% tanpa simpanan database, localStorage, maupun analytics khusus hasil pengujian.
+- **Hasil:** Dapat disalin langsung ke clipboard dalam format ringkas.
+

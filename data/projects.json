@@ -60,6 +60,21 @@
     "openMode": "same-tab"
   },
   {
+    "id": "internet-speed-test",
+    "title": "Internet Speed Test",
+    "description": "Uji kecepatan download, upload, ping, jitter, dan kualitas koneksi Internet.",
+    "category": "Networking",
+    "type": "tool",
+    "thumbnail": "assets/images/projects/speed-test.jpg",
+    "icon": "gauge",
+    "tags": ["Speed Test", "Download", "Upload", "Ping", "Jitter"],
+    "url": "tools/internet-speed-test/index.html",
+    "repository": "",
+    "status": "completed",
+    "featured": true,
+    "openMode": "same-tab"
+  },
+  {
     "id": "network-monitoring-prometheus",
     "title": "Network Monitoring System",
     "description": "Perancangan dashboard pemantauan performa router dan jaringan menggunakan Prometheus dan Grafana.",

@@ -1,0 +1,450 @@
+/* ============================================================
+   ALLBASE INTERNET SPEED TEST SPECIFIC STYLES
+   Gauge Speedometer, Metric Cards, Phase Progress, Responsive Grid
+   ============================================================ */
+
+/* Data Warning & Cellular Box */
+.warning-box {
+  background-color: var(--warning-soft);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.warning-box i {
+  color: var(--warning);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.warning-text-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.warning-text-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.cellular-alert {
+  background-color: var(--primary-soft);
+  border: 1px solid var(--primary-light);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+html[data-theme="dark"] .cellular-alert {
+  color: var(--primary-light);
+}
+
+/* Speedometer Gauge Container */
+.gauge-card {
+  text-align: center;
+  padding: 32px 24px;
+  margin-bottom: 24px;
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.gauge-wrapper {
+  position: relative;
+  width: 260px;
+  height: 160px;
+  margin: 0 auto 16px auto;
+}
+
+.gauge-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.gauge-bg-path {
+  fill: none;
+  stroke: var(--surface-secondary);
+  stroke-width: 18;
+  stroke-linecap: round;
+}
+
+html[data-theme="dark"] .gauge-bg-path {
+  stroke: #182B49;
+}
+
+.gauge-active-path {
+  fill: none;
+  stroke: url(#gaugeGradient);
+  stroke-width: 18;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.25s ease-out;
+}
+
+.gauge-needle {
+  transform-origin: 130px 140px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gauge-needle-head {
+  fill: var(--primary);
+}
+
+.gauge-needle-center {
+  fill: var(--surface);
+  stroke: var(--primary);
+  stroke-width: 4;
+}
+
+/* Central Gauge Value Display */
+.gauge-value-box {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
+}
+
+.gauge-number {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.gauge-unit {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* Phase & Status Info */
+.status-indicator {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-badge-text {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  display: inline-block;
+  opacity: 0.4;
+}
+
+.status-pulse-dot.running {
+  animation: pulse-ring 1.5s infinite ease-in-out;
+  opacity: 1;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.5; }
+}
+
+/* Phase Steps Line */
+.phase-steps {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.step-chip {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.76rem;
+  font-weight: 500;
+  background: var(--surface-secondary);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  transition: all var(--transition-fast);
+}
+
+.step-chip.active {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: var(--primary);
+  font-weight: 700;
+}
+
+.step-chip.done {
+  background: var(--success-soft);
+  color: var(--success);
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+/* Progress Bar */
+.progress-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 16px auto 0 auto;
+}
+
+.progress-bar-track {
+  width: 100%;
+  height: 8px;
+  background-color: var(--surface-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--primary), #06B6D4);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+/* Control Buttons Row */
+.controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+/* 4 Metric Cards Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 16px;
+  text-align: center;
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.metric-card.active {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+  background: var(--surface-secondary);
+  transform: translateY(-2px);
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.metric-header i {
+  width: 18px;
+  height: 18px;
+}
+
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.metric-unit {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* Quality Rating Section */
+.quality-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.quality-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.quality-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quality-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.quality-item {
+  background: var(--surface-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  text-align: center;
+}
+
+.quality-item-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.quality-item-score {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.quality-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 14px;
+  text-align: center;
+}
+
+/* Metadata & Info Section */
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.info-item {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+.info-item span {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.info-notice {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  line-height: 1.5;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .quality-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gauge-wrapper {
+    width: 220px;
+    height: 140px;
+  }
+  .gauge-needle {
+    transform-origin: 130px 140px;
+  }
+  .gauge-number {
+    font-size: 2.1rem;
+  }
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .metric-card {
+    padding: 14px 10px;
+  }
+  .metric-value {
+    font-size: 1.4rem;
+  }
+  .quality-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .controls-row .btn {
+    width: 100%;
+  }
+}
+
+/* Accessibility: prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .gauge-needle,
+  .gauge-active-path,
+  .progress-bar-fill,
+  .metric-card,
+  .status-pulse-dot.running {
+    transition: none !important;
+    animation: none !important;
+  }
+}
