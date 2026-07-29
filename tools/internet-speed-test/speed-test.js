@@ -59,6 +59,7 @@ function initSpeedTest() {
   const startBtn = getElement('startBtn');
   const cancelBtn = getElement('cancelBtn');
   const restartBtn = getElement('restartBtn');
+  const restartCancelledBtn = getElement('restartCancelledBtn');
   const copyBtn = getElement('copyBtn');
 
   checkCellularConnection();
@@ -66,6 +67,7 @@ function initSpeedTest() {
   startBtn.addEventListener('click', startTest);
   cancelBtn.addEventListener('click', cancelTest);
   restartBtn.addEventListener('click', startTest);
+  restartCancelledBtn.addEventListener('click', startTest);
   copyBtn.addEventListener('click', copyResultsToClipboard);
 
   window.addEventListener('online', updateOnlineStatus);
@@ -103,16 +105,56 @@ function updateOnlineStatus() {
   }
 }
 
+// Set Phase Badge Styling & Text
+function setPhaseBadge(text, variantClass) {
+  const testPhaseBadge = getElement('testPhaseBadge');
+  const phaseBadgeText = getElement('phaseBadgeText');
+
+  testPhaseBadge.className = `test-phase-badge ${variantClass}`;
+  phaseBadgeText.textContent = text;
+}
+
+// Set Status Block Styling & Text
+function setStatusBlock(title, desc, variantClass, iconName) {
+  const testStatusBlock = getElement('testStatusBlock');
+  const statusTitle = getElement('statusTitle');
+  const statusDesc = getElement('statusDesc');
+  const statusIcon = getElement('statusIcon');
+
+  testStatusBlock.className = `test-status-block ${variantClass}`;
+  statusTitle.textContent = title;
+  statusDesc.textContent = desc;
+
+  if (statusIcon) {
+    statusIcon.setAttribute('data-lucide', iconName);
+    if (window.lucide) lucide.createIcons();
+  }
+}
+
+// Set Stepper Items Status (pending, active, completed)
+function setStepperState(pingState, downloadState, uploadState, finishedState) {
+  const stepPing = getElement('stepPing');
+  const stepDownload = getElement('stepDownload');
+  const stepUpload = getElement('stepUpload');
+  const stepFinished = getElement('stepFinished');
+
+  stepPing.className = `step-item ${pingState}`;
+  stepDownload.className = `step-item ${downloadState}`;
+  stepUpload.className = `step-item ${uploadState}`;
+  stepFinished.className = `step-item ${finishedState}`;
+}
+
 // Reset UI to Initial Idle State
 function resetUIState() {
   const startBtn = getElement('startBtn');
   const cancelBtn = getElement('cancelBtn');
   const restartBtn = getElement('restartBtn');
+  const restartCancelledBtn = getElement('restartCancelledBtn');
   const copyBtn = getElement('copyBtn');
+
   const gaugeNumber = getElement('gaugeNumber');
   const gaugeUnit = getElement('gaugeUnit');
-  const testStatusText = getElement('testStatusText');
-  const statusPulseDot = getElement('statusPulseDot');
+  const gaugeLabel = getElement('gaugeLabel');
   const progressBarFill = getElement('progressBarFill');
   const progressTrack = getElement('progressTrack');
 
@@ -131,6 +173,7 @@ function resetUIState() {
   const cardPing = getElement('cardPing');
   const cardJitter = getElement('cardJitter');
 
+  const qualityWarningNotice = getElement('qualityWarningNotice');
   const qualityOverallBadge = getElement('qualityOverallBadge');
   const scoreStreaming = getElement('scoreStreaming');
   const scoreGaming = getElement('scoreGaming');
@@ -139,26 +182,37 @@ function resetUIState() {
   const infoTime = getElement('infoTime');
   const infoDuration = getElement('infoDuration');
 
-  // Gauge Initial State
+  // Gauge Reset
   updateGauge(0);
+  gaugeNumber.style.opacity = '1';
   gaugeNumber.textContent = '0.00';
   gaugeUnit.textContent = 'Mbps';
-  testStatusText.textContent = 'Siap untuk menguji koneksi';
-  statusPulseDot.className = 'status-pulse-dot';
+  gaugeLabel.textContent = 'Siap Menguji Koneksi';
 
-  // Progress Bar Initial State
+  // Phase Badge & Status Block
+  setPhaseBadge('SIAP', 'badge-phase-ready');
+  setStatusBlock(
+    'Siap untuk Pengujian',
+    'Klik tombol Mulai Tes untuk mengukur performa jaringan Anda.',
+    'status-ready',
+    'play-circle'
+  );
+
+  // Stepper & Progress
+  setStepperState('pending', 'pending', 'pending', 'pending');
   progressBarFill.style.width = '0%';
   progressTrack.setAttribute('aria-valuenow', '0');
 
-  // Button Initial States (Section 12)
+  // Buttons
   startBtn.style.display = 'inline-flex';
   startBtn.disabled = false;
   cancelBtn.style.display = 'none';
   cancelBtn.disabled = true;
   restartBtn.style.display = 'none';
+  restartCancelledBtn.style.display = 'none';
   copyBtn.disabled = true;
 
-  // Metric Cards Reset
+  // Metric Cards
   valDownload.textContent = '—';
   valUpload.textContent = '—';
   valPing.textContent = '—';
@@ -169,21 +223,22 @@ function resetUIState() {
   statusPing.textContent = 'Unloaded';
   statusJitter.textContent = 'Unloaded';
 
-  [cardDownload, cardUpload, cardPing, cardJitter].forEach(card => card.classList.remove('active'));
+  [cardDownload, cardUpload, cardPing, cardJitter].forEach(card => card.className = 'metric-card');
 
-  // Quality Panel Reset
+  // Quality Panel
+  qualityWarningNotice.style.display = 'none';
   qualityOverallBadge.className = 'badge badge-secondary';
   qualityOverallBadge.textContent = 'Belum diuji';
-  scoreStreaming.innerHTML = '<span class="badge badge-secondary">Belum diuji</span>';
-  scoreGaming.innerHTML = '<span class="badge badge-secondary">Belum diuji</span>';
-  scoreVideoCall.innerHTML = '<span class="badge badge-secondary">Belum diuji</span>';
+  scoreStreaming.innerHTML = '<span class="badge badge-secondary">Belum Diuji</span>';
+  scoreGaming.innerHTML = '<span class="badge badge-secondary">Belum Diuji</span>';
+  scoreVideoCall.innerHTML = '<span class="badge badge-secondary">Belum Diuji</span>';
 
-  // Info Reset
+  // Info
   infoTime.textContent = '—';
   infoDuration.textContent = '—';
 }
 
-// Update Speedometer SVG Gauge
+// Update Speedometer SVG Gauge (Radius=120, Arc Length=376.99)
 function updateGauge(mbpsValue) {
   const gaugeNeedle = document.getElementById('gaugeNeedle');
   const gaugeActivePath = document.getElementById('gaugeActivePath');
@@ -203,7 +258,7 @@ function updateGauge(mbpsValue) {
   }
 
   if (gaugeActivePath) {
-    const totalArc = 314.159;
+    const totalArc = 376.99;
     const offset = totalArc - (fraction * totalArc);
     gaugeActivePath.style.strokeDashoffset = offset.toFixed(2);
   }
@@ -217,8 +272,13 @@ function startTest() {
     if (window.SubpageEngine) {
       window.SubpageEngine.showToast('Koneksi Internet tidak tersedia. Periksa jaringan Anda.', 'error');
     }
-    const testStatusText = getElement('testStatusText');
-    testStatusText.textContent = 'Koneksi Internet tidak tersedia.';
+    setStatusBlock(
+      'Koneksi Tidak Tersedia',
+      'Perangkat Anda terputus dari jaringan Internet.',
+      'status-error',
+      'wifi-off'
+    );
+    setPhaseBadge('OFFLINE', 'badge-phase-error');
     return;
   }
 
@@ -232,22 +292,26 @@ function startTest() {
   const startBtn = getElement('startBtn');
   const cancelBtn = getElement('cancelBtn');
   const restartBtn = getElement('restartBtn');
+  const restartCancelledBtn = getElement('restartCancelledBtn');
   const copyBtn = getElement('copyBtn');
-  const testStatusText = getElement('testStatusText');
-  const statusPulseDot = getElement('statusPulseDot');
 
-  // Button States During Test (Section 12)
   startBtn.style.display = 'none';
   startBtn.disabled = true;
+  restartCancelledBtn.style.display = 'none';
   cancelBtn.style.display = 'inline-flex';
   cancelBtn.disabled = false;
   restartBtn.style.display = 'none';
   copyBtn.disabled = true;
 
-  statusPulseDot.className = 'status-pulse-dot running';
-  testStatusText.textContent = 'Menyiapkan pengujian...';
+  setPhaseBadge('MENYIAPKAN', 'badge-phase-running');
+  setStatusBlock(
+    'Menyiapkan Pengujian',
+    'Menghubungkan ke server pengujian Cloudflare...',
+    'status-running',
+    'loader'
+  );
 
-  // Instantiate Cloudflare SpeedTest Engine (Section 10)
+  // Instantiate Cloudflare SpeedTest Engine
   try {
     testInstance = new SpeedTest({
       autoStart: false,
@@ -267,12 +331,10 @@ function startTest() {
       ]
     });
 
-    // Event: Running Change
     testInstance.onRunningChange = (running) => {
       isRunning = running;
     };
 
-    // Event: Live Results Change (Section 10 & 11)
     testInstance.onResultsChange = ({ type }) => {
       if (isCancelled) return;
       const results = testInstance.results;
@@ -281,7 +343,6 @@ function startTest() {
       updateStageFromType(type, results);
     };
 
-    // Event: Finish (Section 10 & 11)
     testInstance.onFinish = (results) => {
       if (isCancelled) return;
 
@@ -291,18 +352,20 @@ function startTest() {
       updateFinalResults(results);
     };
 
-    // Event: Error
     testInstance.onError = (error) => {
       console.error('[ALLBASE SpeedTest Error]:', error);
       isRunning = false;
 
-      const testStatusText = getElement('testStatusText');
-      const statusPulseDot = getElement('statusPulseDot');
       const cancelBtn = getElement('cancelBtn');
       const restartBtn = getElement('restartBtn');
 
-      statusPulseDot.className = 'status-pulse-dot';
-      testStatusText.textContent = 'Pengujian gagal. Periksa koneksi lalu coba kembali.';
+      setPhaseBadge('ERROR', 'badge-phase-error');
+      setStatusBlock(
+        'Pengujian Gagal',
+        'Terjadi kesalahan jaringan. Periksa koneksi lalu coba kembali.',
+        'status-error',
+        'alert-triangle'
+      );
 
       cancelBtn.style.display = 'none';
       restartBtn.style.display = 'inline-flex';
@@ -312,24 +375,28 @@ function startTest() {
       }
     };
 
-    // Execute Test Play
     testInstance.play();
 
   } catch (err) {
     console.error('[ALLBASE SpeedTest Init Exception]:', err);
     isRunning = false;
-    const testStatusText = getElement('testStatusText');
     const startBtn = getElement('startBtn');
     const cancelBtn = getElement('cancelBtn');
 
-    testStatusText.textContent = 'Library pengujian gagal dimuat.';
+    setPhaseBadge('ERROR', 'badge-phase-error');
+    setStatusBlock(
+      'Gagal Memuat Engine',
+      'Library pengujian Cloudflare tidak dapat diinisialisasi.',
+      'status-error',
+      'alert-triangle'
+    );
     cancelBtn.style.display = 'none';
     startBtn.style.display = 'inline-flex';
     startBtn.disabled = false;
   }
 }
 
-// Safely Read & Render Live Metrics (Section 11)
+// Safely Read & Render Live Metrics
 function updateAvailableMetrics(results) {
   if (!results) return;
 
@@ -348,32 +415,41 @@ function updateAvailableMetrics(results) {
   const statusPing = getElement('statusPing');
   const statusJitter = getElement('statusJitter');
 
+  const cardDownload = getElement('cardDownload');
+  const cardUpload = getElement('cardUpload');
+  const cardPing = getElement('cardPing');
+  const cardJitter = getElement('cardJitter');
+
   if (downloadBps !== null) {
     valDownload.textContent = formatMbps(downloadBps);
     statusDownload.textContent = 'Terukur';
+    cardDownload.classList.add('completed');
   }
 
   if (uploadBps !== null) {
     valUpload.textContent = formatMbps(uploadBps);
     statusUpload.textContent = 'Terukur';
+    cardUpload.classList.add('completed');
   }
 
   if (pingMs !== null) {
     valPing.textContent = formatMs(pingMs);
     statusPing.textContent = 'Terukur';
+    cardPing.classList.add('completed');
   }
 
   if (jitterMs !== null) {
     valJitter.textContent = formatMs(jitterMs);
     statusJitter.textContent = 'Terukur';
+    cardJitter.classList.add('completed');
   }
 }
 
-// Update Active Stage, Gauge, and Progress Bar based on Measurement Type (Section 6 & 10)
+// Update Active Stage, Gauge, and Progress Bar based on Measurement Type
 function updateStageFromType(type, results) {
-  const testStatusText = getElement('testStatusText');
   const gaugeNumber = getElement('gaugeNumber');
   const gaugeUnit = getElement('gaugeUnit');
+  const gaugeLabel = getElement('gaugeLabel');
   const progressBarFill = getElement('progressBarFill');
   const progressTrack = getElement('progressTrack');
 
@@ -385,10 +461,20 @@ function updateStageFromType(type, results) {
   [cardDownload, cardUpload, cardPing, cardJitter].forEach(card => card.classList.remove('active'));
 
   if (type === 'latency') {
-    testStatusText.textContent = 'Mengukur ping...';
+    setPhaseBadge('PING TEST', 'badge-phase-running');
+    setStatusBlock(
+      'Mengukur Latency & Ping',
+      'Mengukur waktu respons (RTT) antara perangkat Anda dan Cloudflare.',
+      'status-running',
+      'activity'
+    );
+    setStepperState('active', 'pending', 'pending', 'pending');
+
+    gaugeLabel.textContent = 'Mengukur Latency & Ping...';
     gaugeNumber.textContent = '—';
     gaugeUnit.textContent = 'Mbps';
     updateGauge(0);
+
     cardPing.classList.add('active');
     cardJitter.classList.add('active');
 
@@ -396,7 +482,16 @@ function updateStageFromType(type, results) {
     progressTrack.setAttribute('aria-valuenow', '20');
 
   } else if (type === 'download') {
-    testStatusText.textContent = 'Menguji download';
+    setPhaseBadge('DOWNLOAD TEST', 'badge-phase-running');
+    setStatusBlock(
+      'Mengukur Kecepatan Download',
+      'Mengukur kecepatan penerimaan data dari jaringan pengujian Cloudflare.',
+      'status-running',
+      'arrow-down-circle'
+    );
+    setStepperState('completed', 'active', 'pending', 'pending');
+
+    gaugeLabel.textContent = 'Kecepatan Download';
     const dlBps = readResult(() => results.getDownloadBandwidth());
     const mbpsStr = formatMbps(dlBps);
     if (mbpsStr !== '—') {
@@ -404,13 +499,23 @@ function updateStageFromType(type, results) {
       updateGauge(parseFloat(mbpsStr));
     }
     gaugeUnit.textContent = 'Mbps';
+
     cardDownload.classList.add('active');
 
     progressBarFill.style.width = '60%';
     progressTrack.setAttribute('aria-valuenow', '60');
 
   } else if (type === 'upload') {
-    testStatusText.textContent = 'Menguji upload';
+    setPhaseBadge('UPLOAD TEST', 'badge-phase-running');
+    setStatusBlock(
+      'Mengukur Kecepatan Upload',
+      'Mengukur kecepatan pengiriman data ke jaringan pengujian Cloudflare.',
+      'status-running',
+      'arrow-up-circle'
+    );
+    setStepperState('completed', 'completed', 'active', 'pending');
+
+    gaugeLabel.textContent = 'Kecepatan Upload';
     const ulBps = readResult(() => results.getUploadBandwidth());
     const mbpsStr = formatMbps(ulBps);
     if (mbpsStr !== '—') {
@@ -418,6 +523,7 @@ function updateStageFromType(type, results) {
       updateGauge(parseFloat(mbpsStr));
     }
     gaugeUnit.textContent = 'Mbps';
+
     cardUpload.classList.add('active');
 
     progressBarFill.style.width = '85%';
@@ -425,7 +531,7 @@ function updateStageFromType(type, results) {
   }
 }
 
-// Handle Final Results on Test Completion (Section 6, 8, 10, 11)
+// Handle Final Results on Test Completion
 function updateFinalResults(results) {
   const downloadBps = readResult(() => results.getDownloadBandwidth());
   const uploadBps = readResult(() => results.getUploadBandwidth());
@@ -441,14 +547,14 @@ function updateFinalResults(results) {
 
   const gaugeNumber = getElement('gaugeNumber');
   const gaugeUnit = getElement('gaugeUnit');
-  const testStatusText = getElement('testStatusText');
-  const statusPulseDot = getElement('statusPulseDot');
+  const gaugeLabel = getElement('gaugeLabel');
   const progressBarFill = getElement('progressBarFill');
   const progressTrack = getElement('progressTrack');
 
   const startBtn = getElement('startBtn');
   const cancelBtn = getElement('cancelBtn');
   const restartBtn = getElement('restartBtn');
+  const restartCancelledBtn = getElement('restartCancelledBtn');
   const copyBtn = getElement('copyBtn');
 
   const infoTime = getElement('infoTime');
@@ -465,7 +571,7 @@ function updateFinalResults(results) {
   valPing.textContent = finalPing;
   valJitter.textContent = finalJitter;
 
-  // Final Speedometer Reading (Main Download Value) (Section 6)
+  // Final Speedometer Display (Main Download Speed)
   if (finalDl !== '—') {
     gaugeNumber.textContent = finalDl;
     updateGauge(parseFloat(finalDl));
@@ -474,17 +580,29 @@ function updateFinalResults(results) {
     updateGauge(0);
   }
   gaugeUnit.textContent = 'Mbps';
-  testStatusText.textContent = 'Tes selesai';
-  statusPulseDot.className = 'status-pulse-dot';
+  gaugeLabel.textContent = 'Kecepatan Download Final';
 
-  // 100% Progress Bar
+  // Phase Badge & Status Block
+  setPhaseBadge('SELESAI', 'badge-phase-finished');
+  setStatusBlock(
+    'Pengujian Selesai',
+    'Performa koneksi Internet Anda telah berhasil diuji sepenuhnya.',
+    'status-finished',
+    'check-circle'
+  );
+
+  // Stepper & 100% Progress
+  setStepperState('completed', 'completed', 'completed', 'completed');
   progressBarFill.style.width = '100%';
   progressTrack.setAttribute('aria-valuenow', '100');
 
-  // Un-highlight cards
-  [getElement('cardDownload'), getElement('cardUpload'), getElement('cardPing'), getElement('cardJitter')].forEach(card => card.classList.remove('active'));
+  // Un-highlight active cards
+  [getElement('cardDownload'), getElement('cardUpload'), getElement('cardPing'), getElement('cardJitter')].forEach(card => {
+    card.classList.remove('active');
+    card.classList.add('completed');
+  });
 
-  // Render Connection Quality Section (Section 8)
+  // Quality Assessment
   renderQualityAssessment(scores, finalDl, finalUl, finalPing, finalJitter);
 
   // Metadata Updates
@@ -492,8 +610,9 @@ function updateFinalResults(results) {
   infoTime.textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   infoDuration.textContent = `${(durationMs / 1000).toFixed(1)} dtk`;
 
-  // Button States After Finish (Section 12)
+  // Buttons After Finish
   startBtn.style.display = 'none';
+  restartCancelledBtn.style.display = 'none';
   cancelBtn.style.display = 'none';
   restartBtn.style.display = 'inline-flex';
   copyBtn.disabled = false;
@@ -503,24 +622,27 @@ function updateFinalResults(results) {
   }
 }
 
-// Connection Quality Classification & Rendering (Section 8)
+// Connection Quality Classification & Rendering
 function translateScoreClassification(scoreObj) {
   if (!scoreObj) return null;
   const str = String(typeof scoreObj === 'object' ? (scoreObj.classification || scoreObj.points || '') : scoreObj).toLowerCase();
-  
-  if (str.includes('great')) return { text: 'Sangat Baik', class: 'badge-success', desc: 'Sangat lancar tanpa hambatan' };
-  if (str.includes('good')) return { text: 'Baik', class: 'badge-primary', desc: 'Performa stabil & lancar' };
-  if (str.includes('average')) return { text: 'Cukup', class: 'badge-warning', desc: 'Cukup untuk kebutuhan umum' };
-  if (str.includes('poor')) return { text: 'Kurang', class: 'badge-danger', desc: 'Potensi buffer / delay' };
-  if (str.includes('bad')) return { text: 'Sangat Kurang', class: 'badge-danger', desc: 'Koneksi lambat & tidak stabil' };
+
+  if (str.includes('great')) return { text: 'Sangat Baik', class: 'badge-success' };
+  if (str.includes('good')) return { text: 'Baik', class: 'badge-primary' };
+  if (str.includes('average')) return { text: 'Cukup', class: 'badge-warning' };
+  if (str.includes('poor')) return { text: 'Kurang', class: 'badge-danger' };
+  if (str.includes('bad')) return { text: 'Sangat Kurang', class: 'badge-danger' };
   return null;
 }
 
 function renderQualityAssessment(scores, dlStr, ulStr, pingStr, jitterStr) {
+  const qualityWarningNotice = getElement('qualityWarningNotice');
   const qualityOverallBadge = getElement('qualityOverallBadge');
   const scoreStreaming = getElement('scoreStreaming');
   const scoreGaming = getElement('scoreGaming');
   const scoreVideoCall = getElement('scoreVideoCall');
+
+  qualityWarningNotice.style.display = 'none';
 
   let streamRes = null;
   let gameRes = null;
@@ -540,22 +662,22 @@ function renderQualityAssessment(scores, dlStr, ulStr, pingStr, jitterStr) {
     const jitter = parseFloat(jitterStr) || 999;
 
     if (dl >= 50 && ul >= 10 && ping <= 30 && jitter <= 10) {
-      const item = { text: 'Sangat Baik', class: 'badge-success', desc: 'Performa tinggi untuk seluruh penggunaan' };
+      const item = { text: 'Sangat Baik', class: 'badge-success' };
       streamRes = streamRes || item;
       gameRes = gameRes || item;
       rtcRes = rtcRes || item;
     } else if (dl >= 20 && ul >= 5 && ping <= 60 && jitter <= 20) {
-      const item = { text: 'Baik', class: 'badge-primary', desc: 'Stabil untuk streaming HD & video call' };
+      const item = { text: 'Baik', class: 'badge-primary' };
       streamRes = streamRes || item;
       gameRes = gameRes || item;
       rtcRes = rtcRes || item;
     } else if (dl >= 5 && ul >= 1 && ping <= 100) {
-      const item = { text: 'Cukup', class: 'badge-warning', desc: 'Cukup untuk browsing & media sosial' };
+      const item = { text: 'Cukup', class: 'badge-warning' };
       streamRes = streamRes || item;
       gameRes = gameRes || item;
       rtcRes = rtcRes || item;
     } else {
-      const item = { text: 'Kurang', class: 'badge-danger', desc: 'Koneksi lambat untuk aktivitas berat' };
+      const item = { text: 'Kurang', class: 'badge-danger' };
       streamRes = streamRes || item;
       gameRes = gameRes || item;
       rtcRes = rtcRes || item;
@@ -577,7 +699,7 @@ function renderQualityAssessment(scores, dlStr, ulStr, pingStr, jitterStr) {
   }
 }
 
-// Cancel Speed Test Execution (Section 10 & 12)
+// Cancel Speed Test Execution & Handle Cancelled State
 function cancelTest() {
   if (!isRunning && !testInstance) return;
 
@@ -597,24 +719,57 @@ function cancelTest() {
   const startBtn = getElement('startBtn');
   const cancelBtn = getElement('cancelBtn');
   const restartBtn = getElement('restartBtn');
-  const testStatusText = getElement('testStatusText');
-  const statusPulseDot = getElement('statusPulseDot');
+  const restartCancelledBtn = getElement('restartCancelledBtn');
+  const copyBtn = getElement('copyBtn');
+  const gaugeNumber = getElement('gaugeNumber');
+  const gaugeLabel = getElement('gaugeLabel');
+  const qualityWarningNotice = getElement('qualityWarningNotice');
+  const qualityOverallBadge = getElement('qualityOverallBadge');
 
-  updateGauge(0);
-  testStatusText.textContent = 'Pengujian dibatalkan oleh pengguna.';
-  statusPulseDot.className = 'status-pulse-dot';
+  // Cancelled State UI Enhancements
+  setPhaseBadge('DIBATALKAN', 'badge-phase-cancelled');
+  setStatusBlock(
+    'Pengujian Dibatalkan',
+    'Hasil yang tampil merupakan hasil sementara dan belum lengkap. Tes belum selesai. Jalankan ulang untuk memperoleh hasil lengkap.',
+    'status-cancelled',
+    'alert-circle'
+  );
 
+  gaugeNumber.style.opacity = '0.75';
+  gaugeLabel.textContent = 'Hasil Sementara (Dibatalkan)';
+
+  // Update card statuses for cancelled state
+  ['Download', 'Upload', 'Ping', 'Jitter'].forEach(key => {
+    const valElem = document.getElementById(`val${key}`);
+    const statusElem = document.getElementById(`status${key}`);
+    if (valElem && valElem.textContent !== '—') {
+      if (statusElem) statusElem.textContent = 'Hasil sementara';
+    } else if (statusElem) {
+      statusElem.textContent = 'Belum diuji';
+    }
+  });
+
+  // Display Quality Notice for incomplete test
+  qualityWarningNotice.style.display = 'flex';
+  qualityOverallBadge.className = 'badge badge-secondary';
+  qualityOverallBadge.textContent = 'Belum diuji';
+  getElement('scoreStreaming').innerHTML = '<span class="badge badge-secondary">Belum Diuji</span>';
+  getElement('scoreGaming').innerHTML = '<span class="badge badge-secondary">Belum Diuji</span>';
+  getElement('scoreVideoCall').innerHTML = '<span class="badge badge-secondary">Belum Diuji</span>';
+
+  // Button States for Cancelled Test
   cancelBtn.style.display = 'none';
   restartBtn.style.display = 'none';
-  startBtn.style.display = 'inline-flex';
-  startBtn.disabled = false;
+  startBtn.style.display = 'none';
+  restartCancelledBtn.style.display = 'inline-flex';
+  copyBtn.disabled = true;
 
   if (window.SubpageEngine) {
     window.SubpageEngine.showToast('Pengujian kecepatan dibatalkan.', 'info');
   }
 }
 
-// Copy Summary Results to Clipboard (Section 12)
+// Copy Summary Results to Clipboard
 function copyResultsToClipboard() {
   if (!isFinished) return;
 

@@ -3,7 +3,7 @@
    Static App Shell Caching & Offline Fallback Strategy
    ============================================================ */
 
-const CACHE_NAME = 'allbase-static-v7';
+const CACHE_NAME = 'allbase-static-v8';
 const STATIC_ASSETS = [
   './',
   './index.html',
