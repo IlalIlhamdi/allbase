@@ -52,7 +52,7 @@
 
 @media (max-width: 768px) {
   :root {
-    --header-height: 64px;
+    --header-height: 72px;
   }
 }
 

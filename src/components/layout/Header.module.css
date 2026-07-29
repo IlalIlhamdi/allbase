@@ -8,6 +8,8 @@
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
   transition: background-color var(--transition-normal), border-color var(--transition-normal);
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
 }
 
 [data-theme="dark"] .header {
@@ -37,8 +39,14 @@
   min-width: 0;
   font-family: var(--font-heading);
   font-weight: 800;
-  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-size: clamp(1.05rem, 4vw, 1.25rem);
   color: var(--color-text-primary);
+}
+
+@media (max-width: 350px) {
+  .brandName {
+    font-size: 1rem;
+  }
 }
 
 .brandIcon {
@@ -95,10 +103,10 @@
 }
 
 .iconBtn {
-  min-width: 44px;
-  min-height: 44px;
-  width: 44px;
-  height: 44px;
+  min-width: 48px;
+  min-height: 48px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border);
   background-color: var(--color-surface);
