@@ -1,6 +1,7 @@
 .heroSection {
-  padding-block: clamp(20px, 4vw, 72px) clamp(32px, 6vw, 88px);
-  scroll-margin-top: calc(var(--header-height) + 16px);
+  padding-top: 32px;
+  padding-bottom: clamp(32px, 6vw, 88px);
+  scroll-margin-top: calc(var(--mobile-header-height, 86px) + 16px);
 }
 
 .heroGrid {
@@ -90,33 +91,40 @@
   }
 }
 
-.actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+/* Mobile vs Desktop Actions */
+.desktopHeroActions {
+  display: none;
+}
+
+.mobilePrimaryActionContainer {
+  display: flex;
   width: 100%;
-  margin-top: 8px;
-  margin-bottom: 20px;
+  margin-top: 4px;
+  margin-bottom: 0;
 }
 
-.actions > :nth-child(3) {
-  grid-column: 1 / -1;
+.mobilePrimaryAction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
+  min-height: 54px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background-color: var(--color-primary-600);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color var(--transition-fast);
 }
 
-@media (max-width: 360px) {
-  .actions {
-    grid-template-columns: 1fr;
-  }
-
-  .actions > :nth-child(3) {
-    grid-column: auto;
-    width: 100%;
-  }
+.mobilePrimaryAction:hover {
+  background-color: var(--color-primary-700);
 }
 
-@media (min-width: 641px) {
-  .actions {
+@media (min-width: 769px) {
+  .desktopHeroActions {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
@@ -125,9 +133,8 @@
     width: auto;
   }
 
-  .actions > :nth-child(3) {
-    grid-column: auto;
-    width: auto;
+  .mobilePrimaryActionContainer {
+    display: none;
   }
 }
 
@@ -139,23 +146,14 @@
   justify-content: center;
   gap: 8px;
   min-height: 52px;
-  width: 100%;
-  padding-inline: 14px;
+  width: auto;
+  padding-inline: 20px;
   padding-block: 10px;
   border-radius: var(--radius-sm);
   font-size: clamp(0.95rem, 3.8vw, 1rem);
   font-weight: 600;
   transition: all var(--transition-fast);
   white-space: nowrap;
-}
-
-@media (min-width: 641px) {
-  .btnPrimary,
-  .btnSecondary,
-  .btnOutline {
-    width: auto;
-    padding-inline: 20px;
-  }
 }
 
 .btnPrimary {
@@ -189,54 +187,7 @@
   color: var(--color-primary-600);
 }
 
-.socials {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  width: 100%;
-  margin-top: 4px;
-  margin-bottom: 0;
-}
-
-.socialBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  flex: 0 0 50px;
-  border-radius: 14px;
-  border: 1px solid var(--color-border);
-  color: var(--color-text-primary);
-  background-color: var(--color-surface);
-  transition: transform var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
-}
-
-.socialBtn:hover {
-  transform: translateY(-2px);
-  border-color: var(--color-primary-500);
-  background-color: var(--color-primary-50);
-  color: var(--color-primary-600);
-}
-
-[data-theme="dark"] .socialBtn:hover {
-  background-color: var(--color-primary-900);
-}
-
-.socialBtn:focus-visible {
-  outline: 2px solid var(--color-primary-600);
-  outline-offset: 2px;
-}
-
-@media (max-width: 360px) {
-  .socialBtn {
-    width: 46px;
-    height: 46px;
-    flex-basis: 46px;
-  }
-}
-
+/* Profile Visual Frame */
 .profileVisual {
   width: min(100%, 340px);
   margin: 32px auto 0;
@@ -254,6 +205,10 @@
     margin-top: 0;
     width: 100%;
   }
+}
+
+.profileCard {
+  width: 100%;
 }
 
 .profileImageWrapper {
@@ -287,4 +242,49 @@
 .profileRole {
   font-size: 0.85rem;
   color: var(--color-primary-200);
+}
+
+/* Profile Social Links under Photo */
+.profileSocialLinks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+  margin-top: 18px;
+}
+
+.profileSocialLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  border: 1px solid var(--color-border);
+  border-radius: 15px;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.profileSocialLink:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary-600);
+  background: var(--color-primary-50);
+  color: var(--color-primary-600);
+}
+
+[data-theme="dark"] .profileSocialLink:hover {
+  background: var(--color-surface-soft);
+  color: var(--color-primary-400);
+}
+
+.profileSocialLink:focus-visible {
+  outline: 3px solid var(--color-primary-600);
+  outline-offset: 3px;
 }
