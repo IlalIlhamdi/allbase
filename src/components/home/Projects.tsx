@@ -26,7 +26,7 @@ export default function Projects() {
   return (
     <section id="projects" className="section" aria-labelledby="projects-title">
       <div className="container">
-        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+        <div style={{ textAlign: "center", marginBottom: "clamp(32px, 5vw, 40px)" }}>
           <span
             style={{
               padding: "4px 12px",
@@ -42,16 +42,16 @@ export default function Projects() {
           >
             Perpustakaan Karya
           </span>
-          <h2 id="projects-title" style={{ fontSize: "2rem", marginBottom: "12px" }}>
+          <h2 id="projects-title" className="sectionTitle">
             Semua Proyek Saya
           </h2>
-          <p style={{ color: "var(--color-text-secondary)", maxWidth: "600px", marginInline: "auto" }}>
+          <p className="sectionDescription">
             Jelajahi seluruh proyek yang telah dan sedang saya kembangkan.
           </p>
         </div>
 
         {/* Toolbar Filter & Search */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginBottom: "36px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginBottom: "36px" }}>
           <div
             style={{
               position: "relative",
@@ -74,25 +74,24 @@ export default function Projects() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari nama proyek, deskripsi, atau tag teknologi..."
+              placeholder="Cari nama proyek, deskripsi, atau tag..."
               style={{
                 width: "100%",
                 padding: "12px 16px 12px 42px",
                 borderRadius: "var(--radius-sm)",
                 border: "1px solid var(--color-border)",
                 backgroundColor: "var(--color-surface)",
-                fontSize: "0.92rem",
+                fontSize: "1rem",
                 color: "var(--color-text-primary)",
               }}
             />
           </div>
 
           <div
+            className="filterScroll"
             style={{
-              display: "flex",
               justifyContent: "center",
               flexWrap: "wrap",
-              gap: "8px",
             }}
             role="tablist"
             aria-label="Kategori Proyek"
@@ -106,6 +105,7 @@ export default function Projects() {
                   aria-pressed={isActive}
                   style={{
                     padding: "8px 18px",
+                    minHeight: "44px",
                     borderRadius: "var(--radius-pill)",
                     fontSize: "0.88rem",
                     fontWeight: 600,
@@ -113,6 +113,7 @@ export default function Projects() {
                     backgroundColor: isActive ? "var(--color-primary-600)" : "var(--color-surface)",
                     color: isActive ? "#ffffff" : "var(--color-text-primary)",
                     transition: "all var(--transition-fast)",
+                    whiteSpace: "nowrap",
                   }}
                 >
                   {cat === "all" ? "Semua Kategori" : cat}
@@ -137,13 +138,7 @@ export default function Projects() {
             Proyek tidak ditemukan. Cobalah kata kunci lain.
           </div>
         ) : (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-              gap: "24px",
-            }}
-          >
+          <div className="cardsGrid">
             {filteredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} />
             ))}

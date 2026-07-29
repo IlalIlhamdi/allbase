@@ -5,7 +5,7 @@ export default function Tools() {
   return (
     <section id="tools" className="section section-alt" aria-labelledby="tools-title">
       <div className="container">
-        <div style={{ textAlign: "center", marginBottom: "48px" }}>
+        <div style={{ textAlign: "center", marginBottom: "clamp(32px, 5vw, 48px)" }}>
           <span
             style={{
               padding: "4px 12px",
@@ -21,21 +21,15 @@ export default function Tools() {
           >
             Produktivitas
           </span>
-          <h2 id="tools-title" style={{ fontSize: "2rem", marginBottom: "12px" }}>
+          <h2 id="tools-title" className="sectionTitle">
             Web Tools &amp; Utility
           </h2>
-          <p style={{ color: "var(--color-text-secondary)", maxWidth: "600px", marginInline: "auto" }}>
+          <p className="sectionDescription">
             Alat praktis berbasis web untuk kalkulasi subnet, uji kecepatan jaringan, dan utilitas teknis.
           </p>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-            gap: "24px",
-          }}
-        >
+        <div className="cardsGrid">
           {toolsData.map((tool) => (
             <ToolCard key={tool.id} tool={tool} />
           ))}

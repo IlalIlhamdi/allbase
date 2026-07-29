@@ -57,10 +57,10 @@ export default function SubnetCalculator() {
           backgroundColor: "var(--color-surface)",
           border: "1px solid var(--color-border)",
           borderRadius: "var(--radius-md)",
-          padding: "32px 24px",
+          padding: "clamp(18px, 4vw, 32px)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "12px" }}>
           <span
             style={{
               padding: "4px 10px",
@@ -81,8 +81,8 @@ export default function SubnetCalculator() {
           </span>
         </div>
 
-        <h1 style={{ fontSize: "1.6rem", marginBottom: "6px" }}>Subnet Calculator IPv4</h1>
-        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", marginBottom: "24px" }}>
+        <h1 style={{ fontSize: "clamp(1.4rem, 4vw, 1.8rem)", marginBottom: "6px" }}>Subnet Calculator IPv4</h1>
+        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", marginBottom: "24px", lineHeight: 1.6 }}>
           Hitung pembagian blok subnet IPv4, Network Address, Broadcast Address, Wildcard Mask, dan usable host range.
         </p>
 
@@ -90,8 +90,8 @@ export default function SubnetCalculator() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-              gap: "20px",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))",
+              gap: "16px",
               marginBottom: "24px",
             }}
           >
@@ -107,11 +107,12 @@ export default function SubnetCalculator() {
                 placeholder="192.168.1.1"
                 style={{
                   width: "100%",
-                  padding: "10px 14px",
+                  padding: "12px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
                   fontFamily: "var(--font-mono)",
+                  fontSize: "1rem",
                 }}
                 required
               />
@@ -127,11 +128,12 @@ export default function SubnetCalculator() {
                 onChange={(e) => setPrefix(Number(e.target.value))}
                 style={{
                   width: "100%",
-                  padding: "10px 14px",
+                  padding: "12px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
                   fontFamily: "var(--font-mono)",
+                  fontSize: "1rem",
                 }}
               >
                 {Array.from({ length: 33 }, (_, i) => 32 - i).map((p) => (
@@ -149,19 +151,22 @@ export default function SubnetCalculator() {
             </div>
           )}
 
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
             <button
               type="submit"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "8px",
+                minHeight: "44px",
                 padding: "10px 20px",
                 borderRadius: "var(--radius-sm)",
                 backgroundColor: "var(--color-primary-600)",
                 color: "#ffffff",
                 fontWeight: 600,
                 fontSize: "0.92rem",
+                flex: "1 1 140px",
               }}
             >
               <Calculator size={16} /> Hitung Subnet
@@ -173,7 +178,9 @@ export default function SubnetCalculator() {
               style={{
                 display: "inline-flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "8px",
+                minHeight: "44px",
                 padding: "10px 20px",
                 borderRadius: "var(--radius-sm)",
                 backgroundColor: "var(--color-surface-soft)",
@@ -181,6 +188,7 @@ export default function SubnetCalculator() {
                 color: "var(--color-text-primary)",
                 fontWeight: 600,
                 fontSize: "0.92rem",
+                flex: "1 1 120px",
               }}
             >
               <RotateCcw size={16} /> Reset
@@ -193,7 +201,9 @@ export default function SubnetCalculator() {
               style={{
                 display: "inline-flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "8px",
+                minHeight: "44px",
                 padding: "10px 20px",
                 borderRadius: "var(--radius-sm)",
                 border: "1px solid var(--color-border)",
@@ -202,6 +212,7 @@ export default function SubnetCalculator() {
                 fontWeight: 600,
                 fontSize: "0.92rem",
                 cursor: result ? "pointer" : "not-allowed",
+                flex: "1 1 140px",
               }}
             >
               {copied ? <CheckCircle size={16} color="var(--color-success)" /> : <Copy size={16} />}
@@ -218,7 +229,7 @@ export default function SubnetCalculator() {
             backgroundColor: "var(--color-surface)",
             border: "1px solid var(--color-border)",
             borderRadius: "var(--radius-md)",
-            padding: "24px",
+            padding: "clamp(18px, 4vw, 24px)",
           }}
         >
           <h3 style={{ fontSize: "1.1rem", marginBottom: "16px" }}>Hasil Kalkulasi Subnet IPv4</h3>
@@ -226,51 +237,51 @@ export default function SubnetCalculator() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: "16px",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 190px), 1fr))",
+              gap: "12px",
               fontFamily: "var(--font-mono)",
             }}
           >
-            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)" }}>
+            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)", overflowWrap: "anywhere" }}>
               <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>IP Address / Kelas</div>
               <div style={{ fontWeight: 700 }}>
                 {result.ip} <span style={{ fontSize: "0.75rem", color: "var(--color-primary-600)" }}>({result.ipClass})</span>
               </div>
             </div>
 
-            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)" }}>
+            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)", overflowWrap: "anywhere" }}>
               <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>Subnet Mask</div>
               <div style={{ fontWeight: 700 }}>
                 {result.mask} (/{result.prefix})
               </div>
             </div>
 
-            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)" }}>
+            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)", overflowWrap: "anywhere" }}>
               <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>Network Address</div>
               <div style={{ fontWeight: 700, color: "var(--color-primary-600)" }}>{result.network}</div>
             </div>
 
-            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)" }}>
+            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)", overflowWrap: "anywhere" }}>
               <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>Broadcast Address</div>
               <div style={{ fontWeight: 700 }}>{result.broadcast}</div>
             </div>
 
-            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)" }}>
+            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)", overflowWrap: "anywhere" }}>
               <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>Wildcard Mask</div>
               <div style={{ fontWeight: 700 }}>{result.wildcard}</div>
             </div>
 
-            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)" }}>
+            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)", overflowWrap: "anywhere" }}>
               <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>First Usable Host</div>
               <div style={{ fontWeight: 700, color: "var(--color-success)" }}>{result.firstHost}</div>
             </div>
 
-            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)" }}>
+            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)", overflowWrap: "anywhere" }}>
               <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>Last Usable Host</div>
               <div style={{ fontWeight: 700, color: "var(--color-success)" }}>{result.lastHost}</div>
             </div>
 
-            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)" }}>
+            <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border)", overflowWrap: "anywhere" }}>
               <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>Total Usable Host</div>
               <div style={{ fontWeight: 700, color: "var(--color-success)" }}>
                 {result.usableHosts.toLocaleString("id-ID")} Host

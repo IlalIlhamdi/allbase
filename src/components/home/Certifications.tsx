@@ -5,7 +5,7 @@ export default function Certifications() {
   return (
     <section id="certifications" className="section" aria-labelledby="certs-title">
       <div className="container">
-        <div style={{ textAlign: "center", marginBottom: "48px" }}>
+        <div style={{ textAlign: "center", marginBottom: "clamp(32px, 5vw, 48px)" }}>
           <span
             style={{
               padding: "4px 12px",
@@ -21,21 +21,15 @@ export default function Certifications() {
           >
             Kredensial
           </span>
-          <h2 id="certs-title" style={{ fontSize: "2rem", marginBottom: "12px" }}>
+          <h2 id="certs-title" className="sectionTitle">
             Sertifikasi &amp; Pencapaian
           </h2>
-          <p style={{ color: "var(--color-text-secondary)", maxWidth: "600px", marginInline: "auto" }}>
+          <p className="sectionDescription">
             Sertifikasi resmi dan pendidikan teknis yang saya selesaikan.
           </p>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "24px",
-          }}
-        >
+        <div className="cardsGrid">
           {certificatesData.map((cert) => (
             <CertificateCard key={cert.id} certificate={cert} />
           ))}

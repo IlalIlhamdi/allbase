@@ -5,7 +5,7 @@ export default function Skills() {
   return (
     <section id="skills" className="section" aria-labelledby="skills-title">
       <div className="container">
-        <div style={{ textAlign: "center", marginBottom: "48px" }}>
+        <div style={{ textAlign: "center", marginBottom: "clamp(32px, 5vw, 48px)" }}>
           <span
             style={{
               padding: "4px 12px",
@@ -21,21 +21,15 @@ export default function Skills() {
           >
             Tech Stack
           </span>
-          <h2 id="skills-title" style={{ fontSize: "2rem", marginBottom: "12px" }}>
+          <h2 id="skills-title" className="sectionTitle">
             Keahlian &amp; Teknologi
           </h2>
-          <p style={{ color: "var(--color-text-secondary)", maxWidth: "600px", marginInline: "auto" }}>
+          <p className="sectionDescription">
             Perangkat lunak, hardware jaringan, dan bahasa pemrosesan yang saya gunakan.
           </p>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "24px",
-          }}
-        >
+        <div className="cardsGrid">
           {skillsData.map((category) => (
             <SkillCard key={category.category} category={category} />
           ))}

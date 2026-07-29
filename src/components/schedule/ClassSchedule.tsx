@@ -30,7 +30,7 @@ export default function ClassSchedule() {
           backgroundColor: "var(--color-surface)",
           border: "1px solid var(--color-border)",
           borderRadius: "var(--radius-md)",
-          padding: "24px",
+          padding: "clamp(18px, 4vw, 24px)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -54,15 +54,16 @@ export default function ClassSchedule() {
           >
             <Calendar size={14} /> TRJT 2A · Semester 4
           </span>
-          <h1 style={{ fontSize: "1.6rem", marginTop: "4px" }}>Jadwal Perkuliahan Roster</h1>
+          <h1 style={{ fontSize: "clamp(1.4rem, 4vw, 1.8rem)", marginTop: "4px" }}>Jadwal Perkuliahan Roster</h1>
         </div>
 
         {/* Tab Switchers */}
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
           <button
             onClick={() => setActiveTab("jadwal")}
             style={{
               padding: "8px 16px",
+              minHeight: "44px",
               borderRadius: "var(--radius-sm)",
               fontWeight: 600,
               fontSize: "0.88rem",
@@ -77,6 +78,7 @@ export default function ClassSchedule() {
             onClick={() => setActiveTab("daftar")}
             style={{
               padding: "8px 16px",
+              minHeight: "44px",
               borderRadius: "var(--radius-sm)",
               fontWeight: 600,
               fontSize: "0.88rem",
@@ -93,13 +95,14 @@ export default function ClassSchedule() {
       {activeTab === "jadwal" && (
         <>
           {/* Day Pills */}
-          <div style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "4px" }}>
+          <div className="filterScroll">
             {daysName.map((day, idx) => (
               <button
                 key={day}
                 onClick={() => setSelectedDay(idx)}
                 style={{
                   padding: "10px 20px",
+                  minHeight: "44px",
                   borderRadius: "var(--radius-sm)",
                   fontWeight: 700,
                   fontSize: "0.9rem",
@@ -107,6 +110,7 @@ export default function ClassSchedule() {
                   color: selectedDay === idx ? "#ffffff" : "var(--color-text-primary)",
                   border: "1px solid var(--color-border)",
                   cursor: "pointer",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {day}
@@ -137,10 +141,10 @@ export default function ClassSchedule() {
                     backgroundColor: "var(--color-surface)",
                     border: "1px solid var(--color-border)",
                     borderRadius: "var(--radius-md)",
-                    padding: "20px",
+                    padding: "clamp(16px, 3vw, 20px)",
                     display: "grid",
-                    gridTemplateColumns: "100px 1fr",
-                    gap: "20px",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 100px), 1fr))",
+                    gap: "16px",
                     alignItems: "center",
                   }}
                 >
@@ -163,10 +167,10 @@ export default function ClassSchedule() {
 
                   <div>
                     <h3 style={{ fontSize: "1.1rem", marginBottom: "6px" }}>{item.mk}</h3>
-                    <div style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
+                    <div style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px", flexWrap: "wrap" }}>
                       <User size={14} color="var(--color-primary-600)" /> {item.dosen}
                     </div>
-                    <div style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", display: "flex", alignItems: "center", gap: "6px" }}>
+                    <div style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
                       <MapPin size={14} /> {item.ruang} • {item.gedung}
                     </div>
                   </div>
@@ -183,7 +187,7 @@ export default function ClassSchedule() {
             backgroundColor: "var(--color-surface)",
             border: "1px solid var(--color-border)",
             borderRadius: "var(--radius-md)",
-            padding: "24px",
+            padding: "clamp(18px, 4vw, 24px)",
           }}
         >
           <div style={{ position: "relative", marginBottom: "20px" }}>
@@ -195,16 +199,17 @@ export default function ClassSchedule() {
               placeholder="Cari nama mahasiswa atau NIM..."
               style={{
                 width: "100%",
-                padding: "10px 14px 10px 42px",
+                padding: "12px 14px 12px 42px",
                 borderRadius: "var(--radius-sm)",
                 border: "1px solid var(--color-border)",
                 backgroundColor: "var(--color-surface)",
+                fontSize: "1rem",
               }}
             />
           </div>
 
-          <div style={{ overflowX: "auto" }}>
-            <table>
+          <div className="tableWrapper">
+            <table style={{ minWidth: "480px" }}>
               <thead>
                 <tr style={{ borderBottom: "2px solid var(--color-border)", textAlign: "left" }}>
                   <th style={{ padding: "12px", fontSize: "0.85rem" }}>No</th>

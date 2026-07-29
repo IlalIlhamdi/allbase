@@ -7,7 +7,8 @@ export default function Footer() {
       style={{
         backgroundColor: "var(--color-surface)",
         borderTop: "1px solid var(--color-border)",
-        paddingBlock: "32px",
+        paddingTop: "32px",
+        paddingBottom: "max(24px, calc(env(safe-area-inset-bottom) + 16px))",
         marginTop: "auto",
         transition: "background-color var(--transition-normal), border-color var(--transition-normal)",
       }}
@@ -26,14 +27,15 @@ export default function Footer() {
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div
               style={{
-                width: "32px",
-                height: "32px",
+                width: "36px",
+                height: "36px",
                 borderRadius: "var(--radius-sm)",
                 backgroundColor: "var(--color-primary-600)",
                 color: "#ffffff",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                flexShrink: 0,
               }}
             >
               <Layers size={18} />
@@ -49,6 +51,7 @@ export default function Footer() {
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
+              minHeight: "44px",
               padding: "8px 16px",
               borderRadius: "var(--radius-sm)",
               border: "1px solid var(--color-border)",

@@ -17,10 +17,10 @@ const galleryItems: GalleryItem[] = [
   { id: 4, caption: "Dokumentasi Proyek 3", src: "/images/friendship/img/foto (4).jpg" },
   { id: 5, caption: "Dokumentasi Proyek 4", src: "/images/friendship/img/foto (5).jpg" },
   { id: 6, caption: "Dokumentasi Kebersamaan 5", src: "/images/friendship/img/foto (6).jpg" },
-  { id: 7, caption: "Dokumentasi Kebersamaan 6", src: "/images/friendship/img/foto (7).jpg" },
-  { id: 8, caption: "Dokumentasi Kebersamaan 7", src: "/images/friendship/img/foto (8).jpg" },
-  { id: 9, caption: "Dokumentasi Kebersamaan 8", src: "/images/friendship/img/foto (9).jpg" },
-  { id: 10, caption: "Dokumentasi Kebersamaan 9", src: "/images/friendship/img/foto (10).jpg" },
+  { id: 7, caption: "Dokumentasi Kebersamaan 6", src: "/images/friendship/img/foto (6).jpg" },
+  { id: 8, caption: "Dokumentasi Kebersamaan 7", src: "/images/friendship/img/foto (7).jpg" },
+  { id: 9, caption: "Dokumentasi Kebersamaan 8", src: "/images/friendship/img/foto (8).jpg" },
+  { id: 10, caption: "Dokumentasi Kebersamaan 9", src: "/images/friendship/img/foto (9).jpg" },
 ];
 
 export default function FriendshipGallery() {
@@ -39,13 +39,13 @@ export default function FriendshipGallery() {
           backgroundColor: "var(--color-surface)",
           border: "1px solid var(--color-border)",
           borderRadius: "var(--radius-md)",
-          padding: "32px",
+          padding: "clamp(18px, 4vw, 32px)",
         }}
       >
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
             gap: "24px",
             alignItems: "center",
           }}
@@ -67,11 +67,11 @@ export default function FriendshipGallery() {
             >
               <Users size={14} /> Personal Gallery
             </span>
-            <h1 style={{ fontSize: "2rem", marginBottom: "8px" }}>Duo Cees</h1>
+            <h1 style={{ fontSize: "clamp(1.5rem, 4vw, 2rem)", marginBottom: "8px" }}>Duo Cees</h1>
             <div style={{ fontSize: "1.05rem", color: "var(--color-primary-600)", fontWeight: 700, marginBottom: "12px" }}>
               Rahmat Haikal &amp; Ilal Ilhamdi
             </div>
-            <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)" }}>
+            <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
               Kumpulan momen kebersamaan, cerita perjalanan, dan dokumentasi kolaborasi dalam memecahkan berbagai proyek teknologi dan jaringan.
             </p>
           </div>
@@ -83,6 +83,9 @@ export default function FriendshipGallery() {
               width={340}
               height={260}
               style={{
+                width: "100%",
+                maxWidth: "340px",
+                height: "auto",
                 borderRadius: "var(--radius-md)",
                 objectFit: "cover",
                 border: "3px solid var(--color-border)",
@@ -97,7 +100,7 @@ export default function FriendshipGallery() {
       {/* Filter Bar */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "12px" }}>
         <h2 style={{ fontSize: "1.3rem" }}>Galeri Momen Kebersamaan ({filteredItems.length})</h2>
-        <div style={{ position: "relative", minWidth: "240px" }}>
+        <div style={{ position: "relative", width: "100%", maxWidth: "300px" }}>
           <Search size={18} style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--color-text-muted)" }} />
           <input
             type="text"
@@ -106,10 +109,11 @@ export default function FriendshipGallery() {
             placeholder="Cari momen..."
             style={{
               width: "100%",
-              padding: "10px 14px 10px 42px",
+              padding: "12px 14px 12px 42px",
               borderRadius: "var(--radius-sm)",
               border: "1px solid var(--color-border)",
               backgroundColor: "var(--color-surface)",
+              fontSize: "1rem",
             }}
           />
         </div>
@@ -119,7 +123,7 @@ export default function FriendshipGallery() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 160px), 1fr))",
           gap: "16px",
         }}
       >
@@ -137,16 +141,16 @@ export default function FriendshipGallery() {
               transition: "transform var(--transition-fast)",
             }}
           >
-            <div style={{ position: "relative", width: "100%", height: "180px" }}>
+            <div style={{ position: "relative", width: "100%", aspectRatio: "4/3" }}>
               <Image
                 src={item.src}
                 alt={item.caption}
                 fill
-                sizes="(max-width: 768px) 100vw, 250px"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 250px"
                 style={{ objectFit: "cover" }}
               />
             </div>
-            <div style={{ padding: "12px", fontSize: "0.85rem", fontWeight: 600, textAlign: "center" }}>
+            <div style={{ padding: "10px", fontSize: "0.85rem", fontWeight: 600, textAlign: "center" }}>
               {item.caption}
             </div>
           </div>
@@ -159,13 +163,13 @@ export default function FriendshipGallery() {
           style={{
             position: "fixed",
             inset: 0,
-            backgroundColor: "rgba(7, 19, 38, 0.9)",
+            backgroundColor: "rgba(7, 19, 38, 0.92)",
             backdropFilter: "blur(8px)",
             zIndex: 1000,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: "20px",
+            padding: "16px",
           }}
           onClick={() => setLightboxIdx(null)}
         >
@@ -173,16 +177,17 @@ export default function FriendshipGallery() {
             onClick={() => setLightboxIdx(null)}
             style={{
               position: "absolute",
-              top: "20px",
-              right: "20px",
+              top: "16px",
+              right: "16px",
               color: "#ffffff",
-              backgroundColor: "rgba(255,255,255,0.15)",
+              backgroundColor: "rgba(255,255,255,0.2)",
               width: "44px",
               height: "44px",
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              zIndex: 1001,
             }}
             aria-label="Tutup Preview Foto"
           >
@@ -196,32 +201,33 @@ export default function FriendshipGallery() {
             }}
             style={{
               position: "absolute",
-              left: "20px",
+              left: "12px",
               top: "50%",
               transform: "translateY(-50%)",
               color: "#ffffff",
-              backgroundColor: "rgba(255,255,255,0.15)",
+              backgroundColor: "rgba(255,255,255,0.2)",
               width: "44px",
               height: "44px",
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              zIndex: 1001,
             }}
             aria-label="Foto Sebelumnya"
           >
             <ChevronLeft size={24} />
           </button>
 
-          <div onClick={(e) => e.stopPropagation()} style={{ textAlign: "center" }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ textAlign: "center", maxWidth: "90vw", maxHeight: "80dvh" }}>
             <Image
               src={filteredItems[lightboxIdx].src}
               alt={filteredItems[lightboxIdx].caption}
               width={800}
               height={600}
               style={{
-                maxWidth: "90vw",
-                maxHeight: "80vh",
+                maxWidth: "100%",
+                maxHeight: "70dvh",
                 objectFit: "contain",
                 borderRadius: "var(--radius-md)",
               }}
@@ -238,17 +244,18 @@ export default function FriendshipGallery() {
             }}
             style={{
               position: "absolute",
-              right: "20px",
+              right: "12px",
               top: "50%",
               transform: "translateY(-50%)",
               color: "#ffffff",
-              backgroundColor: "rgba(255,255,255,0.15)",
+              backgroundColor: "rgba(255,255,255,0.2)",
               width: "44px",
               height: "44px",
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              zIndex: 1001,
             }}
             aria-label="Foto Selanjutnya"
           >

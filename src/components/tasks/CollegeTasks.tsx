@@ -149,10 +149,10 @@ export default function CollegeTasks() {
           backgroundColor: "var(--color-surface)",
           border: "1px solid var(--color-border)",
           borderRadius: "var(--radius-md)",
-          padding: "32px 24px",
+          padding: "clamp(18px, 4vw, 32px)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "12px" }}>
           <span
             style={{
               padding: "4px 10px",
@@ -171,10 +171,10 @@ export default function CollegeTasks() {
           <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Penyimpanan Lokal Browser</span>
         </div>
 
-        <h1 style={{ fontSize: "1.6rem", marginBottom: "6px" }}>
+        <h1 style={{ fontSize: "clamp(1.4rem, 4vw, 1.8rem)", marginBottom: "6px" }}>
           {editId ? "Edit Tugas Kuliah" : "Tambah Tugas Kuliah"}
         </h1>
-        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", marginBottom: "24px" }}>
+        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", marginBottom: "24px", lineHeight: 1.6 }}>
           Catat tugas perkuliahan, atur deadline, dan pantau prioritas pengerjaan tugas Anda.
         </p>
 
@@ -182,7 +182,7 @@ export default function CollegeTasks() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))",
               gap: "16px",
               marginBottom: "16px",
             }}
@@ -199,7 +199,7 @@ export default function CollegeTasks() {
                 placeholder="Contoh: Jaringan Komputer"
                 style={{
                   width: "100%",
-                  padding: "10px 14px",
+                  padding: "12px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
@@ -221,7 +221,7 @@ export default function CollegeTasks() {
                 placeholder="Contoh: Pertemuan 4"
                 style={{
                   width: "100%",
-                  padding: "10px 14px",
+                  padding: "12px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
@@ -234,7 +234,7 @@ export default function CollegeTasks() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 160px), 1fr))",
               gap: "16px",
               marginBottom: "16px",
             }}
@@ -250,7 +250,7 @@ export default function CollegeTasks() {
                 onChange={(e) => setGivenDate(e.target.value)}
                 style={{
                   width: "100%",
-                  padding: "10px 14px",
+                  padding: "12px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
@@ -270,7 +270,7 @@ export default function CollegeTasks() {
                 onChange={(e) => setDeadline(e.target.value)}
                 style={{
                   width: "100%",
-                  padding: "10px 14px",
+                  padding: "12px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
@@ -290,7 +290,7 @@ export default function CollegeTasks() {
                 onChange={(e) => setPriority(e.target.value as "Tinggi" | "Sedang" | "Rendah")}
                 style={{
                   width: "100%",
-                  padding: "10px 14px",
+                  padding: "12px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
@@ -305,7 +305,7 @@ export default function CollegeTasks() {
           </div>
 
           <div style={{ marginBottom: "20px" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "6px", marginBottom: "6px" }}>
               <label htmlFor="descTextarea" style={{ fontSize: "0.88rem", fontWeight: 600 }}>
                 Deskripsi &amp; Rincian Tugas *
               </label>
@@ -315,6 +315,7 @@ export default function CollegeTasks() {
                   onClick={() => formatText("upper")}
                   style={{
                     padding: "4px 8px",
+                    minHeight: "36px",
                     fontSize: "0.75rem",
                     borderRadius: "var(--radius-sm)",
                     border: "1px solid var(--color-border)",
@@ -328,6 +329,7 @@ export default function CollegeTasks() {
                   onClick={() => formatText("capitalize")}
                   style={{
                     padding: "4px 8px",
+                    minHeight: "36px",
                     fontSize: "0.75rem",
                     borderRadius: "var(--radius-sm)",
                     border: "1px solid var(--color-border)",
@@ -341,6 +343,7 @@ export default function CollegeTasks() {
                   onClick={() => formatText("title")}
                   style={{
                     padding: "4px 8px",
+                    minHeight: "36px",
                     fontSize: "0.75rem",
                     borderRadius: "var(--radius-sm)",
                     border: "1px solid var(--color-border)",
@@ -359,7 +362,7 @@ export default function CollegeTasks() {
               rows={4}
               style={{
                 width: "100%",
-                padding: "10px 14px",
+                padding: "12px 14px",
                 borderRadius: "var(--radius-sm)",
                 border: "1px solid var(--color-border)",
                 backgroundColor: "var(--color-surface)",
@@ -369,19 +372,22 @@ export default function CollegeTasks() {
             />
           </div>
 
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
             <button
               type="submit"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "8px",
+                minHeight: "44px",
                 padding: "10px 20px",
                 borderRadius: "var(--radius-sm)",
                 backgroundColor: "var(--color-primary-600)",
                 color: "#ffffff",
                 fontWeight: 600,
                 fontSize: "0.92rem",
+                flex: "1 1 140px",
               }}
             >
               <PlusCircle size={16} /> {editId ? "Update Tugas" : "Simpan Tugas"}
@@ -393,7 +399,9 @@ export default function CollegeTasks() {
               style={{
                 display: "inline-flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "8px",
+                minHeight: "44px",
                 padding: "10px 20px",
                 borderRadius: "var(--radius-sm)",
                 backgroundColor: "var(--color-surface-soft)",
@@ -401,6 +409,7 @@ export default function CollegeTasks() {
                 color: "var(--color-text-primary)",
                 fontWeight: 600,
                 fontSize: "0.92rem",
+                flex: "1 1 120px",
               }}
             >
               <RotateCcw size={16} /> Reset Form
@@ -432,7 +441,7 @@ export default function CollegeTasks() {
           borderRadius: "var(--radius-md)",
           padding: "16px",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))",
           gap: "12px",
         }}
       >
@@ -445,11 +454,11 @@ export default function CollegeTasks() {
             placeholder="Cari mata kuliah..."
             style={{
               width: "100%",
-              padding: "10px 14px 10px 42px",
+              padding: "12px 14px 12px 42px",
               borderRadius: "var(--radius-sm)",
               border: "1px solid var(--color-border)",
               backgroundColor: "var(--color-surface)",
-              fontSize: "0.9rem",
+              fontSize: "1rem",
             }}
           />
         </div>
@@ -458,11 +467,11 @@ export default function CollegeTasks() {
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
           style={{
-            padding: "10px 14px",
+            padding: "12px 14px",
             borderRadius: "var(--radius-sm)",
             border: "1px solid var(--color-border)",
             backgroundColor: "var(--color-surface)",
-            fontSize: "0.9rem",
+            fontSize: "1rem",
           }}
         >
           <option value="all">Semua Status</option>
@@ -486,7 +495,7 @@ export default function CollegeTasks() {
           Belum ada tugas yang cocok.
         </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
+        <div className="cardsGrid">
           {filteredTasks.map((t) => {
             const daysLeft = calculateDaysLeft(t.deadline);
             return (
@@ -496,14 +505,14 @@ export default function CollegeTasks() {
                   backgroundColor: "var(--color-surface)",
                   border: "1px solid var(--color-border)",
                   borderRadius: "var(--radius-md)",
-                  padding: "20px",
+                  padding: "clamp(16px, 4vw, 20px)",
                   display: "flex",
                   flexDirection: "column",
                   gap: "12px",
                   opacity: t.completed ? 0.75 : 1,
                 }}
               >
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
                   <div>
                     <h3 style={{ fontSize: "1.1rem", textDecoration: t.completed ? "line-through" : "none" }}>{t.course}</h3>
                     <span style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>{t.meeting || "Tugas"}</span>
@@ -533,16 +542,16 @@ export default function CollegeTasks() {
                   </span>
                 </div>
 
-                <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)", whiteSpace: "pre-wrap" }}>{t.desc}</p>
+                <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)", whiteSpace: "pre-wrap", lineHeight: 1.6 }}>{t.desc}</p>
 
-                <div style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", display: "flex", justifyContent: "space-between", paddingTop: "10px", borderTop: "1px solid var(--color-border)" }}>
+                <div style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "4px", paddingTop: "10px", borderTop: "1px solid var(--color-border)" }}>
                   <span>Diberikan: {t.givenDate || "-"}</span>
                   <span>
                     Deadline: <strong>{t.deadline}</strong> ({daysLeft < 0 ? `Lewat ${Math.abs(daysLeft)} hari` : `${daysLeft} hari lagi`})
                   </span>
                 </div>
 
-                <div style={{ display: "flex", gap: "8px", marginTop: "auto" }}>
+                <div style={{ display: "flex", gap: "8px", marginTop: "auto", flexWrap: "wrap" }}>
                   <button
                     onClick={() => toggleComplete(t.id)}
                     style={{
@@ -551,6 +560,7 @@ export default function CollegeTasks() {
                       alignItems: "center",
                       justifyContent: "center",
                       gap: "6px",
+                      minHeight: "44px",
                       padding: "8px 12px",
                       borderRadius: "var(--radius-sm)",
                       backgroundColor: t.completed ? "var(--color-surface-soft)" : "var(--color-primary-600)",
@@ -566,6 +576,8 @@ export default function CollegeTasks() {
                   <button
                     onClick={() => editTask(t)}
                     style={{
+                      minWidth: "44px",
+                      minHeight: "44px",
                       padding: "8px 12px",
                       borderRadius: "var(--radius-sm)",
                       border: "1px solid var(--color-border)",
@@ -578,6 +590,8 @@ export default function CollegeTasks() {
                   <button
                     onClick={() => deleteTask(t.id)}
                     style={{
+                      minWidth: "44px",
+                      minHeight: "44px",
                       padding: "8px 12px",
                       borderRadius: "var(--radius-sm)",
                       border: "1px solid var(--color-border)",

@@ -2,236 +2,113 @@ import Image from "next/image";
 import Link from "next/link";
 import { Grid, Wrench, Send, GitBranch, MessageCircle, Mail } from "lucide-react";
 import { socialLinks } from "@/data/social-links";
+import styles from "./Hero.module.css";
 
 export default function Hero() {
   return (
-    <section
-      id="hero"
-      className="section"
-      style={{
-        paddingTop: "48px",
-        paddingBottom: "64px",
-      }}
-    >
+    <section id="hero" className={styles.heroSection}>
       <div className="container">
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "48px",
-            alignItems: "center",
-          }}
-        >
-          {/* Left Column */}
-          <div>
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "6px 14px",
-                borderRadius: "var(--radius-pill)",
-                backgroundColor: "var(--color-primary-50)",
-                color: "var(--color-primary-600)",
-                fontSize: "0.85rem",
-                fontWeight: 600,
-                marginBottom: "20px",
-                border: "1px solid var(--color-border)",
-              }}
-            >
-              <span
-                style={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  backgroundColor: "var(--color-primary-600)",
-                  display: "inline-block",
-                }}
-              />
+        <div className={styles.heroGrid}>
+          {/* Left Column Content */}
+          <div className={styles.heroContent}>
+            <div className={styles.badge}>
+              <span className={styles.dot} />
               Network • Technology • Development
             </div>
 
-            <h1
-              style={{
-                fontSize: "clamp(2rem, 5vw, 3.2rem)",
-                fontWeight: 800,
-                lineHeight: 1.15,
-                marginBottom: "20px",
-              }}
-            >
+            <h1 className={styles.title}>
               Semua Proyek dan Tool, <br />
-              Dalam <span style={{ color: "var(--color-primary-600)" }}>Satu Base.</span>
+              Dalam <span className={styles.titleHighlight}>Satu Base.</span>
             </h1>
 
-            <p
-              style={{
-                fontSize: "1.05rem",
-                color: "var(--color-text-secondary)",
-                lineHeight: 1.6,
-                marginBottom: "32px",
-                maxWidth: "600px",
-              }}
-            >
+            <p className={styles.description}>
               ALLBASE adalah pusat portofolio, proyek, dan berbagai tool yang saya bangun untuk pembelajaran jaringan telekomunikasi, teknologi, dan pengembangan aplikasi web modern.
             </p>
 
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginBottom: "32px" }}>
-              <Link
-                href="#projects"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "12px 24px",
-                  borderRadius: "var(--radius-sm)",
-                  backgroundColor: "var(--color-primary-600)",
-                  color: "#ffffff",
-                  fontWeight: 600,
-                  fontSize: "0.95rem",
-                }}
-              >
-                <Grid size={18} /> Lihat Proyek
+            <div className={styles.actions}>
+              <Link href="#projects" className={styles.btnPrimary}>
+                <Grid size={20} /> Lihat Proyek
               </Link>
 
-              <Link
-                href="#tools"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "12px 24px",
-                  borderRadius: "var(--radius-sm)",
-                  backgroundColor: "var(--color-surface-soft)",
-                  border: "1px solid var(--color-border)",
-                  color: "var(--color-text-primary)",
-                  fontWeight: 600,
-                  fontSize: "0.95rem",
-                }}
-              >
-                <Wrench size={18} /> Buka Tools
+              <Link href="#tools" className={styles.btnSecondary}>
+                <Wrench size={20} /> Buka Tools
               </Link>
 
-              <Link
-                href="#contact"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "12px 24px",
-                  borderRadius: "var(--radius-sm)",
-                  border: "1px solid var(--color-border)",
-                  color: "var(--color-text-primary)",
-                  fontWeight: 600,
-                  fontSize: "0.95rem",
-                }}
-              >
-                <Send size={18} /> Hubungi Saya
+              <Link href="#contact" className={styles.btnOutline}>
+                <Send size={20} /> Hubungi Saya
               </Link>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div className={styles.socials}>
               <a
                 href={socialLinks.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  width: "44px",
-                  height: "44px",
-                  borderRadius: "var(--radius-sm)",
-                  border: "1px solid var(--color-border)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--color-text-primary)",
-                }}
+                className={styles.socialBtn}
                 title="Profil GitHub"
                 aria-label="Profil GitHub"
               >
-                <GitBranch size={20} />
+                <GitBranch size={22} />
               </a>
 
               <a
                 href={socialLinks.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  width: "44px",
-                  height: "44px",
-                  borderRadius: "var(--radius-sm)",
-                  border: "1px solid var(--color-border)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--color-text-primary)",
-                }}
+                className={styles.socialBtn}
                 title="Chat WhatsApp"
                 aria-label="Chat WhatsApp"
               >
-                <MessageCircle size={20} />
+                <MessageCircle size={22} />
               </a>
 
               <a
                 href={socialLinks.email}
-                style={{
-                  width: "44px",
-                  height: "44px",
-                  borderRadius: "var(--radius-sm)",
-                  border: "1px solid var(--color-border)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--color-text-primary)",
-                }}
+                className={styles.socialBtn}
                 title="Kirim Email"
                 aria-label="Kirim Email"
               >
-                <Mail size={20} />
+                <Mail size={22} />
+              </a>
+
+              <a
+                href={socialLinks.tiktok}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialBtn}
+                title="TikTok RAXIL"
+                aria-label="TikTok RAXIL"
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.29 0 .58.05.85.14V9.41a6.33 6.33 0 0 0-.85-.06 6.33 6.33 0 0 0-6.33 6.33 6.33 6.33 0 0 0 6.33 6.33 6.33 6.33 0 0 0 6.33-6.33V9.01a8.16 8.16 0 0 0 4.78 1.52V7.1a4.85 4.85 0 0 1-1.005-.41z" />
+                </svg>
               </a>
             </div>
           </div>
 
           {/* Right Column: Visual Profile Frame */}
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <div
-              style={{
-                position: "relative",
-                width: "100%",
-                maxWidth: "320px",
-                borderRadius: "var(--radius-lg)",
-                overflow: "hidden",
-                border: "4px solid var(--color-surface)",
-                boxShadow: "var(--shadow-lg)",
-                backgroundColor: "var(--color-surface)",
-              }}
-            >
+          <div className={styles.profileVisual}>
+            <div className={styles.profileImageWrapper}>
               <Image
                 src="/profile.jpg"
                 alt="Ilal Ilhamdi"
-                width={320}
-                height={380}
+                fill
                 priority
+                sizes="(max-width: 430px) 86vw, (max-width: 768px) 340px, 380px"
                 style={{
-                  width: "100%",
-                  height: "auto",
                   objectFit: "cover",
-                  display: "block",
+                  objectPosition: "center 35%",
                 }}
               />
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  background: "linear-gradient(to top, rgba(7, 19, 38, 0.9), transparent)",
-                  padding: "20px 16px 16px",
-                  color: "#ffffff",
-                }}
-              >
-                <h3 style={{ fontSize: "1.2rem", color: "#ffffff", marginBottom: "2px" }}>Ilal Ilhamdi</h3>
-                <p style={{ fontSize: "0.85rem", color: "var(--color-primary-200)" }}>
-                  Network &amp; Technology Enthusiast
-                </p>
+              <div className={styles.profileOverlay}>
+                <h3 className={styles.profileName}>Ilal Ilhamdi</h3>
+                <p className={styles.profileRole}>Network &amp; Technology Enthusiast</p>
               </div>
             </div>
           </div>

@@ -5,6 +5,9 @@
 }
 
 html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
   font-family: var(--font-body, system-ui, -apple-system, sans-serif);
   background-color: var(--color-background);
   color: var(--color-text-primary);
@@ -15,12 +18,18 @@ html {
 }
 
 body {
+  width: 100%;
+  max-width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  overflow-x: clip;
   background-color: var(--color-background);
   color: var(--color-text-primary);
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
   transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
@@ -40,10 +49,9 @@ button {
   cursor: pointer;
 }
 
-img, video, svg {
+img, video, svg, canvas {
   display: block;
   max-width: 100%;
-  height: auto;
 }
 
 table {
