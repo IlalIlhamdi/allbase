@@ -6,14 +6,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const routes = [
     "",
-    "/tools/internet-speed-test/",
-    "/tools/subnet-calculator/",
-    "/tools/ip-calculator/",
-    "/tools/network-converter/",
-    "/class-schedule/",
-    "/college-tasks/",
-    "/friendship-page/",
-    "/ilal-gps/",
+    "/tools/internet-speed-test",
+    "/tools/subnet-calculator",
+    "/tools/ip-calculator",
+    "/tools/network-converter",
+    "/class-schedule",
+    "/college-tasks",
+    "/friendship-page",
+    "/ilal-gps",
   ];
 
   return routes.map((route) => ({

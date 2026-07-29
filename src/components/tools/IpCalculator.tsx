@@ -23,7 +23,7 @@ export default function IpCalculator() {
         Alat cepat untuk menganalisis alokasi blok IP address, kelas IP, subnet mask, dan rentang alamat host.
       </p>
       <Link
-        href="/tools/subnet-calculator/"
+        href="/tools/subnet-calculator"
         style={{
           display: "inline-flex",
           alignItems: "center",

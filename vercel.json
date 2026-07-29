@@ -1,8 +1,5 @@
 {
-  "version": 2,
-  "name": "allbase-personal-hub",
-  "cleanUrls": true,
-  "trailingSlash": false,
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "headers": [
     {
       "source": "/(.*)",

@@ -5,7 +5,7 @@ import { constructMetadata } from "@/lib/metadata";
 export const metadata: Metadata = constructMetadata({
   title: "Pengelola Tugas Kuliah — ALLBASE",
   description: "Aplikasi pencatatan dan manajemen daftar tugas perkuliahan harian dengan reminder deadline interaktif.",
-  canonical: "/college-tasks/",
+  canonical: "/college-tasks",
 });
 
 export default function CollegeTasksPage() {
