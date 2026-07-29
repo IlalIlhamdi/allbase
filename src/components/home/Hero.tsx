@@ -4,6 +4,8 @@ import { Grid, Wrench, Send, GitBranch, MessageCircle, Mail } from "lucide-react
 import { socialLinks } from "@/data/social-links";
 import styles from "./Hero.module.css";
 
+const contactTarget = "/#contact";
+
 export default function Hero() {
   return (
     <section id="hero" className={styles.heroSection}>
@@ -27,22 +29,22 @@ export default function Hero() {
 
             {/* Mobile Primary Action (Hubungi Saya CTA) */}
             <div className={styles.mobilePrimaryActionContainer}>
-              <Link href="#contact" className={styles.mobilePrimaryAction}>
+              <Link href={contactTarget} className={styles.mobilePrimaryAction}>
                 <Send size={20} /> Hubungi Saya
               </Link>
             </div>
 
             {/* Desktop Hero Actions */}
             <div className={styles.desktopHeroActions}>
-              <Link href="#projects" className={styles.btnPrimary}>
+              <Link href="/#projects" className={styles.btnPrimary}>
                 <Grid size={20} /> Lihat Proyek
               </Link>
 
-              <Link href="#tools" className={styles.btnSecondary}>
+              <Link href="/#tools" className={styles.btnSecondary}>
                 <Wrench size={20} /> Buka Tools
               </Link>
 
-              <Link href="#contact" className={styles.btnOutline}>
+              <Link href={contactTarget} className={styles.btnOutline}>
                 <Send size={20} /> Hubungi Saya
               </Link>
             </div>
