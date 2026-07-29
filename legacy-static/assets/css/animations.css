@@ -1,0 +1,76 @@
+/* ============================================================
+   ALLBASE AI SCANNER & NETWORK ANIMATIONS
+   Subtle Scanning Line, Radar Pulse, Faint Grid Accent
+   ============================================================ */
+
+/* Faint Grid Background Pattern */
+.bg-network-grid {
+  background-image: radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Subtle AI Scanning Line Effect */
+.scanner-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanner-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+  animation: scan-horizontal 5s linear infinite;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes scan-horizontal {
+  0% { left: -100%; }
+  50%, 100% { left: 100%; }
+}
+
+/* Online Status Pulse Dot */
+.status-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--success);
+  box-shadow: 0 0 8px var(--success);
+  animation: pulse-dot 2.5s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.25); opacity: 0.6; }
+}
+
+/* Subtle Radar Circle Spin */
+.radar-circle {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border: 1px dashed var(--primary-light);
+  border-radius: 50%;
+  opacity: 0.25;
+  animation: radar-rotate 25s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes radar-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Entrance Animations */
+.animate-fade-up {
+  animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
