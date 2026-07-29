@@ -11,20 +11,21 @@ export default function HomePage() {
     "@context": "https://schema.org",
     "@graph": [
       {
+        "@type": "WebSite",
+        "name": "ALLBASE",
+        "alternateName": "ALLBASE HUB",
+        "url": "https://allbase.my.id",
+      },
+      {
         "@type": "Person",
         "name": "Ilal Ilhamdi",
-        "url": "https://allbase.my.id/",
+        "url": "https://allbase.my.id",
         "image": "https://allbase.my.id/profile.jpg",
         "jobTitle": "Network & Technology Enthusiast",
         "sameAs": [
           "https://github.com/IlalIlhamdi/allbase",
-          "https://www.credly.com/badges/ddefb255-6d2c-488f-a53e-c4ad6f84c327/public_url",
+          "https://www.tiktok.com/@raxil424?_r=1&_t=ZS-98RAfFICARl",
         ],
-      },
-      {
-        "@type": "WebSite",
-        "name": "ALLBASE",
-        "url": "https://allbase.my.id/",
       },
     ],
   };

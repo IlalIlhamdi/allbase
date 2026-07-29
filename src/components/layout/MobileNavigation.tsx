@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { Grid, Wrench, Home, User, Code, Folder, Award, Mail } from "lucide-react";
+import { Grid, Wrench, Send, Home, User, Code, Folder, Award, Mail } from "lucide-react";
 import { mainNavItems } from "@/data/navigation";
 import styles from "./MobileNavigation.module.css";
 
@@ -26,19 +26,23 @@ export default function MobileNavigation({ isOpen, onClose }: MobileNavigationPr
     if (!isOpen) return;
 
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const previousTouchAction = document.body.style.touchAction;
 
-    const handleKeyDown = (event: KeyboardEvent) => {
+    document.body.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
+
+    const closeWithEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onClose();
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", closeWithEscape);
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.touchAction = previousTouchAction;
+      window.removeEventListener("keydown", closeWithEscape);
     };
   }, [isOpen, onClose]);
 
@@ -80,20 +84,29 @@ export default function MobileNavigation({ isOpen, onClose }: MobileNavigationPr
         <div className={styles.mobileQuickActions}>
           <Link
             href="/#projects"
-            className={styles.btnLihatProyek}
+            className={`${styles.mobileQuickAction} ${styles.btnLihatProyek}`}
             onClick={onClose}
           >
-            <Grid size={18} />
+            <Grid size={18} aria-hidden="true" />
             <span>Lihat Proyek</span>
           </Link>
 
           <Link
             href="/#tools"
-            className={styles.btnBukaTools}
+            className={`${styles.mobileQuickAction} ${styles.btnBukaTools}`}
             onClick={onClose}
           >
-            <Wrench size={18} />
+            <Wrench size={18} aria-hidden="true" />
             <span>Buka Tools</span>
+          </Link>
+
+          <Link
+            href="/#contact"
+            className={`${styles.mobileQuickAction} ${styles.btnHubungiSaya}`}
+            onClick={onClose}
+          >
+            <Send size={18} aria-hidden="true" />
+            <span>Hubungi Saya</span>
           </Link>
         </div>
       </nav>

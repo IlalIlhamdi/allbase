@@ -1,6 +1,6 @@
 .heroSection {
   padding-top: 32px;
-  padding-bottom: clamp(32px, 6vw, 88px);
+  padding-bottom: 48px;
   scroll-margin-top: calc(var(--mobile-header-height, 86px) + 16px);
 }
 
@@ -21,6 +21,23 @@
 .heroContent {
   display: flex;
   flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    padding-top: 32px;
+    padding-bottom: 48px;
+  }
+
+  .heroContent {
+    gap: 20px;
+  }
+
+  .profileVisual {
+    width: min(100%, 330px);
+    margin: 28px auto 0;
+  }
 }
 
 .badge {
@@ -37,7 +54,6 @@
   line-height: 1.2;
   white-space: normal;
   border: 1px solid var(--color-border);
-  margin-bottom: 16px;
   font-weight: 600;
 }
 
@@ -57,7 +73,6 @@
   text-wrap: balance;
   overflow-wrap: normal;
   word-break: normal;
-  margin-bottom: 16px;
   font-weight: 800;
 }
 
@@ -82,7 +97,6 @@
   font-size: clamp(1rem, 4.1vw, 1.12rem);
   line-height: 1.65;
   color: var(--color-text-secondary);
-  margin-bottom: 20px;
 }
 
 @media (min-width: 900px) {
@@ -91,36 +105,9 @@
   }
 }
 
-/* Mobile vs Desktop Actions */
+/* Actions Desktop */
 .desktopHeroActions {
   display: none;
-}
-
-.mobilePrimaryActionContainer {
-  display: flex;
-  width: 100%;
-  margin-top: 4px;
-  margin-bottom: 0;
-}
-
-.mobilePrimaryAction {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  min-height: 54px;
-  padding: 12px 18px;
-  border-radius: 14px;
-  background-color: var(--color-primary-600);
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: background-color var(--transition-fast);
-}
-
-.mobilePrimaryAction:hover {
-  background-color: var(--color-primary-700);
 }
 
 @media (min-width: 769px) {
@@ -129,12 +116,7 @@
     flex-wrap: wrap;
     gap: 12px;
     margin-top: 8px;
-    margin-bottom: 24px;
     width: auto;
-  }
-
-  .mobilePrimaryActionContainer {
-    display: none;
   }
 }
 
@@ -189,15 +171,8 @@
 
 /* Profile Visual Frame */
 .profileVisual {
-  width: min(100%, 340px);
-  margin: 32px auto 0;
-}
-
-@media (max-width: 390px) {
-  .profileVisual {
-    width: min(100%, 320px);
-    margin-top: 32px;
-  }
+  width: min(100%, 330px);
+  margin: 28px auto 0;
 }
 
 @media (min-width: 900px) {
@@ -209,6 +184,8 @@
 
 .profileCard {
   width: 100%;
+  overflow: hidden;
+  border-radius: 22px;
 }
 
 .profileImageWrapper {
@@ -248,11 +225,10 @@
 .profileSocialLinks {
   display: flex;
   justify-content: center;
-  align-items: center;
   flex-wrap: wrap;
   gap: 12px;
-  width: 100%;
   margin-top: 18px;
+  margin-bottom: 36px;
 }
 
 .profileSocialLink {
