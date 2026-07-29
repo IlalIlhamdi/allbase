@@ -3,7 +3,7 @@
    Static App Shell Caching & Offline Fallback Strategy
    ============================================================ */
 
-const CACHE_NAME = 'allbase-static-v6';
+const CACHE_NAME = 'allbase-static-v7';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -32,7 +32,7 @@ const STATIC_ASSETS = [
   './assets/js/filters.js',
   './assets/js/app.js',
   './assets/js/subpage.js',
-  './assets/vendor/cloudflare-speedtest/speedtest.js',
+  './assets/vendor/cloudflare-speedtest/speedtest.bundle.js',
   './network-converter/index.html',
   './tools/subnet-calculator/index.html',
   './tools/ip-calculator/index.html',

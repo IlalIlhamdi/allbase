@@ -16,25 +16,34 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
 
-  <!-- Shared Subpage Styles & Engine -->
-  <link rel="stylesheet" href="../../assets/css/subpage.css">
-  <link rel="stylesheet" href="./speed-test.css">
-  <script defer src="../../assets/js/subpage.js"></script>
+  <!-- Root Absolute Styles -->
+  <link rel="stylesheet" href="/assets/css/variables.css">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/subpage.css">
+  <link rel="stylesheet" href="/tools/internet-speed-test/speed-test.css">
+
+  <!-- Root Absolute Scripts -->
+  <script src="/assets/js/theme.js" defer></script>
+  <script src="/assets/js/subpage.js" defer></script>
+  <script type="module" src="/tools/internet-speed-test/speed-test.js"></script>
 </head>
 <body>
 
   <!-- SHARED SUBPAGE HEADER -->
-  <header class="subpage-header">
-    <div class="subpage-header-inner">
+  <header class="subpage-header speed-subpage-header">
+    <div class="subpage-header-inner" style="max-width:980px;">
       <div class="header-left">
-        <a href="../../index.html#tools" class="btn btn-sm btn-secondary" title="Kembali ke ALLBASE Hub">
-          <i data-lucide="arrow-left"></i> Kembali ke ALLBASE
+        <a href="/#tools" class="btn btn-sm btn-secondary" title="Kembali ke ALLBASE Hub">
+          <i data-lucide="arrow-left"></i>
+          <span class="back-button-label-long">Kembali ke ALLBASE</span>
+          <span class="back-button-label-short">ALLBASE</span>
         </a>
-        <span class="header-title-text">Internet Speed Test</span>
       </div>
 
+      <div class="speed-subpage-title">Internet Speed Test</div>
+
       <div class="header-right">
-        <span class="badge badge-primary badge-hide-mobile"><i data-lucide="activity"></i> Network Tool</span>
         <button class="btn btn-sm btn-secondary btn-icon theme-toggle-btn" title="Ganti Tema Light/Dark" aria-label="Toggle Mode Tema">
           <i data-lucide="moon" style="width:18px;height:18px;"></i>
         </button>
@@ -43,30 +52,29 @@
   </header>
 
   <!-- MAIN CONTAINER -->
-  <main class="subpage-container">
+  <main class="speed-test-page">
 
-    <!-- HEADER TITLE CARD -->
-    <div class="card" style="margin-bottom:24px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+    <!-- 1. INTRO SECTION -->
+    <section class="speed-test-intro card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px;">
         <span class="badge badge-primary"><i data-lucide="gauge"></i> Cloudflare Measurement Engine</span>
         <span style="font-size:0.8rem;color:var(--text-muted);font-family:var(--font-mono);">Edge Network API</span>
       </div>
-
       <h1 style="font-size:1.6rem;margin-bottom:6px;">Internet Speed Test</h1>
-      <p style="font-size:0.95rem;color:var(--text-secondary);">
+      <p style="font-size:0.92rem;color:var(--text-secondary);">
         Uji performa bandwidth Download, Upload, Ping, Jitter, serta penilaian kualitas koneksi real-time ke jaringan pengujian Cloudflare.
       </p>
-    </div>
+    </section>
 
-    <!-- DATA USAGE & CELLULAR WARNING BOX -->
-    <div class="warning-box">
+    <!-- 2. DATA WARNING SECTION -->
+    <section class="data-warning warning-box">
       <i data-lucide="alert-triangle"></i>
       <div>
         <div class="warning-text-title">Peringatan Penggunaan Data</div>
         <div class="warning-text-desc">
           Tes kecepatan dapat menggunakan data dalam jumlah besar. Pastikan Anda memahami penggunaan kuota sebelum memulai.
         </div>
-        <div class="warning-text-desc" style="margin-top:6px;font-size:0.84rem;color:var(--text-muted);">
+        <div class="warning-text-desc" style="margin-top:4px;font-size:0.82rem;color:var(--text-muted);">
           Hasil mengukur koneksi antara perangkat Anda dan jaringan pengujian Cloudflare. Hasil dapat berbeda berdasarkan lokasi server, WiFi, perangkat, kondisi jaringan, dan aktivitas pengguna lain.
         </div>
         <div id="cellularWarning" class="cellular-alert" style="display:none;">
@@ -74,11 +82,11 @@
           <span>Anda kemungkinan menggunakan jaringan seluler. Tes ini dapat menggunakan kuota data.</span>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- SPEEDOMETER GAUGE CARD -->
-    <div class="gauge-card">
-      <div class="gauge-wrapper">
+    <!-- 3. SPEED TEST PANEL SECTION -->
+    <section class="speed-test-panel gauge-card">
+      <div class="speed-gauge gauge-wrapper">
         <svg class="gauge-svg" viewBox="0 0 260 160">
           <defs>
             <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -88,7 +96,7 @@
             </linearGradient>
           </defs>
 
-          <!-- Arc Background Path (180 deg, r=100) -->
+          <!-- Arc Background Path -->
           <path class="gauge-bg-path" d="M 30 140 A 100 100 0 0 1 230 140" />
 
           <!-- Active Progress Arc Path -->
@@ -107,33 +115,20 @@
         </div>
       </div>
 
-      <!-- Phase & Status Text -->
-      <div class="status-indicator">
+      <div class="test-status status-indicator">
         <div class="status-badge-text">
           <span id="statusPulseDot" class="status-pulse-dot"></span>
           <span id="testStatusText">Siap untuk menguji koneksi</span>
         </div>
       </div>
 
-      <!-- Phase Steps Line -->
-      <div class="phase-steps">
-        <span id="step1" class="step-chip">1. Menyiapkan</span>
-        <span id="step2" class="step-chip">2. Ping & Jitter</span>
-        <span id="step3" class="step-chip">3. Download</span>
-        <span id="step4" class="step-chip">4. Upload</span>
-        <span id="step5" class="step-chip">5. Analisis Kualitas</span>
-        <span id="step6" class="step-chip">6. Selesai</span>
-      </div>
-
-      <!-- Progress Bar -->
-      <div class="progress-container">
+      <div class="test-progress progress-container">
         <div class="progress-bar-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressTrack">
           <div class="progress-bar-fill" id="progressBarFill"></div>
         </div>
       </div>
 
-      <!-- Control Buttons -->
-      <div class="controls-row">
+      <div class="test-actions controls-row">
         <button id="startBtn" class="btn btn-primary" title="Mulai pengujian kecepatan">
           <i data-lucide="play"></i> Mulai Tes
         </button>
@@ -147,87 +142,107 @@
           <i data-lucide="copy"></i> Salin Hasil
         </button>
       </div>
-    </div>
+    </section>
 
-    <!-- 4 MAIN METRIC CARDS -->
-    <div class="metrics-grid">
+    <!-- 4. METRICS GRID SECTION -->
+    <section class="metrics-grid">
       <!-- Download -->
       <div id="cardDownload" class="metric-card">
         <div class="metric-header">
-          <i data-lucide="arrow-down-circle" style="color:var(--primary);"></i> Download
+          <i data-lucide="arrow-down-circle" style="color:var(--primary);"></i>
+          <span>Download</span>
         </div>
         <div id="valDownload" class="metric-value">—</div>
         <div class="metric-unit">Mbps</div>
+        <div id="statusDownload" class="metric-status">Belum diuji</div>
       </div>
 
       <!-- Upload -->
       <div id="cardUpload" class="metric-card">
         <div class="metric-header">
-          <i data-lucide="arrow-up-circle" style="color:#06B6D4;"></i> Upload
+          <i data-lucide="arrow-up-circle" style="color:#06B6D4;"></i>
+          <span>Upload</span>
         </div>
         <div id="valUpload" class="metric-value">—</div>
         <div class="metric-unit">Mbps</div>
+        <div id="statusUpload" class="metric-status">Belum diuji</div>
       </div>
 
       <!-- Ping -->
       <div id="cardPing" class="metric-card">
         <div class="metric-header">
-          <i data-lucide="activity" style="color:#10B981;"></i> Ping
+          <i data-lucide="activity" style="color:#10B981;"></i>
+          <span>Ping</span>
         </div>
         <div id="valPing" class="metric-value">—</div>
-        <div class="metric-unit">ms (Unloaded)</div>
+        <div class="metric-unit">ms</div>
+        <div id="statusPing" class="metric-status">Unloaded</div>
       </div>
 
       <!-- Jitter -->
       <div id="cardJitter" class="metric-card">
         <div class="metric-header">
-          <i data-lucide="radio" style="color:#8B5CF6;"></i> Jitter
+          <i data-lucide="radio" style="color:#8B5CF6;"></i>
+          <span>Jitter</span>
         </div>
         <div id="valJitter" class="metric-value">—</div>
-        <div class="metric-unit">ms (Unloaded)</div>
+        <div class="metric-unit">ms</div>
+        <div id="statusJitter" class="metric-status">Unloaded</div>
       </div>
-    </div>
+    </section>
 
-    <!-- CONNECTION QUALITY ASSESSMENT CARD -->
-    <div class="quality-card">
+    <!-- 5. QUALITY PANEL SECTION -->
+    <section class="quality-panel quality-card">
       <div class="quality-header">
         <div class="quality-title-group">
           <i data-lucide="award" style="color:var(--primary);width:22px;height:22px;"></i>
           <h2 style="font-size:1.15rem;margin:0;">Penilaian Kualitas Koneksi</h2>
         </div>
-        <span id="qualityOverallBadge" class="badge badge-secondary">Menunggu pengujian...</span>
+        <span id="qualityOverallBadge" class="badge badge-secondary">Belum diuji</span>
       </div>
 
       <div class="quality-grid">
         <div class="quality-item">
           <div class="quality-item-name">
-            <i data-lucide="tv" style="width:16px;height:16px;"></i> Streaming Video
+            <i data-lucide="tv" style="width:16px;height:16px;"></i>
+            <span>Streaming Video</span>
           </div>
-          <div id="scoreStreaming" class="quality-item-score">—</div>
+          <div id="scoreStreaming" class="quality-item-score">
+            <span class="badge badge-secondary">Belum diuji</span>
+          </div>
+          <div class="quality-item-desc">Definisi Tinggi / 4K Streaming</div>
         </div>
 
         <div class="quality-item">
           <div class="quality-item-name">
-            <i data-lucide="gamepad-2" style="width:16px;height:16px;"></i> Game Online
+            <i data-lucide="gamepad-2" style="width:16px;height:16px;"></i>
+            <span>Game Online</span>
           </div>
-          <div id="scoreGaming" class="quality-item-score">—</div>
+          <div id="scoreGaming" class="quality-item-score">
+            <span class="badge badge-secondary">Belum diuji</span>
+          </div>
+          <div class="quality-item-desc">Responsivitas & Realtime Ping</div>
         </div>
 
         <div class="quality-item">
           <div class="quality-item-name">
-            <i data-lucide="video" style="width:16px;height:16px;"></i> Video Call / RTT
+            <i data-lucide="video" style="width:16px;height:16px;"></i>
+            <span>Video Call / RTT</span>
           </div>
-          <div id="scoreVideoCall" class="quality-item-score">—</div>
+          <div id="scoreVideoCall" class="quality-item-score">
+            <span class="badge badge-secondary">Belum diuji</span>
+          </div>
+          <div class="quality-item-desc">Konferensi Video & Panggilan Suara</div>
         </div>
       </div>
 
       <div id="qualitySourceNote" class="quality-note">
         Penilaian merupakan perkiraan berdasarkan hasil pengujian saat ini dan bukan sebagai jaminan resmi ISP.
       </div>
-    </div>
+    </section>
 
-    <!-- METADATA & PRIVACY INFO CARD -->
-    <div class="info-card">
+    <!-- 6. TEST INFORMATION SECTION -->
+    <section class="test-information info-card">
       <h3 style="font-size:1rem;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
         <i data-lucide="info" style="color:var(--primary);width:18px;height:18px;"></i> Informasi Pengujian
       </h3>
@@ -242,7 +257,7 @@
       <div class="info-notice">
         Pengujian dilakukan menggunakan measurement engine Cloudflare. Hasil pengukuran dapat diproses oleh penyedia layanan pengujian untuk insight agregat. ALLBASE tidak menyimpan data hasil tes atau alamat IP pengguna.
       </div>
-    </div>
+    </section>
 
   </main>
 
@@ -251,7 +266,5 @@
     <p>&copy; <span id="footerYear">2026</span> ALLBASE Hub — Internet Speed Test Engine.</p>
   </footer>
 
-  <!-- SPEED TEST LOGIC SCRIPT (ESM MODULE) -->
-  <script type="module" src="./speed-test.js"></script>
 </body>
 </html>
