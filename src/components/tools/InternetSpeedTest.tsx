@@ -1,7 +1,28 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Gauge, Play, RotateCcw, XCircle, Copy, AlertTriangle, CheckCircle, Activity, ArrowDownCircle, ArrowUpCircle, Radio, Award } from "lucide-react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import Link from "next/link";
+import {
+  Play,
+  RotateCcw,
+  Square,
+  Copy,
+  Check,
+  AlertTriangle,
+  ArrowDown,
+  ArrowUp,
+  Activity,
+  Radio,
+  Award,
+  ChevronLeft,
+  Gauge,
+  Tv,
+  Gamepad2,
+  Video,
+  Globe,
+} from "lucide-react";
+import { evaluateConnectionQuality, speedToFraction } from "@/lib/speedTestQuality";
+import styles from "./InternetSpeedTest.module.css";
 
 type TestState =
   | "idle"
@@ -9,7 +30,6 @@ type TestState =
   | "latency"
   | "download"
   | "upload"
-  | "analyzing"
   | "completed"
   | "cancelled"
   | "error";
@@ -20,6 +40,17 @@ interface SpeedResults {
   pingMs: number | null;
   jitterMs: number | null;
 }
+
+// Scale ticks for dynamic semicircle gauge
+const GAUGE_TICKS = [
+  { value: 0, label: "0" },
+  { value: 10, label: "10" },
+  { value: 50, label: "50" },
+  { value: 100, label: "100" },
+  { value: 250, label: "250" },
+  { value: 500, label: "500" },
+  { value: 1000, label: "1G+" },
+];
 
 export default function InternetSpeedTest() {
   const [testState, setTestState] = useState<TestState>("idle");
@@ -32,14 +63,19 @@ export default function InternetSpeedTest() {
   });
   const [copied, setCopied] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const speedTestEngineRef = useRef<unknown>(null);
+  const [showDataWarningDetails, setShowDataWarningDetails] = useState<boolean>(false);
 
+  // Speed test engine reference
+  const speedTestEngineRef = useRef<{ pause?: () => void; play?: () => void } | null>(null);
+
+  // Clean up engine on unmount
   useEffect(() => {
     return () => {
       if (speedTestEngineRef.current) {
         try {
-          const engine = speedTestEngineRef.current as { pause?: () => void };
-          if (typeof engine.pause === "function") engine.pause();
+          if (typeof speedTestEngineRef.current.pause === "function") {
+            speedTestEngineRef.current.pause();
+          }
         } catch {
           // ignore
         }
@@ -58,14 +94,14 @@ export default function InternetSpeedTest() {
       const SpeedTestModule = await import("@cloudflare/speedtest");
       const SpeedTest = SpeedTestModule.default;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const engine: any = new SpeedTest({
+      // Initialize Cloudflare SpeedTest Engine
+      const engine = new SpeedTest({
         autoStart: false,
       });
 
       speedTestEngineRef.current = engine;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // Event listener for real-time measurements
       engine.onResultsChange = (data: any) => {
         if (!data) return;
         const type = data.type || "";
@@ -94,12 +130,16 @@ export default function InternetSpeedTest() {
         }
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // Event listener when all measurement suites complete
       engine.onFinish = (finalResults: any) => {
         setTestState("completed");
         setCurrentSpeed(0);
 
-        const summary = typeof finalResults?.getSummary === "function" ? finalResults.getSummary() : finalResults || {};
+        const summary =
+          typeof finalResults?.getSummary === "function"
+            ? finalResults.getSummary()
+            : (finalResults as Record<string, number>) || {};
+
         const dlBps = Number(summary.download || summary.downloadSpeed || 0);
         const ulBps = Number(summary.upload || summary.uploadSpeed || 0);
         const pMs = Number(summary.latency || summary.ping || 0);
@@ -115,7 +155,9 @@ export default function InternetSpeedTest() {
 
       engine.onError = (err: unknown) => {
         setTestState("error");
-        setErrorMessage(err instanceof Error ? err.message : "Pengujian mengalami kendala koneksi.");
+        setErrorMessage(
+          err instanceof Error ? err.message : "Pengujian mengalami kendala koneksi."
+        );
       };
 
       engine.play();
@@ -128,8 +170,9 @@ export default function InternetSpeedTest() {
   const cancelTest = () => {
     if (speedTestEngineRef.current) {
       try {
-        const engine = speedTestEngineRef.current as { pause?: () => void };
-        if (typeof engine.pause === "function") engine.pause();
+        if (typeof speedTestEngineRef.current.pause === "function") {
+          speedTestEngineRef.current.pause();
+        }
       } catch {
         // ignore
       }
@@ -139,375 +182,560 @@ export default function InternetSpeedTest() {
   };
 
   const copyResults = () => {
-    if (testState !== "completed") return;
-    const text = `ALLBASE Internet Speed Test Results:
-- Download: ${results.downloadMbps ? results.downloadMbps.toFixed(2) : "—"} Mbps
-- Upload: ${results.uploadMbps ? results.uploadMbps.toFixed(2) : "—"} Mbps
-- Ping: ${results.pingMs ? results.pingMs.toFixed(1) : "—"} ms
-- Jitter: ${results.jitterMs ? results.jitterMs.toFixed(1) : "—"} ms
-Uji koneksi Anda di https://allbase.my.id/tools/internet-speed-test`;
+    if (testState !== "completed" && testState !== "cancelled") return;
 
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 3000);
+    const dlText = results.downloadMbps ? `${results.downloadMbps.toFixed(2)} Mbps` : "—";
+    const ulText = results.uploadMbps ? `${results.uploadMbps.toFixed(2)} Mbps` : "—";
+    const pingText = results.pingMs ? `${results.pingMs.toFixed(1)} ms` : "—";
+    const jitterText = results.jitterMs ? `${results.jitterMs.toFixed(1)} ms` : "—";
+
+    const text = `ALLBASE Internet Speed Test
+Download: ${dlText}
+Upload: ${ulText}
+Ping: ${pingText}
+Jitter: ${jitterText}
+Tested at: allbase.my.id`;
+
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
   };
 
-  const getStreamingQuality = () => {
-    if (!results.downloadMbps) return "Belum Diuji";
-    if (results.downloadMbps >= 25) return "Sangat Baik (4K Ultra HD)";
-    if (results.downloadMbps >= 10) return "Baik (1080p Full HD)";
-    return "Cukup (720p HD)";
+  // Connection Quality Evaluation
+  const qualityEvaluation = useMemo(() => {
+    if (testState !== "completed") return null;
+    return evaluateConnectionQuality({
+      download: results.downloadMbps,
+      upload: results.uploadMbps,
+      ping: results.pingMs,
+      jitter: results.jitterMs,
+    });
+  }, [testState, results]);
+
+  // Semicircle calculations (Center: 170, 160; Radius: 125)
+  const arcRadius = 125;
+  const arcLength = Math.PI * arcRadius; // ~392.7
+  const gaugeFraction = speedToFraction(currentSpeed);
+  const strokeDashoffset = arcLength * (1 - gaugeFraction);
+
+  // Tip dot position along arc
+  const tipX = 170 - arcRadius * Math.cos(gaugeFraction * Math.PI);
+  const tipY = 160 - arcRadius * Math.sin(gaugeFraction * Math.PI);
+
+  const getPhaseDisplay = () => {
+    switch (testState) {
+      case "idle":
+        return "SIAP";
+      case "preparing":
+        return "MENYIAPKAN";
+      case "latency":
+        return "PING / JITTER";
+      case "download":
+        return "DOWNLOAD";
+      case "upload":
+        return "UPLOAD";
+      case "completed":
+        return "SELESAI";
+      case "cancelled":
+        return "DIBATALKAN";
+      case "error":
+        return "ERROR";
+      default:
+        return "SPEED TEST";
+    }
   };
 
-  const getGamingQuality = () => {
-    if (!results.pingMs) return "Belum Diuji";
-    if (results.pingMs <= 30 && (results.jitterMs || 0) <= 10) return "Sangat Baik (Low Latency)";
-    if (results.pingMs <= 60) return "Baik";
-    return "Cukup / High Latency";
+  const getStatusLine = () => {
+    switch (testState) {
+      case "idle":
+        return {
+          dotClass: styles.dotIdle,
+          text: "Siap melakukan pengujian koneksi",
+        };
+      case "preparing":
+        return {
+          dotClass: styles.dotRunning,
+          text: "Menghubungkan ke Edge Server Cloudflare...",
+        };
+      case "latency":
+        return {
+          dotClass: styles.dotRunning,
+          text: "Mengukur latensi ping dan jitter...",
+        };
+      case "download":
+        return {
+          dotClass: styles.dotRunning,
+          text: "Mengukur kecepatan download...",
+        };
+      case "upload":
+        return {
+          dotClass: styles.dotRunning,
+          text: "Mengukur kecepatan upload...",
+        };
+      case "completed":
+        return {
+          dotClass: styles.dotSuccess,
+          text: "✓ Pengujian selesai",
+        };
+      case "cancelled":
+        return {
+          dotClass: styles.dotCancelled,
+          text: "○ Pengujian dibatalkan",
+        };
+      case "error":
+        return {
+          dotClass: styles.dotError,
+          text: errorMessage || "Terjadi kesalahan saat pengujian",
+        };
+    }
   };
+
+  const statusInfo = getStatusLine();
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-      {/* Intro Box */}
-      <div
-        style={{
-          backgroundColor: "var(--color-surface)",
-          border: "1px solid var(--color-border)",
-          borderRadius: "var(--radius-md)",
-          padding: "clamp(18px, 4vw, 24px)",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "8px" }}>
-          <span
-            style={{
-              padding: "4px 10px",
-              borderRadius: "var(--radius-pill)",
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              backgroundColor: "var(--color-primary-50)",
-              color: "var(--color-primary-600)",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-            }}
-          >
-            <Gauge size={14} /> Cloudflare Engine
-          </span>
-          <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)", fontFamily: "var(--font-mono)" }}>
-            Edge Network API
-          </span>
+    <div className={styles.container}>
+      {/* Tool Top Bar */}
+      <div className={styles.toolBar}>
+        <Link href="/#tools" className={styles.backButton} aria-label="Kembali ke Halaman Tools">
+          <ChevronLeft size={18} />
+          <span>Tools</span>
+        </Link>
+        <div className={styles.barTitle}>
+          <span>Speed Test</span>
         </div>
-        <h1 style={{ fontSize: "clamp(1.4rem, 4vw, 1.8rem)", marginBottom: "6px" }}>Internet Speed Test</h1>
-        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
-          Uji performa bandwidth Download, Upload, Ping, Jitter, serta penilaian kualitas koneksi real-time.
-        </p>
+        <div className={styles.engineBadge} title="Didukung Cloudflare Speedtest Network Engine">
+          <Gauge size={13} />
+          <span>Cloudflare Edge</span>
+        </div>
       </div>
 
-      {/* Warning Box */}
-      <div
-        style={{
-          backgroundColor: "var(--color-warning-soft)",
-          border: "1px solid var(--color-warning)",
-          borderRadius: "var(--radius-md)",
-          padding: "16px 20px",
-          display: "flex",
-          gap: "14px",
-          color: "var(--color-text-primary)",
-        }}
-      >
-        <AlertTriangle size={20} color="var(--color-warning)" style={{ flexShrink: 0, marginTop: "2px" }} />
-        <div>
-          <div style={{ fontWeight: 700, fontSize: "0.92rem", marginBottom: "2px" }}>Peringatan Penggunaan Data</div>
-          <div style={{ fontSize: "0.85rem", color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
-            Tes kecepatan dapat menggunakan kuota data dalam jumlah cukup besar. Pastikan Anda memperhatikan batas kuota internet seluler Anda.
+      {/* Hero Intro */}
+      <section className={styles.heroIntro}>
+        <h1 className={styles.title}>Internet Speed Test</h1>
+        <p className={styles.description}>
+          Ukur kecepatan download, upload, ping, dan jitter koneksi internet secara real-time.
+        </p>
+      </section>
+
+      {/* Compact Data Warning */}
+      <div className={styles.warningNotice}>
+        <div className={styles.warningHeader}>
+          <div className={styles.warningContent}>
+            <AlertTriangle size={17} className={styles.warningIcon} />
+            <span>Tes dapat menggunakan kuota data cukup besar.</span>
+          </div>
+          <button
+            type="button"
+            className={styles.warningToggleBtn}
+            onClick={() => setShowDataWarningDetails((prev) => !prev)}
+            aria-expanded={showDataWarningDetails}
+          >
+            {showDataWarningDetails ? "Tutup info" : "Pelajari penggunaan data"}
+          </button>
+        </div>
+        {showDataWarningDetails && (
+          <div className={styles.warningDetails}>
+            Pengujian kecepatan mengunduh dan mengunggah sampel file acak untuk mengukur bandwidth aktual.
+            Rata-rata pengujian dapat mengonsumsi kuota sekitar 20 MB – 80 MB tergantung kecepatan koneksi Anda.
+          </div>
+        )}
+      </div>
+
+      {/* Main Meter & Gauge Arena */}
+      <div className={styles.testArena} aria-live="polite">
+        {/* Latency Summary Above Gauge */}
+        <div className={styles.latencySummary}>
+          <div className={styles.latencyItem}>
+            <span className={styles.latencyLabel}>PING</span>
+            <span className={styles.latencyValue}>
+              {results.pingMs !== null ? results.pingMs.toFixed(0) : "—"}
+              <span className={styles.latencyUnit}>ms</span>
+            </span>
+          </div>
+          <div className={styles.latencyItem}>
+            <span className={styles.latencyLabel}>JITTER</span>
+            <span className={styles.latencyValue}>
+              {results.jitterMs !== null ? results.jitterMs.toFixed(0) : "—"}
+              <span className={styles.latencyUnit}>ms</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Big Semicircle Gauge */}
+        <div className={styles.speedGaugeWrapper}>
+          <svg
+            className={styles.gaugeSvg}
+            viewBox="0 0 340 185"
+            aria-label={`Kecepatan saat ini ${currentSpeed.toFixed(2)} Mbps`}
+            role="img"
+          >
+            <defs>
+              {/* Vibrant ALLBASE Blue to Cyan to Emerald Gradient */}
+              <linearGradient id="speedGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#2563eb" />
+                <stop offset="50%" stopColor="#06b6d4" />
+                <stop offset="100%" stopColor="#10b981" />
+              </linearGradient>
+
+              {/* Glow Filter for Active Needle Tip */}
+              <filter id="gaugeGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+            </defs>
+
+            {/* Background Arc Track */}
+            <path
+              d="M 45 160 A 125 125 0 0 1 295 160"
+              fill="none"
+              stroke="var(--color-border)"
+              strokeWidth="14"
+              strokeLinecap="round"
+              opacity="0.85"
+            />
+
+            {/* Tick Marks on Arc */}
+            {GAUGE_TICKS.map((tick) => {
+              const fraction = speedToFraction(tick.value);
+              const angleRad = fraction * Math.PI;
+              const rInner = 136;
+              const rOuter = 143;
+              const x1 = 170 - rInner * Math.cos(angleRad);
+              const y1 = 160 - rInner * Math.sin(angleRad);
+              const x2 = 170 - rOuter * Math.cos(angleRad);
+              const y2 = 160 - rOuter * Math.sin(angleRad);
+              const textR = 153;
+              const tx = 170 - textR * Math.cos(angleRad);
+              const ty = 160 - textR * Math.sin(angleRad);
+
+              return (
+                <g key={tick.value}>
+                  <line
+                    x1={x1}
+                    y1={y1}
+                    x2={x2}
+                    y2={y2}
+                    stroke="var(--color-text-muted)"
+                    strokeWidth="1.5"
+                    opacity="0.6"
+                  />
+                  <text
+                    x={tx}
+                    y={ty + 3}
+                    textAnchor="middle"
+                    fill="var(--color-text-muted)"
+                    fontSize="9.5"
+                    fontFamily="var(--font-heading)"
+                    fontWeight="600"
+                    opacity="0.75"
+                  >
+                    {tick.label}
+                  </text>
+                </g>
+              );
+            })}
+
+            {/* Active Progress Arc */}
+            <path
+              d="M 45 160 A 125 125 0 0 1 295 160"
+              fill="none"
+              stroke="url(#speedGradient)"
+              strokeWidth="14"
+              strokeLinecap="round"
+              strokeDasharray={arcLength}
+              strokeDashoffset={strokeDashoffset}
+              style={{
+                transition:
+                  testState === "idle" || testState === "cancelled"
+                    ? "stroke-dashoffset 400ms ease-out"
+                    : "stroke-dashoffset 150ms cubic-bezier(0.2, 0.8, 0.2, 1)",
+              }}
+            />
+
+            {/* Needle Tip Glowing Dot */}
+            {gaugeFraction > 0.005 && (
+              <circle
+                cx={tipX}
+                cy={tipY}
+                r="6.5"
+                fill="#ffffff"
+                stroke="#06b6d4"
+                strokeWidth="3.5"
+                filter="url(#gaugeGlow)"
+              />
+            )}
+          </svg>
+
+          {/* Large Speed Value in Center of Semicircle */}
+          <div className={styles.gaugeCenterData}>
+            <span className={styles.phaseTag}>{getPhaseDisplay()}</span>
+            <div className={styles.speedValue}>{currentSpeed.toFixed(2)}</div>
+            <div className={styles.speedUnit}>Mbps</div>
+          </div>
+        </div>
+
+        {/* Live Status Line */}
+        <div className={styles.statusLine}>
+          <span className={`${styles.statusDot} ${statusInfo.dotClass}`} />
+          <span>{statusInfo.text}</span>
+        </div>
+
+        {/* Interactive Controls */}
+        <div className={styles.controlsWrapper}>
+          {testState === "idle" && (
+            <button
+              type="button"
+              className={styles.startButton}
+              onClick={runTest}
+              aria-label="Mulai Pengujian Kecepatan Internet"
+            >
+              <Play size={18} fill="currentColor" />
+              <span>MULAI TES</span>
+            </button>
+          )}
+
+          {(testState === "preparing" ||
+            testState === "latency" ||
+            testState === "download" ||
+            testState === "upload") && (
+            <button
+              type="button"
+              className={styles.cancelButton}
+              onClick={cancelTest}
+              aria-label="Batalkan Pengujian Kecepatan"
+            >
+              <Square size={16} fill="currentColor" />
+              <span>Batalkan Tes</span>
+            </button>
+          )}
+
+          {testState === "completed" && (
+            <div className={styles.resultActions}>
+              <button
+                type="button"
+                className={styles.restartButton}
+                onClick={runTest}
+                aria-label="Uji Ulang Kecepatan Internet"
+              >
+                <RotateCcw size={16} />
+                <span>Tes Lagi</span>
+              </button>
+              <button
+                type="button"
+                className={`${styles.copyButton} ${copied ? styles.copyButtonCopied : ""}`}
+                onClick={copyResults}
+                aria-label="Salin Hasil Pengujian ke Clipboard"
+              >
+                {copied ? <Check size={16} /> : <Copy size={16} />}
+                <span>{copied ? "Hasil Disalin!" : "Salin Hasil"}</span>
+              </button>
+            </div>
+          )}
+
+          {(testState === "cancelled" || testState === "error") && (
+            <button
+              type="button"
+              className={styles.startButton}
+              onClick={runTest}
+              aria-label="Mulai Ulang Pengujian Kecepatan"
+            >
+              <RotateCcw size={18} />
+              <span>Mulai Ulang</span>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Primary Metrics (Download & Upload) */}
+      <div className={styles.primaryMetrics}>
+        <div
+          className={`${styles.metricCard} ${testState === "download" ? styles.cardActive : ""}`}
+        >
+          <div className={styles.metricHeader}>
+            <div className={`${styles.metricTitleGroup} ${styles.dlAccent}`}>
+              <ArrowDown size={17} />
+              <span>DOWNLOAD</span>
+            </div>
+          </div>
+          <div className={styles.metricNumber}>
+            {results.downloadMbps !== null ? results.downloadMbps.toFixed(2) : "—"}
+            <span className={styles.metricUnitSmall}>Mbps</span>
+          </div>
+        </div>
+
+        <div
+          className={`${styles.metricCard} ${testState === "upload" ? styles.cardActive : ""}`}
+        >
+          <div className={styles.metricHeader}>
+            <div className={`${styles.metricTitleGroup} ${styles.ulAccent}`}>
+              <ArrowUp size={17} />
+              <span>UPLOAD</span>
+            </div>
+          </div>
+          <div className={styles.metricNumber}>
+            {results.uploadMbps !== null ? results.uploadMbps.toFixed(2) : "—"}
+            <span className={styles.metricUnitSmall}>Mbps</span>
           </div>
         </div>
       </div>
 
-      {/* Main Meter & Panel */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
-          gap: "24px",
-          backgroundColor: "var(--color-surface)",
-          border: "1px solid var(--color-border)",
-          borderRadius: "var(--radius-md)",
-          padding: "clamp(20px, 4vw, 32px)",
-        }}
-      >
-        {/* Left Gauge Display */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ textAlign: "center", marginBottom: "16px" }}>
+      {/* Secondary Metrics (Ping & Jitter) */}
+      <div className={styles.secondaryMetrics}>
+        <div className={styles.secondaryCard}>
+          <div className={styles.secondaryLabel}>
+            <Activity size={15} color="var(--color-primary-500)" />
+            <span>Ping</span>
+          </div>
+          <div className={styles.secondaryValue}>
+            {results.pingMs !== null ? results.pingMs.toFixed(1) : "—"}
+            <span className={styles.metricUnitSmall}>ms</span>
+          </div>
+        </div>
+
+        <div className={styles.secondaryCard}>
+          <div className={styles.secondaryLabel}>
+            <Radio size={15} color="var(--color-text-muted)" />
+            <span>Jitter</span>
+          </div>
+          <div className={styles.secondaryValue}>
+            {results.jitterMs !== null ? results.jitterMs.toFixed(1) : "—"}
+            <span className={styles.metricUnitSmall}>ms</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Connection Quality Assessment Section (After completion) */}
+      {qualityEvaluation && (
+        <section className={styles.qualitySection} aria-label="Analisis Kualitas Koneksi Internet">
+          <div className={styles.qualityHeader}>
+            <h2 className={styles.qualityTitle}>
+              <Award size={20} color="var(--color-primary-600)" />
+              <span>Kualitas Koneksi</span>
+            </h2>
             <span
-              style={{
-                fontSize: "0.82rem",
-                fontWeight: 700,
-                fontFamily: "var(--font-mono)",
-                padding: "4px 12px",
-                borderRadius: "var(--radius-pill)",
-                backgroundColor: testState === "completed" ? "var(--color-success-soft)" : "var(--color-primary-50)",
-                color: testState === "completed" ? "var(--color-success)" : "var(--color-primary-600)",
-                textTransform: "uppercase",
-              }}
+              className={`${styles.qualityBadge} ${
+                qualityEvaluation.overall.status === "great"
+                  ? styles.badgeGreat
+                  : qualityEvaluation.overall.status === "good"
+                  ? styles.badgeGood
+                  : qualityEvaluation.overall.status === "average"
+                  ? styles.badgeAverage
+                  : styles.badgePoor
+              }`}
             >
-              {testState === "idle"
-                ? "SIAP"
-                : testState === "completed"
-                ? "SELESAI"
-                : testState === "cancelled"
-                ? "DIBATALKAN"
-                : testState === "error"
-                ? "ERROR"
-                : `PENGUJIAN (${testState})`}
+              ● {qualityEvaluation.overall.level}
             </span>
           </div>
 
-          {/* SVG Speedometer Gauge */}
-          <div style={{ position: "relative", width: "min(100%, 240px)", height: "160px" }}>
-            <svg viewBox="0 0 320 200" style={{ width: "100%", height: "100%" }}>
-              <path
-                d="M 40 160 A 120 120 0 0 1 280 160"
-                fill="none"
-                stroke="var(--color-border)"
-                strokeWidth="16"
-                strokeLinecap="round"
-              />
-              <path
-                d="M 40 160 A 120 120 0 0 1 280 160"
-                fill="none"
-                stroke="var(--color-primary-600)"
-                strokeWidth="16"
-                strokeLinecap="round"
-                strokeDasharray="376.99"
-                strokeDashoffset={376.99 - (Math.min(currentSpeed, 100) / 100) * 376.99}
-                style={{ transition: "stroke-dashoffset 200ms ease" }}
-              />
-            </svg>
-            <div
-              style={{
-                position: "absolute",
-                bottom: "10px",
-                left: 0,
-                right: 0,
-                textAlign: "center",
-              }}
-            >
-              <div style={{ fontSize: "clamp(1.8rem, 5vw, 2.2rem)", fontWeight: 800, fontFamily: "var(--font-mono)", lineHeight: 1 }}>
-                {currentSpeed.toFixed(2)}
+          <div className={styles.qualityList}>
+            {/* Streaming 4K */}
+            <div className={styles.qualityRow}>
+              <div className={styles.qualityCategory}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <Tv size={15} color="var(--color-primary-500)" />
+                  <span className={styles.categoryName}>Streaming 4K</span>
+                </div>
+                <span className={styles.categoryDetail}>{qualityEvaluation.streaming.detail}</span>
               </div>
-              <div style={{ fontSize: "0.85rem", color: "var(--color-text-muted)", fontWeight: 600 }}>Mbps</div>
+              <span
+                className={`${styles.qualityBadge} ${
+                  qualityEvaluation.streaming.status === "great"
+                    ? styles.badgeGreat
+                    : qualityEvaluation.streaming.status === "good"
+                    ? styles.badgeGood
+                    : qualityEvaluation.streaming.status === "average"
+                    ? styles.badgeAverage
+                    : styles.badgePoor
+                }`}
+              >
+                ● {qualityEvaluation.streaming.level}
+              </span>
+            </div>
+
+            {/* Gaming Online */}
+            <div className={styles.qualityRow}>
+              <div className={styles.qualityCategory}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <Gamepad2 size={15} color="var(--color-success)" />
+                  <span className={styles.categoryName}>Gaming</span>
+                </div>
+                <span className={styles.categoryDetail}>{qualityEvaluation.gaming.detail}</span>
+              </div>
+              <span
+                className={`${styles.qualityBadge} ${
+                  qualityEvaluation.gaming.status === "great"
+                    ? styles.badgeGreat
+                    : qualityEvaluation.gaming.status === "good"
+                    ? styles.badgeGood
+                    : qualityEvaluation.gaming.status === "average"
+                    ? styles.badgeAverage
+                    : styles.badgePoor
+                }`}
+              >
+                ● {qualityEvaluation.gaming.level}
+              </span>
+            </div>
+
+            {/* Video Call */}
+            <div className={styles.qualityRow}>
+              <div className={styles.qualityCategory}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <Video size={15} color="#06b6d4" />
+                  <span className={styles.categoryName}>Video Call</span>
+                </div>
+                <span className={styles.categoryDetail}>{qualityEvaluation.videoCall.detail}</span>
+              </div>
+              <span
+                className={`${styles.qualityBadge} ${
+                  qualityEvaluation.videoCall.status === "great"
+                    ? styles.badgeGreat
+                    : qualityEvaluation.videoCall.status === "good"
+                    ? styles.badgeGood
+                    : qualityEvaluation.videoCall.status === "average"
+                    ? styles.badgeAverage
+                    : styles.badgePoor
+                }`}
+              >
+                ● {qualityEvaluation.videoCall.level}
+              </span>
+            </div>
+
+            {/* Web Browsing */}
+            <div className={styles.qualityRow}>
+              <div className={styles.qualityCategory}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <Globe size={15} color="var(--color-primary-600)" />
+                  <span className={styles.categoryName}>Browsing</span>
+                </div>
+                <span className={styles.categoryDetail}>{qualityEvaluation.browsing.detail}</span>
+              </div>
+              <span
+                className={`${styles.qualityBadge} ${
+                  qualityEvaluation.browsing.status === "great"
+                    ? styles.badgeGreat
+                    : qualityEvaluation.browsing.status === "good"
+                    ? styles.badgeGood
+                    : qualityEvaluation.browsing.status === "average"
+                    ? styles.badgeAverage
+                    : styles.badgePoor
+                }`}
+              >
+                ● {qualityEvaluation.browsing.level}
+              </span>
             </div>
           </div>
+        </section>
+      )}
+
+      {/* Copy Toast Notification */}
+      {copied && (
+        <div className={styles.toast} role="status" aria-live="polite">
+          <Check size={16} color="#10b981" />
+          <span>✓ Hasil disalin ke clipboard</span>
         </div>
-
-        {/* Right Info Controls */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          <div>
-            <h2 style={{ fontSize: "1.2rem", marginBottom: "6px" }}>Analisis Koneksi Real-time</h2>
-            <p style={{ fontSize: "0.88rem", color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
-              {testState === "idle"
-                ? "Klik Mulai Tes untuk menguji performa koneksi internet."
-                : testState === "completed"
-                ? "Pengujian selesai. Seluruh indikator telah diukur."
-                : testState === "cancelled"
-                ? "Pengujian dibatalkan oleh pengguna."
-                : testState === "error"
-                ? errorMessage
-                : "Sedang mengukur trafik data..."}
-            </p>
-          </div>
-
-          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "auto" }}>
-            {testState === "idle" || testState === "completed" ? (
-              <button
-                onClick={runTest}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                  minHeight: "48px",
-                  padding: "10px 20px",
-                  borderRadius: "var(--radius-sm)",
-                  backgroundColor: "var(--color-primary-600)",
-                  color: "#ffffff",
-                  fontWeight: 600,
-                  fontSize: "0.92rem",
-                  flex: "1 1 140px",
-                }}
-              >
-                <Play size={16} /> {testState === "completed" ? "Tes Ulang" : "Mulai Tes"}
-              </button>
-            ) : testState === "cancelled" || testState === "error" ? (
-              <button
-                onClick={runTest}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                  minHeight: "48px",
-                  padding: "10px 20px",
-                  borderRadius: "var(--radius-sm)",
-                  backgroundColor: "var(--color-primary-600)",
-                  color: "#ffffff",
-                  fontWeight: 600,
-                  fontSize: "0.92rem",
-                  flex: "1 1 140px",
-                }}
-              >
-                <RotateCcw size={16} /> Mulai Ulang Tes
-              </button>
-            ) : (
-              <button
-                onClick={cancelTest}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                  minHeight: "48px",
-                  padding: "10px 20px",
-                  borderRadius: "var(--radius-sm)",
-                  backgroundColor: "var(--color-danger)",
-                  color: "#ffffff",
-                  fontWeight: 600,
-                  fontSize: "0.92rem",
-                  flex: "1 1 140px",
-                }}
-              >
-                <XCircle size={16} /> Batalkan
-              </button>
-            )}
-
-            <button
-              onClick={copyResults}
-              disabled={testState !== "completed"}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "8px",
-                minHeight: "48px",
-                padding: "10px 20px",
-                borderRadius: "var(--radius-sm)",
-                border: "1px solid var(--color-border)",
-                backgroundColor: "var(--color-surface)",
-                color: testState === "completed" ? "var(--color-text-primary)" : "var(--color-text-muted)",
-                fontWeight: 600,
-                fontSize: "0.92rem",
-                cursor: testState === "completed" ? "pointer" : "not-allowed",
-                flex: "1 1 140px",
-              }}
-            >
-              {copied ? <CheckCircle size={16} color="var(--color-success)" /> : <Copy size={16} />}
-              {copied ? "Hasil Disalin!" : "Salin Hasil"}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Metrics Cards Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 140px), 1fr))", gap: "12px" }}>
-        <div
-          style={{
-            backgroundColor: "var(--color-surface)",
-            border: "1px solid var(--color-border)",
-            borderRadius: "var(--radius-md)",
-            padding: "16px",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--color-primary-600)", marginBottom: "6px" }}>
-            <ArrowDownCircle size={16} />
-            <span style={{ fontWeight: 600, fontSize: "0.85rem" }}>Download</span>
-          </div>
-          <div style={{ fontSize: "clamp(1.3rem, 4vw, 1.6rem)", fontWeight: 800, fontFamily: "var(--font-mono)" }}>
-            {results.downloadMbps ? results.downloadMbps.toFixed(2) : "—"}{" "}
-            <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Mbps</span>
-          </div>
-        </div>
-
-        <div
-          style={{
-            backgroundColor: "var(--color-surface)",
-            border: "1px solid var(--color-border)",
-            borderRadius: "var(--radius-md)",
-            padding: "16px",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--color-success)", marginBottom: "6px" }}>
-            <ArrowUpCircle size={16} />
-            <span style={{ fontWeight: 600, fontSize: "0.85rem" }}>Upload</span>
-          </div>
-          <div style={{ fontSize: "clamp(1.3rem, 4vw, 1.6rem)", fontWeight: 800, fontFamily: "var(--font-mono)" }}>
-            {results.uploadMbps ? results.uploadMbps.toFixed(2) : "—"}{" "}
-            <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>Mbps</span>
-          </div>
-        </div>
-
-        <div
-          style={{
-            backgroundColor: "var(--color-surface)",
-            border: "1px solid var(--color-border)",
-            borderRadius: "var(--radius-md)",
-            padding: "16px",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--color-warning)", marginBottom: "6px" }}>
-            <Activity size={16} />
-            <span style={{ fontWeight: 600, fontSize: "0.85rem" }}>Ping</span>
-          </div>
-          <div style={{ fontSize: "clamp(1.3rem, 4vw, 1.6rem)", fontWeight: 800, fontFamily: "var(--font-mono)" }}>
-            {results.pingMs ? results.pingMs.toFixed(1) : "—"}{" "}
-            <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>ms</span>
-          </div>
-        </div>
-
-        <div
-          style={{
-            backgroundColor: "var(--color-surface)",
-            border: "1px solid var(--color-border)",
-            borderRadius: "var(--radius-md)",
-            padding: "16px",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--color-primary-400)", marginBottom: "6px" }}>
-            <Radio size={16} />
-            <span style={{ fontWeight: 600, fontSize: "0.85rem" }}>Jitter</span>
-          </div>
-          <div style={{ fontSize: "clamp(1.3rem, 4vw, 1.6rem)", fontWeight: 800, fontFamily: "var(--font-mono)" }}>
-            {results.jitterMs ? results.jitterMs.toFixed(1) : "—"}{" "}
-            <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>ms</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Connection Quality Rating */}
-      <div
-        style={{
-          backgroundColor: "var(--color-surface)",
-          border: "1px solid var(--color-border)",
-          borderRadius: "var(--radius-md)",
-          padding: "clamp(18px, 4vw, 24px)",
-        }}
-      >
-        <h3 style={{ fontSize: "1.1rem", marginBottom: "16px", display: "flex", alignItems: "center", gap: "8px" }}>
-          <Award size={20} color="var(--color-primary-600)" /> Rating Kualitas Koneksi
-        </h3>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: "12px" }}>
-          <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)" }}>
-            <div style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", marginBottom: "4px" }}>Streaming Video</div>
-            <div style={{ fontWeight: 700, color: "var(--color-primary-600)" }}>{getStreamingQuality()}</div>
-          </div>
-
-          <div style={{ padding: "14px", backgroundColor: "var(--color-surface-soft)", borderRadius: "var(--radius-sm)" }}>
-            <div style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", marginBottom: "4px" }}>Gaming Online</div>
-            <div style={{ fontWeight: 700, color: "var(--color-success)" }}>{getGamingQuality()}</div>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

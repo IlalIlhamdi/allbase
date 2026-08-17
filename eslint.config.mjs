@@ -3,7 +3,18 @@ import tsParser from "@typescript-eslint/parser";
 
 const eslintConfig = [
   {
-    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "out/**",
+      "build/**",
+      "coverage/**",
+      "public/**",
+      "tools/**",
+    ],
+  },
+  {
+    files: ["src/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     plugins: {
       "@next/next": nextPlugin,
     },
