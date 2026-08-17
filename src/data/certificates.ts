@@ -1,0 +1,30 @@
+import { Certificate } from "@/types/certificate";
+
+export const certificatesData: readonly Certificate[] = [
+  {
+    id: "cert-1",
+    title: "MikroTik Certified Network Associate (MTCNA)",
+    issuer: "MikroTik",
+    year: "2025",
+    credentialUrl: "",
+    description: "Sertifikasi keahlian konfigurasi dasar RouterOS, routing, firewall, bandwidth management, dan wireless networking.",
+  },
+  {
+    id: "cert-2",
+    title: "CCNA: Introduction to Networks",
+    issuer: "Cisco Networking Academy",
+    year: "2026",
+    credentialUrl: "https://www.credly.com/badges/ddefb255-6d2c-488f-a53e-c4ad6f84c327/public_url",
+    verifyText: "Verifikasi di Credly",
+    description: "Mempelajari dasar jaringan komputer, model OSI dan TCP/IP, IPv4 dan IPv6, Ethernet, switching, routing dasar, serta konfigurasi jaringan menggunakan perangkat Cisco.",
+  },
+  {
+    id: "cert-3",
+    title: "Fundamental of Associate Network Administrator – Nasional",
+    issuer: "Digital Talent Academy",
+    year: "2026",
+    credentialUrl: "https://mapi.sdmdigital.id/get-file?path=output_signed/212-1322-12087/3568e731-34e6-4f2c-a0a2-4a3eae5bd068.pdf&disk=dts-storage-sertifikat",
+    verifyText: "Lihat Sertifikat Resmi",
+    description: "Pelatihan dasar administrasi jaringan yang mencakup pengalamatan jaringan, jaringan nirkabel, pemasangan perangkat jaringan, konfigurasi switch, dan routing dalam satu Autonomous System.",
+  },
+];

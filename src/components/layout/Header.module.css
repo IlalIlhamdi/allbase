@@ -1,0 +1,133 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+  height: var(--header-height);
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+}
+
+[data-theme="dark"] .header {
+  background-color: rgba(13, 30, 58, 0.92);
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+}
+
+@media (min-width: 900px) {
+  .inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(1.05rem, 4vw, 1.25rem);
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 350px) {
+  .brandName {
+    font-size: 1rem;
+  }
+}
+
+.brandIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary-600);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brandName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.brandName span {
+  color: var(--color-primary-600);
+}
+
+.nav {
+  display: none;
+  align-items: center;
+  gap: 24px;
+}
+
+@media (min-width: 900px) {
+  .nav {
+    display: flex;
+  }
+}
+
+.navLink {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.navLink:hover {
+  color: var(--color-primary-600);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.iconBtn {
+  min-width: 48px;
+  min-height: 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.iconBtn:hover {
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-600);
+}
+
+.menuBtn {
+  display: flex;
+}
+
+@media (min-width: 900px) {
+  .menuBtn {
+    display: none;
+  }
+}
