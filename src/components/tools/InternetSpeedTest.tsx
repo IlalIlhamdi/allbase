@@ -66,11 +66,13 @@ export default function InternetSpeedTest() {
   const [showDataWarningDetails, setShowDataWarningDetails] = useState<boolean>(false);
 
   // Speed test engine reference
-  const speedTestEngineRef = useRef<{ pause?: () => void; play?: () => void } | null>(null);
+  const speedTestEngineRef = useRef<{ pause?: () => void; play?: () => void; results?: unknown } | null>(null);
+  const isCancelledRef = useRef<boolean>(false);
 
   // Clean up engine on unmount
   useEffect(() => {
     return () => {
+      isCancelledRef.current = true;
       if (speedTestEngineRef.current) {
         try {
           if (typeof speedTestEngineRef.current.pause === "function") {
@@ -84,6 +86,7 @@ export default function InternetSpeedTest() {
   }, []);
 
   const runTest = async () => {
+    isCancelledRef.current = false;
     setTestState("preparing");
     setCurrentSpeed(0);
     setResults({ downloadMbps: null, uploadMbps: null, pingMs: null, jitterMs: null });
@@ -94,66 +97,107 @@ export default function InternetSpeedTest() {
       const SpeedTestModule = await import("@cloudflare/speedtest");
       const SpeedTest = SpeedTestModule.default;
 
-      // Initialize Cloudflare SpeedTest Engine
+      // Robust Cloudflare SpeedTest Configuration
       const engine = new SpeedTest({
         autoStart: false,
+        measureDownloadLoadedLatency: false,
+        measureUploadLoadedLatency: false,
+        measurements: [
+          { type: "latency", numPackets: 1 },
+          { type: "download", bytes: 1e5, count: 1, bypassMinDuration: true },
+          { type: "latency", numPackets: 10 },
+          { type: "download", bytes: 1e5, count: 4 },
+          { type: "download", bytes: 1e6, count: 4 },
+          { type: "upload", bytes: 1e5, count: 4 },
+          { type: "upload", bytes: 1e6, count: 3 },
+          { type: "download", bytes: 1e7, count: 3 },
+          { type: "upload", bytes: 1e7, count: 2 },
+          { type: "download", bytes: 25e6, count: 2 },
+        ],
       });
 
       speedTestEngineRef.current = engine;
 
       // Event listener for real-time measurements
-      engine.onResultsChange = (data: any) => {
-        if (!data) return;
-        const type = data.type || "";
+      engine.onResultsChange = ({ type }: { type?: string }) => {
+        if (isCancelledRef.current) return;
+        const res = engine.results as {
+          getUnloadedLatency?: () => number | undefined;
+          getUnloadedJitter?: () => number | null | undefined;
+          getDownloadBandwidth?: () => number | undefined;
+          getDownloadBandwidthPoints?: () => Array<{ bps: number }>;
+          getUploadBandwidth?: () => number | undefined;
+          getUploadBandwidthPoints?: () => Array<{ bps: number }>;
+        } | null;
 
-        if (type === "latency" && data.latency) {
-          setTestState("latency");
-          const p = Number(data.latency);
-          const j = Number(data.jitter || 0);
-          setResults((prev) => ({ ...prev, pingMs: p, jitterMs: j }));
+        if (!res) return;
+
+        // Extract latency & jitter
+        const pingVal = typeof res.getUnloadedLatency === "function" ? res.getUnloadedLatency() : undefined;
+        const jitterVal = typeof res.getUnloadedJitter === "function" ? res.getUnloadedJitter() : undefined;
+
+        if (pingVal !== undefined && Number.isFinite(pingVal) && pingVal > 0) {
+          setResults((prev) => ({
+            ...prev,
+            pingMs: pingVal,
+            jitterMs: jitterVal !== null && jitterVal !== undefined && Number.isFinite(jitterVal) ? jitterVal : prev.jitterMs,
+          }));
         }
 
-        if (type === "download" && data.download) {
+        // Handle Download Phase
+        if (type === "download") {
           setTestState("download");
-          const bps = Number(data.download);
-          const mbps = bps / 1_000_000;
-          setCurrentSpeed(mbps);
-          setResults((prev) => ({ ...prev, downloadMbps: mbps }));
-        }
-
-        if (type === "upload" && data.upload) {
+          const points = typeof res.getDownloadBandwidthPoints === "function" ? res.getDownloadBandwidthPoints() : [];
+          const latestBps = points.length > 0 ? points[points.length - 1]?.bps : res.getDownloadBandwidth?.();
+          const bps = Number(latestBps || 0);
+          if (bps > 0) {
+            const mbps = bps / 1_000_000;
+            setCurrentSpeed(mbps);
+            setResults((prev) => ({ ...prev, downloadMbps: mbps }));
+          }
+        } else if (type === "upload") {
+          // Handle Upload Phase
           setTestState("upload");
-          const bps = Number(data.upload);
-          const mbps = bps / 1_000_000;
-          setCurrentSpeed(mbps);
-          setResults((prev) => ({ ...prev, uploadMbps: mbps }));
+          const points = typeof res.getUploadBandwidthPoints === "function" ? res.getUploadBandwidthPoints() : [];
+          const latestBps = points.length > 0 ? points[points.length - 1]?.bps : res.getUploadBandwidth?.();
+          const bps = Number(latestBps || 0);
+          if (bps > 0) {
+            const mbps = bps / 1_000_000;
+            setCurrentSpeed(mbps);
+            setResults((prev) => ({ ...prev, uploadMbps: mbps }));
+          }
+        } else if (type === "latency") {
+          setTestState("latency");
         }
       };
 
       // Event listener when all measurement suites complete
       engine.onFinish = (finalResults: any) => {
+        if (isCancelledRef.current) return;
+
         setTestState("completed");
         setCurrentSpeed(0);
 
         const summary =
           typeof finalResults?.getSummary === "function"
             ? finalResults.getSummary()
-            : (finalResults as Record<string, number>) || {};
+            : (finalResults as unknown as Record<string, number>) || {};
 
-        const dlBps = Number(summary.download || summary.downloadSpeed || 0);
-        const ulBps = Number(summary.upload || summary.uploadSpeed || 0);
-        const pMs = Number(summary.latency || summary.ping || 0);
-        const jMs = Number(summary.jitter || 0);
+        const dlBps = Number(finalResults?.getDownloadBandwidth?.() || summary.download || 0);
+        const ulBps = Number(finalResults?.getUploadBandwidth?.() || summary.upload || 0);
+        const pMs = Number(finalResults?.getUnloadedLatency?.() || summary.latency || 0);
+        const jMs = Number(finalResults?.getUnloadedJitter?.() || summary.jitter || 0);
 
-        setResults({
-          downloadMbps: dlBps > 0 ? dlBps / 1_000_000 : null,
-          uploadMbps: ulBps > 0 ? ulBps / 1_000_000 : null,
-          pingMs: pMs > 0 ? pMs : null,
-          jitterMs: jMs > 0 ? jMs : null,
-        });
+        setResults((prev) => ({
+          downloadMbps: dlBps > 0 ? dlBps / 1_000_000 : prev.downloadMbps,
+          uploadMbps: ulBps > 0 ? ulBps / 1_000_000 : prev.uploadMbps,
+          pingMs: pMs > 0 ? pMs : prev.pingMs,
+          jitterMs: jMs > 0 ? jMs : prev.jitterMs,
+        }));
       };
 
       engine.onError = (err: unknown) => {
+        if (isCancelledRef.current) return;
         setTestState("error");
         setErrorMessage(
           err instanceof Error ? err.message : "Pengujian mengalami kendala koneksi."
@@ -162,12 +206,14 @@ export default function InternetSpeedTest() {
 
       engine.play();
     } catch {
+      if (isCancelledRef.current) return;
       setTestState("error");
       setErrorMessage("Gagal memuat engine pengujian kecepatan.");
     }
   };
 
   const cancelTest = () => {
+    isCancelledRef.current = true;
     if (speedTestEngineRef.current) {
       try {
         if (typeof speedTestEngineRef.current.pause === "function") {
@@ -287,7 +333,7 @@ Tested at: allbase.my.id`;
       case "error":
         return {
           dotClass: styles.dotError,
-          text: errorMessage || "Terjadi kesalahan saat pengujian",
+          text: errorMessage || "Pengujian mengalami kendala koneksi.",
         };
     }
   };
@@ -296,16 +342,14 @@ Tested at: allbase.my.id`;
 
   return (
     <div className={styles.container}>
-      {/* Tool Top Bar */}
+      {/* Top Breadcrumb Navigation */}
       <div className={styles.toolBar}>
-        <Link href="/#tools" className={styles.backButton} aria-label="Kembali ke Halaman Tools">
+        <Link href="/#tools" className={styles.backButton} aria-label="Kembali ke Tools">
           <ChevronLeft size={18} />
           <span>Tools</span>
         </Link>
-        <div className={styles.barTitle}>
-          <span>Speed Test</span>
-        </div>
-        <div className={styles.engineBadge} title="Didukung Cloudflare Speedtest Network Engine">
+        <span className={styles.barTitle}>Speed Test</span>
+        <div className={styles.engineBadge} title="Cloudflare Speedtest Network Engine">
           <Gauge size={13} />
           <span>Cloudflare Edge</span>
         </div>
@@ -319,7 +363,7 @@ Tested at: allbase.my.id`;
         </p>
       </section>
 
-      {/* Compact Data Warning */}
+      {/* Compact Data Warning Notice */}
       <div className={styles.warningNotice}>
         <div className={styles.warningHeader}>
           <div className={styles.warningContent}>
