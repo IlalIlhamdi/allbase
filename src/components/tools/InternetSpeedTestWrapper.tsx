@@ -28,7 +28,7 @@ const InternetSpeedTestClient = dynamic(
           Memuat Engine Speed Test...
         </div>
         <div style={{ fontSize: "0.82rem", color: "var(--color-text-secondary)" }}>
-          Menyiapkan modul Cloudflare Edge Network
+          Menyiapkan modul Measurement Lab (M-Lab NDT7)
         </div>
       </div>
     ),

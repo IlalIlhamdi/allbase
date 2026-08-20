@@ -16,7 +16,7 @@
     "node": ">=20.9.0"
   },
   "dependencies": {
-    "@cloudflare/speedtest": "^1.12.1",
+    "@m-lab/ndt7": "^0.1.5",
     "lucide-react": "^1.27.0",
     "next": "16.2.12",
     "react": "19.2.4",

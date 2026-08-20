@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   Play,
@@ -20,26 +20,17 @@ import {
   Gamepad2,
   Video,
   Globe,
+  Server,
+  ShieldCheck,
+  ExternalLink,
 } from "lucide-react";
+import { useNdt7SpeedTest } from "@/hooks/useNdt7SpeedTest";
+import {
+  formatSpeed,
+  formatLatency,
+} from "@/lib/speedtest/calculations";
 import { evaluateConnectionQuality, speedToFraction } from "@/lib/speedTestQuality";
 import styles from "./InternetSpeedTest.module.css";
-
-type TestState =
-  | "idle"
-  | "preparing"
-  | "latency"
-  | "download"
-  | "upload"
-  | "completed"
-  | "cancelled"
-  | "error";
-
-interface SpeedResults {
-  downloadMbps: number | null;
-  uploadMbps: number | null;
-  pingMs: number | null;
-  jitterMs: number | null;
-}
 
 // Scale ticks for dynamic semicircle gauge
 const GAUGE_TICKS = [
@@ -53,193 +44,37 @@ const GAUGE_TICKS = [
 ];
 
 export default function InternetSpeedTest() {
-  const [testState, setTestState] = useState<TestState>("idle");
-  const [currentSpeed, setCurrentSpeed] = useState<number>(0);
-  const [results, setResults] = useState<SpeedResults>({
-    downloadMbps: null,
-    uploadMbps: null,
-    pingMs: null,
-    jitterMs: null,
-  });
+  const {
+    phase,
+    currentSpeed,
+    results,
+    serverInfo,
+    errorMessage,
+    consentAccepted,
+    setConsentAccepted,
+    startTest,
+    cancelTest,
+    resetTest,
+    isRunning,
+  } = useNdt7SpeedTest();
+
   const [copied, setCopied] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [showDataWarningDetails, setShowDataWarningDetails] = useState<boolean>(false);
 
-  // Speed test engine reference
-  const speedTestEngineRef = useRef<{ pause?: () => void; play?: () => void; results?: unknown } | null>(null);
-  const isCancelledRef = useRef<boolean>(false);
-
-  // Clean up engine on unmount
-  useEffect(() => {
-    return () => {
-      isCancelledRef.current = true;
-      if (speedTestEngineRef.current) {
-        try {
-          if (typeof speedTestEngineRef.current.pause === "function") {
-            speedTestEngineRef.current.pause();
-          }
-        } catch {
-          // ignore
-        }
-      }
-    };
-  }, []);
-
-  const runTest = async () => {
-    isCancelledRef.current = false;
-    setTestState("preparing");
-    setCurrentSpeed(0);
-    setResults({ downloadMbps: null, uploadMbps: null, pingMs: null, jitterMs: null });
-    setErrorMessage("");
-    setCopied(false);
-
-    try {
-      const SpeedTestModule = await import("@cloudflare/speedtest");
-      const SpeedTest = SpeedTestModule.default;
-
-      // Robust Cloudflare SpeedTest Configuration
-      const engine = new SpeedTest({
-        autoStart: false,
-        measureDownloadLoadedLatency: false,
-        measureUploadLoadedLatency: false,
-        measurements: [
-          { type: "latency", numPackets: 1 },
-          { type: "download", bytes: 1e5, count: 1, bypassMinDuration: true },
-          { type: "latency", numPackets: 10 },
-          { type: "download", bytes: 1e5, count: 4 },
-          { type: "download", bytes: 1e6, count: 4 },
-          { type: "upload", bytes: 1e5, count: 4 },
-          { type: "upload", bytes: 1e6, count: 3 },
-          { type: "download", bytes: 1e7, count: 3 },
-          { type: "upload", bytes: 1e7, count: 2 },
-          { type: "download", bytes: 25e6, count: 2 },
-        ],
-      });
-
-      speedTestEngineRef.current = engine;
-
-      // Event listener for real-time measurements
-      engine.onResultsChange = ({ type }: { type?: string }) => {
-        if (isCancelledRef.current) return;
-        const res = engine.results as {
-          getUnloadedLatency?: () => number | undefined;
-          getUnloadedJitter?: () => number | null | undefined;
-          getDownloadBandwidth?: () => number | undefined;
-          getDownloadBandwidthPoints?: () => Array<{ bps: number }>;
-          getUploadBandwidth?: () => number | undefined;
-          getUploadBandwidthPoints?: () => Array<{ bps: number }>;
-        } | null;
-
-        if (!res) return;
-
-        // Extract latency & jitter
-        const pingVal = typeof res.getUnloadedLatency === "function" ? res.getUnloadedLatency() : undefined;
-        const jitterVal = typeof res.getUnloadedJitter === "function" ? res.getUnloadedJitter() : undefined;
-
-        if (pingVal !== undefined && Number.isFinite(pingVal) && pingVal > 0) {
-          setResults((prev) => ({
-            ...prev,
-            pingMs: pingVal,
-            jitterMs: jitterVal !== null && jitterVal !== undefined && Number.isFinite(jitterVal) ? jitterVal : prev.jitterMs,
-          }));
-        }
-
-        // Handle Download Phase
-        if (type === "download") {
-          setTestState("download");
-          const points = typeof res.getDownloadBandwidthPoints === "function" ? res.getDownloadBandwidthPoints() : [];
-          const latestBps = points.length > 0 ? points[points.length - 1]?.bps : res.getDownloadBandwidth?.();
-          const bps = Number(latestBps || 0);
-          if (bps > 0) {
-            const mbps = bps / 1_000_000;
-            setCurrentSpeed(mbps);
-            setResults((prev) => ({ ...prev, downloadMbps: mbps }));
-          }
-        } else if (type === "upload") {
-          // Handle Upload Phase
-          setTestState("upload");
-          const points = typeof res.getUploadBandwidthPoints === "function" ? res.getUploadBandwidthPoints() : [];
-          const latestBps = points.length > 0 ? points[points.length - 1]?.bps : res.getUploadBandwidth?.();
-          const bps = Number(latestBps || 0);
-          if (bps > 0) {
-            const mbps = bps / 1_000_000;
-            setCurrentSpeed(mbps);
-            setResults((prev) => ({ ...prev, uploadMbps: mbps }));
-          }
-        } else if (type === "latency") {
-          setTestState("latency");
-        }
-      };
-
-      // Event listener when all measurement suites complete
-      engine.onFinish = (finalResults: any) => {
-        if (isCancelledRef.current) return;
-
-        setTestState("completed");
-        setCurrentSpeed(0);
-
-        const summary =
-          typeof finalResults?.getSummary === "function"
-            ? finalResults.getSummary()
-            : (finalResults as unknown as Record<string, number>) || {};
-
-        const dlBps = Number(finalResults?.getDownloadBandwidth?.() || summary.download || 0);
-        const ulBps = Number(finalResults?.getUploadBandwidth?.() || summary.upload || 0);
-        const pMs = Number(finalResults?.getUnloadedLatency?.() || summary.latency || 0);
-        const jMs = Number(finalResults?.getUnloadedJitter?.() || summary.jitter || 0);
-
-        setResults((prev) => ({
-          downloadMbps: dlBps > 0 ? dlBps / 1_000_000 : prev.downloadMbps,
-          uploadMbps: ulBps > 0 ? ulBps / 1_000_000 : prev.uploadMbps,
-          pingMs: pMs > 0 ? pMs : prev.pingMs,
-          jitterMs: jMs > 0 ? jMs : prev.jitterMs,
-        }));
-      };
-
-      engine.onError = (err: unknown) => {
-        if (isCancelledRef.current) return;
-        setTestState("error");
-        setErrorMessage(
-          err instanceof Error ? err.message : "Pengujian mengalami kendala koneksi."
-        );
-      };
-
-      engine.play();
-    } catch {
-      if (isCancelledRef.current) return;
-      setTestState("error");
-      setErrorMessage("Gagal memuat engine pengujian kecepatan.");
-    }
-  };
-
-  const cancelTest = () => {
-    isCancelledRef.current = true;
-    if (speedTestEngineRef.current) {
-      try {
-        if (typeof speedTestEngineRef.current.pause === "function") {
-          speedTestEngineRef.current.pause();
-        }
-      } catch {
-        // ignore
-      }
-    }
-    setTestState("cancelled");
-    setCurrentSpeed(0);
-  };
-
   const copyResults = () => {
-    if (testState !== "completed" && testState !== "cancelled") return;
+    if (phase !== "completed" && phase !== "cancelled") return;
 
-    const dlText = results.downloadMbps ? `${results.downloadMbps.toFixed(2)} Mbps` : "—";
-    const ulText = results.uploadMbps ? `${results.uploadMbps.toFixed(2)} Mbps` : "—";
-    const pingText = results.pingMs ? `${results.pingMs.toFixed(1)} ms` : "—";
-    const jitterText = results.jitterMs ? `${results.jitterMs.toFixed(1)} ms` : "—";
+    const dlText = results.downloadMbps !== null ? `${formatSpeed(results.downloadMbps)} Mbps` : "Tidak tersedia";
+    const ulText = results.uploadMbps !== null ? `${formatSpeed(results.uploadMbps)} Mbps` : "Tidak tersedia";
+    const pingText = results.pingMs !== null ? `${formatLatency(results.pingMs)} ms` : "Tidak tersedia";
+    const jitterText = results.jitterMs !== null ? `${formatLatency(results.jitterMs)} ms` : "Tidak tersedia";
 
     const text = `ALLBASE Internet Speed Test
 Download: ${dlText}
 Upload: ${ulText}
 Ping: ${pingText}
 Jitter: ${jitterText}
+Measurement engine: M-Lab NDT7
 Tested at: allbase.my.id`;
 
     if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -251,14 +86,14 @@ Tested at: allbase.my.id`;
 
   // Connection Quality Evaluation
   const qualityEvaluation = useMemo(() => {
-    if (testState !== "completed") return null;
+    if (phase !== "completed") return null;
     return evaluateConnectionQuality({
       download: results.downloadMbps,
       upload: results.uploadMbps,
       ping: results.pingMs,
       jitter: results.jitterMs,
     });
-  }, [testState, results]);
+  }, [phase, results]);
 
   // Semicircle calculations (Center: 170, 160; Radius: 125)
   const arcRadius = 125;
@@ -271,17 +106,17 @@ Tested at: allbase.my.id`;
   const tipY = 160 - arcRadius * Math.sin(gaugeFraction * Math.PI);
 
   const getPhaseDisplay = () => {
-    switch (testState) {
+    switch (phase) {
       case "idle":
         return "SIAP";
-      case "preparing":
-        return "MENYIAPKAN";
-      case "latency":
-        return "PING / JITTER";
+      case "discovering":
+        return "MENCARI SERVER";
       case "download":
         return "DOWNLOAD";
       case "upload":
         return "UPLOAD";
+      case "finalizing":
+        return "MENYELESAIKAN";
       case "completed":
         return "SELESAI";
       case "cancelled":
@@ -294,21 +129,16 @@ Tested at: allbase.my.id`;
   };
 
   const getStatusLine = () => {
-    switch (testState) {
+    switch (phase) {
       case "idle":
         return {
           dotClass: styles.dotIdle,
           text: "Siap melakukan pengujian koneksi",
         };
-      case "preparing":
+      case "discovering":
         return {
           dotClass: styles.dotRunning,
-          text: "Menghubungkan ke Edge Server Cloudflare...",
-        };
-      case "latency":
-        return {
-          dotClass: styles.dotRunning,
-          text: "Mengukur latensi ping dan jitter...",
+          text: "Mencari server pengujian terdekat (M-Lab Locate)...",
         };
       case "download":
         return {
@@ -319,6 +149,11 @@ Tested at: allbase.my.id`;
         return {
           dotClass: styles.dotRunning,
           text: "Mengukur kecepatan upload...",
+        };
+      case "finalizing":
+        return {
+          dotClass: styles.dotRunning,
+          text: "Menyelesaikan hasil pengukuran...",
         };
       case "completed":
         return {
@@ -349,9 +184,9 @@ Tested at: allbase.my.id`;
           <span>Tools</span>
         </Link>
         <span className={styles.barTitle}>Speed Test</span>
-        <div className={styles.engineBadge} title="Cloudflare Speedtest Network Engine">
+        <div className={styles.engineBadge} title="Measurement Lab NDT7 Network Engine">
           <Gauge size={13} />
-          <span>Cloudflare Edge</span>
+          <span>M-Lab NDT7</span>
         </div>
       </div>
 
@@ -359,16 +194,48 @@ Tested at: allbase.my.id`;
       <section className={styles.heroIntro}>
         <h1 className={styles.title}>Internet Speed Test</h1>
         <p className={styles.description}>
-          Ukur kecepatan download, upload, ping, dan jitter koneksi internet secara real-time.
+          Ukur kecepatan download, upload, ping, dan jitter koneksi internet secara real-time menggunakan Measurement Lab (M-Lab).
         </p>
       </section>
+
+      {/* M-Lab Data Policy Consent Banner */}
+      <div className={styles.consentBanner}>
+        <label className={styles.consentLabel}>
+          <input
+            type="checkbox"
+            className={styles.consentCheckbox}
+            checked={consentAccepted}
+            onChange={(e) => setConsentAccepted(e.target.checked)}
+            disabled={isRunning}
+          />
+          <span>
+            Dengan menjalankan tes, pengukuran jaringan akan dilakukan menggunakan <strong>Measurement Lab (M-Lab)</strong> dan data hasil pengujian akan dipublikasikan ke dataset riset terbuka sesuai kebijakan datanya.
+          </span>
+        </label>
+        <div className={styles.consentFooter}>
+          <div style={{ display: "flex", alignItems: "center", gap: "5px", color: "var(--color-text-muted)" }}>
+            <ShieldCheck size={14} color="var(--color-success)" />
+            <span>Persetujuan Diperlukan</span>
+          </div>
+          <a
+            href="https://www.measurementlab.net/data-policy/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.consentLink}
+            style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}
+          >
+            <span>Kebijakan Data M-Lab</span>
+            <ExternalLink size={12} />
+          </a>
+        </div>
+      </div>
 
       {/* Compact Data Warning Notice */}
       <div className={styles.warningNotice}>
         <div className={styles.warningHeader}>
           <div className={styles.warningContent}>
             <AlertTriangle size={17} className={styles.warningIcon} />
-            <span>Tes dapat menggunakan kuota data cukup besar.</span>
+            <span>Tes dapat menggunakan kuota data yang cukup besar.</span>
           </div>
           <button
             type="button"
@@ -381,8 +248,7 @@ Tested at: allbase.my.id`;
         </div>
         {showDataWarningDetails && (
           <div className={styles.warningDetails}>
-            Pengujian kecepatan mengunduh dan mengunggah sampel file acak untuk mengukur bandwidth aktual.
-            Rata-rata pengujian dapat mengonsumsi kuota sekitar 20 MB – 80 MB tergantung kecepatan koneksi Anda.
+            Pengujian kecepatan mengunduh dan mengunggah aliran data streaming untuk mengukur throughput aktual via WebSocket ke server M-Lab terdekat. Rata-rata pengujian mengonsumsi sekitar 20 MB – 80 MB tergantung kapasitas bandwidth jaringan Anda.
           </div>
         )}
       </div>
@@ -394,14 +260,14 @@ Tested at: allbase.my.id`;
           <div className={styles.latencyItem}>
             <span className={styles.latencyLabel}>PING</span>
             <span className={styles.latencyValue}>
-              {results.pingMs !== null ? results.pingMs.toFixed(0) : "—"}
+              {results.pingMs !== null ? formatLatency(results.pingMs) : "—"}
               <span className={styles.latencyUnit}>ms</span>
             </span>
           </div>
           <div className={styles.latencyItem}>
             <span className={styles.latencyLabel}>JITTER</span>
             <span className={styles.latencyValue}>
-              {results.jitterMs !== null ? results.jitterMs.toFixed(0) : "—"}
+              {results.jitterMs !== null ? formatLatency(results.jitterMs) : "—"}
               <span className={styles.latencyUnit}>ms</span>
             </span>
           </div>
@@ -412,7 +278,7 @@ Tested at: allbase.my.id`;
           <svg
             className={styles.gaugeSvg}
             viewBox="0 0 340 185"
-            aria-label={`Kecepatan saat ini ${currentSpeed.toFixed(2)} Mbps`}
+            aria-label={`Kecepatan saat ini ${formatSpeed(currentSpeed)} Mbps`}
             role="img"
           >
             <defs>
@@ -492,7 +358,7 @@ Tested at: allbase.my.id`;
               strokeDashoffset={strokeDashoffset}
               style={{
                 transition:
-                  testState === "idle" || testState === "cancelled"
+                  phase === "idle" || phase === "cancelled"
                     ? "stroke-dashoffset 400ms ease-out"
                     : "stroke-dashoffset 150ms cubic-bezier(0.2, 0.8, 0.2, 1)",
               }}
@@ -515,7 +381,7 @@ Tested at: allbase.my.id`;
           {/* Large Speed Value in Center of Semicircle */}
           <div className={styles.gaugeCenterData}>
             <span className={styles.phaseTag}>{getPhaseDisplay()}</span>
-            <div className={styles.speedValue}>{currentSpeed.toFixed(2)}</div>
+            <div className={styles.speedValue}>{formatSpeed(currentSpeed)}</div>
             <div className={styles.speedUnit}>Mbps</div>
           </div>
         </div>
@@ -526,13 +392,25 @@ Tested at: allbase.my.id`;
           <span>{statusInfo.text}</span>
         </div>
 
+        {/* Discovered Server Info */}
+        {serverInfo && (
+          <div className={styles.serverChip}>
+            <Server size={12} />
+            <span>
+              Server: {serverInfo.city ? `${serverInfo.city}, ` : ""}{serverInfo.country || "M-Lab Node"}
+            </span>
+          </div>
+        )}
+
         {/* Interactive Controls */}
         <div className={styles.controlsWrapper}>
-          {testState === "idle" && (
+          {phase === "idle" && (
             <button
               type="button"
               className={styles.startButton}
-              onClick={runTest}
+              onClick={startTest}
+              disabled={!consentAccepted}
+              title={!consentAccepted ? "Harap setujui kebijakan data M-Lab terlebih dahulu" : "Mulai Tes Kecepatan"}
               aria-label="Mulai Pengujian Kecepatan Internet"
             >
               <Play size={18} fill="currentColor" />
@@ -540,10 +418,10 @@ Tested at: allbase.my.id`;
             </button>
           )}
 
-          {(testState === "preparing" ||
-            testState === "latency" ||
-            testState === "download" ||
-            testState === "upload") && (
+          {(phase === "discovering" ||
+            phase === "download" ||
+            phase === "upload" ||
+            phase === "finalizing") && (
             <button
               type="button"
               className={styles.cancelButton}
@@ -555,12 +433,12 @@ Tested at: allbase.my.id`;
             </button>
           )}
 
-          {testState === "completed" && (
+          {phase === "completed" && (
             <div className={styles.resultActions}>
               <button
                 type="button"
                 className={styles.restartButton}
-                onClick={runTest}
+                onClick={resetTest}
                 aria-label="Uji Ulang Kecepatan Internet"
               >
                 <RotateCcw size={16} />
@@ -578,11 +456,11 @@ Tested at: allbase.my.id`;
             </div>
           )}
 
-          {(testState === "cancelled" || testState === "error") && (
+          {(phase === "cancelled" || phase === "error") && (
             <button
               type="button"
               className={styles.startButton}
-              onClick={runTest}
+              onClick={resetTest}
               aria-label="Mulai Ulang Pengujian Kecepatan"
             >
               <RotateCcw size={18} />
@@ -595,7 +473,7 @@ Tested at: allbase.my.id`;
       {/* Primary Metrics (Download & Upload) */}
       <div className={styles.primaryMetrics}>
         <div
-          className={`${styles.metricCard} ${testState === "download" ? styles.cardActive : ""}`}
+          className={`${styles.metricCard} ${phase === "download" ? styles.cardActive : ""}`}
         >
           <div className={styles.metricHeader}>
             <div className={`${styles.metricTitleGroup} ${styles.dlAccent}`}>
@@ -604,13 +482,13 @@ Tested at: allbase.my.id`;
             </div>
           </div>
           <div className={styles.metricNumber}>
-            {results.downloadMbps !== null ? results.downloadMbps.toFixed(2) : "—"}
+            {formatSpeed(results.downloadMbps)}
             <span className={styles.metricUnitSmall}>Mbps</span>
           </div>
         </div>
 
         <div
-          className={`${styles.metricCard} ${testState === "upload" ? styles.cardActive : ""}`}
+          className={`${styles.metricCard} ${phase === "upload" ? styles.cardActive : ""}`}
         >
           <div className={styles.metricHeader}>
             <div className={`${styles.metricTitleGroup} ${styles.ulAccent}`}>
@@ -619,7 +497,7 @@ Tested at: allbase.my.id`;
             </div>
           </div>
           <div className={styles.metricNumber}>
-            {results.uploadMbps !== null ? results.uploadMbps.toFixed(2) : "—"}
+            {formatSpeed(results.uploadMbps)}
             <span className={styles.metricUnitSmall}>Mbps</span>
           </div>
         </div>
@@ -633,7 +511,7 @@ Tested at: allbase.my.id`;
             <span>Ping</span>
           </div>
           <div className={styles.secondaryValue}>
-            {results.pingMs !== null ? results.pingMs.toFixed(1) : "—"}
+            {formatLatency(results.pingMs)}
             <span className={styles.metricUnitSmall}>ms</span>
           </div>
         </div>
@@ -644,7 +522,7 @@ Tested at: allbase.my.id`;
             <span>Jitter</span>
           </div>
           <div className={styles.secondaryValue}>
-            {results.jitterMs !== null ? results.jitterMs.toFixed(1) : "—"}
+            {formatLatency(results.jitterMs)}
             <span className={styles.metricUnitSmall}>ms</span>
           </div>
         </div>
