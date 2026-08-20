@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Users, Search, X, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { Users, Search, X, ChevronLeft, ChevronRight, Heart } from "lucide-react";
 
 interface GalleryItem {
   id: number;
@@ -12,15 +13,36 @@ interface GalleryItem {
 
 const galleryItems: GalleryItem[] = [
   { id: 1, caption: "Duo Cees Rahmat & Ilal", src: "/rahmat_ilal.jpg" },
-  { id: 2, caption: "Dokumentasi Proyek 1", src: "/images/friendship/img/foto (2).jpg" },
-  { id: 3, caption: "Dokumentasi Proyek 2", src: "/images/friendship/img/foto (3).jpg" },
-  { id: 4, caption: "Dokumentasi Proyek 3", src: "/images/friendship/img/foto (4).jpg" },
-  { id: 5, caption: "Dokumentasi Proyek 4", src: "/images/friendship/img/foto (5).jpg" },
-  { id: 6, caption: "Dokumentasi Kebersamaan 5", src: "/images/friendship/img/foto (6).jpg" },
+  { id: 2, caption: "Dokumentasi Kebersamaan 1", src: "/images/friendship/img/foto (1).jpg" },
+  { id: 3, caption: "Dokumentasi Kebersamaan 2", src: "/images/friendship/img/foto (2).jpg" },
+  { id: 4, caption: "Dokumentasi Kebersamaan 3", src: "/images/friendship/img/foto (3).jpg" },
+  { id: 5, caption: "Dokumentasi Kebersamaan 4", src: "/images/friendship/img/foto (4).jpg" },
+  { id: 6, caption: "Dokumentasi Kebersamaan 5", src: "/images/friendship/img/foto (5).jpg" },
   { id: 7, caption: "Dokumentasi Kebersamaan 6", src: "/images/friendship/img/foto (6).jpg" },
   { id: 8, caption: "Dokumentasi Kebersamaan 7", src: "/images/friendship/img/foto (7).jpg" },
   { id: 9, caption: "Dokumentasi Kebersamaan 8", src: "/images/friendship/img/foto (8).jpg" },
   { id: 10, caption: "Dokumentasi Kebersamaan 9", src: "/images/friendship/img/foto (9).jpg" },
+  { id: 11, caption: "Dokumentasi Kebersamaan 10", src: "/images/friendship/img/foto (10).jpg" },
+  { id: 12, caption: "Dokumentasi Kebersamaan 11", src: "/images/friendship/img/foto (11).jpg" },
+  { id: 13, caption: "Dokumentasi Kebersamaan 12", src: "/images/friendship/img/foto (12).jpg" },
+  { id: 14, caption: "Dokumentasi Kebersamaan 13", src: "/images/friendship/img/foto (13).jpg" },
+  { id: 15, caption: "Dokumentasi Kebersamaan 14", src: "/images/friendship/img/foto (14).jpg" },
+  { id: 16, caption: "Dokumentasi Kebersamaan 15", src: "/images/friendship/img/foto (15).jpg" },
+  { id: 17, caption: "Dokumentasi Kebersamaan 16", src: "/images/friendship/img/foto (16).jpg" },
+  { id: 18, caption: "Dokumentasi Kebersamaan 17", src: "/images/friendship/img/foto (17).jpg" },
+  { id: 19, caption: "Dokumentasi Kebersamaan 18", src: "/images/friendship/img/foto (18).jpg" },
+  { id: 20, caption: "Dokumentasi Kebersamaan 19", src: "/images/friendship/img/foto (19).jpg" },
+  { id: 21, caption: "Dokumentasi Kebersamaan 20", src: "/images/friendship/img/foto (20).jpg" },
+  { id: 22, caption: "Dokumentasi Kebersamaan 21", src: "/images/friendship/img/foto (21).jpg" },
+  { id: 23, caption: "Dokumentasi Kebersamaan 22", src: "/images/friendship/img/foto (22).jpg" },
+  { id: 24, caption: "Dokumentasi Kebersamaan 23", src: "/images/friendship/img/foto (23).jpg" },
+  { id: 25, caption: "Dokumentasi Kebersamaan 24", src: "/images/friendship/img/foto (24).jpg" },
+  { id: 26, caption: "Dokumentasi Kebersamaan 25", src: "/images/friendship/img/foto (25).jpg" },
+  { id: 27, caption: "Dokumentasi Kebersamaan 26", src: "/images/friendship/img/foto (26).jpg" },
+  { id: 28, caption: "Dokumentasi Kebersamaan 27", src: "/images/friendship/img/foto (27).jpg" },
+  { id: 29, caption: "Dokumentasi Kebersamaan 28", src: "/images/friendship/img/foto (28).jpg" },
+  { id: 30, caption: "Dokumentasi Kebersamaan 29", src: "/images/friendship/img/foto (29).jpg" },
+  { id: 31, caption: "Dokumentasi Kebersamaan 30", src: "/images/friendship/img/foto (30).jpg" },
 ];
 
 export default function FriendshipGallery() {
@@ -33,6 +55,41 @@ export default function FriendshipGallery() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
+      {/* Top Breadcrumb Bar */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "12px",
+          padding: "12px 18px",
+          backgroundColor: "var(--color-surface)",
+          border: "1px solid var(--color-border)",
+          borderRadius: "var(--radius-md)",
+        }}
+      >
+        <Link
+          href="/#projects"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            minHeight: "44px",
+            fontSize: "0.88rem",
+            fontWeight: 600,
+            color: "var(--color-primary-600)",
+          }}
+          aria-label="Kembali ke Portofolio ALLBASE"
+        >
+          <ChevronLeft size={18} />
+          <span>Kembali ke ALLBASE</span>
+        </Link>
+        <span style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", display: "flex", alignItems: "center", gap: "4px" }}>
+          <Heart size={14} color="#ef4444" fill="#ef4444" /> Besto Friendo
+        </span>
+      </div>
+
       {/* Banner Card */}
       <div
         style={{
@@ -45,7 +102,7 @@ export default function FriendshipGallery() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
             gap: "24px",
             alignItems: "center",
           }}
@@ -82,6 +139,7 @@ export default function FriendshipGallery() {
               alt="Rahmat Haikal & Ilal Ilhamdi"
               width={340}
               height={260}
+              priority
               style={{
                 width: "100%",
                 maxWidth: "340px",
@@ -109,7 +167,8 @@ export default function FriendshipGallery() {
             placeholder="Cari momen..."
             style={{
               width: "100%",
-              padding: "12px 14px 12px 42px",
+              minHeight: "44px",
+              padding: "10px 14px 10px 42px",
               borderRadius: "var(--radius-sm)",
               border: "1px solid var(--color-border)",
               backgroundColor: "var(--color-surface)",
@@ -123,7 +182,7 @@ export default function FriendshipGallery() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 160px), 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 180px), 1fr))",
           gap: "16px",
         }}
       >

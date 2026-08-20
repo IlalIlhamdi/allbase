@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CheckSquare, PlusCircle, RotateCcw, Check, Edit3, Trash2, Search } from "lucide-react";
+import Link from "next/link";
+import { CheckSquare, PlusCircle, RotateCcw, Check, Edit3, Trash2, Search, ChevronLeft } from "lucide-react";
 
 export interface TaskItem {
   id: string;
@@ -19,7 +20,7 @@ const STORAGE_KEY = "allbase-college-tasks";
 
 function generateTaskId(courseName: string): string {
   const clean = courseName.toLowerCase().replace(/[^a-z0-9]/g, "");
-  return `task_${clean}_${Date.parse(new Date().toISOString())}`;
+  return `task_${clean}_${Date.now()}`;
 }
 
 export default function CollegeTasks() {
@@ -52,7 +53,11 @@ export default function CollegeTasks() {
 
   const saveTasks = (newTasks: TaskItem[]) => {
     setTasks(newTasks);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newTasks));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newTasks));
+    } catch {
+      // LocalStorage error fallback
+    }
   };
 
   const calculateDaysLeft = (deadlineStr: string) => {
@@ -143,6 +148,41 @@ export default function CollegeTasks() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+      {/* Top Breadcrumb Bar */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "12px",
+          padding: "12px 18px",
+          backgroundColor: "var(--color-surface)",
+          border: "1px solid var(--color-border)",
+          borderRadius: "var(--radius-md)",
+        }}
+      >
+        <Link
+          href="/#projects"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            minHeight: "44px",
+            fontSize: "0.88rem",
+            fontWeight: 600,
+            color: "var(--color-primary-600)",
+          }}
+          aria-label="Kembali ke Proyek ALLBASE"
+        >
+          <ChevronLeft size={18} />
+          <span>Kembali ke ALLBASE</span>
+        </Link>
+        <span style={{ fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
+          Penyimpanan Lokal Browser (Offline-Ready)
+        </span>
+      </div>
+
       {/* Task Form Card */}
       <div
         style={{
@@ -199,7 +239,8 @@ export default function CollegeTasks() {
                 placeholder="Contoh: Jaringan Komputer"
                 style={{
                   width: "100%",
-                  padding: "12px 14px",
+                  minHeight: "44px",
+                  padding: "10px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
@@ -221,7 +262,8 @@ export default function CollegeTasks() {
                 placeholder="Contoh: Pertemuan 4"
                 style={{
                   width: "100%",
-                  padding: "12px 14px",
+                  minHeight: "44px",
+                  padding: "10px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
@@ -250,7 +292,8 @@ export default function CollegeTasks() {
                 onChange={(e) => setGivenDate(e.target.value)}
                 style={{
                   width: "100%",
-                  padding: "12px 14px",
+                  minHeight: "44px",
+                  padding: "10px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
@@ -270,7 +313,8 @@ export default function CollegeTasks() {
                 onChange={(e) => setDeadline(e.target.value)}
                 style={{
                   width: "100%",
-                  padding: "12px 14px",
+                  minHeight: "44px",
+                  padding: "10px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
@@ -290,11 +334,13 @@ export default function CollegeTasks() {
                 onChange={(e) => setPriority(e.target.value as "Tinggi" | "Sedang" | "Rendah")}
                 style={{
                   width: "100%",
-                  padding: "12px 14px",
+                  minHeight: "44px",
+                  padding: "10px 14px",
                   borderRadius: "var(--radius-sm)",
                   border: "1px solid var(--color-border)",
                   backgroundColor: "var(--color-surface)",
                   fontSize: "1rem",
+                  color: "var(--color-text-primary)",
                 }}
               >
                 <option value="Tinggi">Tinggi (High)</option>
@@ -454,7 +500,8 @@ export default function CollegeTasks() {
             placeholder="Cari mata kuliah..."
             style={{
               width: "100%",
-              padding: "12px 14px 12px 42px",
+              minHeight: "44px",
+              padding: "10px 14px 10px 42px",
               borderRadius: "var(--radius-sm)",
               border: "1px solid var(--color-border)",
               backgroundColor: "var(--color-surface)",
@@ -467,11 +514,13 @@ export default function CollegeTasks() {
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
           style={{
-            padding: "12px 14px",
+            minHeight: "44px",
+            padding: "10px 14px",
             borderRadius: "var(--radius-sm)",
             border: "1px solid var(--color-border)",
             backgroundColor: "var(--color-surface)",
             fontSize: "1rem",
+            color: "var(--color-text-primary)",
           }}
         >
           <option value="all">Semua Status</option>

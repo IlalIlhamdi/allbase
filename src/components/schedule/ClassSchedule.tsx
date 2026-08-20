@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { scheduleData, studentList } from "@/data/schedule";
-import { Calendar, MapPin, User, Search, Users } from "lucide-react";
+import { Calendar, MapPin, User, Search, Users, ChevronLeft } from "lucide-react";
 
 const daysKey = ["senin", "selasa", "rabu", "kamis", "jumat"];
 const daysName = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"];
@@ -24,6 +25,41 @@ export default function ClassSchedule() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+      {/* Top Breadcrumb Bar */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "12px",
+          padding: "12px 18px",
+          backgroundColor: "var(--color-surface)",
+          border: "1px solid var(--color-border)",
+          borderRadius: "var(--radius-md)",
+        }}
+      >
+        <Link
+          href="/#projects"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            minHeight: "44px",
+            fontSize: "0.88rem",
+            fontWeight: 600,
+            color: "var(--color-primary-600)",
+          }}
+          aria-label="Kembali ke Proyek ALLBASE"
+        >
+          <ChevronLeft size={18} />
+          <span>Kembali ke ALLBASE</span>
+        </Link>
+        <span style={{ fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
+          Teknik Rekayasa Jaringan Telekomunikasi (TRJT 2A)
+        </span>
+      </div>
+
       {/* App Bar Header */}
       <div
         style={{
@@ -52,7 +88,7 @@ export default function ClassSchedule() {
               gap: "6px",
             }}
           >
-            <Calendar size={14} /> TRJT 2A · Semester 4
+            <Calendar size={14} /> TRJT 2A &middot; Semester 4
           </span>
           <h1 style={{ fontSize: "clamp(1.4rem, 4vw, 1.8rem)", marginTop: "4px" }}>Jadwal Perkuliahan Roster</h1>
         </div>
@@ -171,7 +207,7 @@ export default function ClassSchedule() {
                       <User size={14} color="var(--color-primary-600)" /> {item.dosen}
                     </div>
                     <div style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-                      <MapPin size={14} /> {item.ruang} • {item.gedung}
+                      <MapPin size={14} /> {item.ruang} &bull; {item.gedung}
                     </div>
                   </div>
                 </div>
@@ -199,7 +235,8 @@ export default function ClassSchedule() {
               placeholder="Cari nama mahasiswa atau NIM..."
               style={{
                 width: "100%",
-                padding: "12px 14px 12px 42px",
+                minHeight: "44px",
+                padding: "10px 14px 10px 42px",
                 borderRadius: "var(--radius-sm)",
                 border: "1px solid var(--color-border)",
                 backgroundColor: "var(--color-surface)",

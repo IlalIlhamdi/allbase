@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { MapPin, Navigation, Share2, Map, AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { MapPin, Navigation, Share2, Map, AlertCircle, ChevronLeft, Info } from "lucide-react";
 
 export default function IlalGps() {
   const [coords, setCoords] = useState<string>("Koordinat muncul di sini...");
@@ -20,28 +21,32 @@ export default function IlalGps() {
     setErrorMsg("");
 
     try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`, {
+        headers: {
+          "Accept": "application/json",
+        },
+      });
+      if (!res.ok) throw new Error("Gagal menghubungi server geocoding.");
       const data = await res.json();
-      if (data && data.address) {
-        const addr = data.display_name || "Alamat ditemukan.";
-        setAddress(addr);
+      if (data && data.display_name) {
+        setAddress(data.display_name);
       } else {
-        setAddress("Alamat tidak ditemukan.");
+        setAddress("Koordinat berhasil dideteksi (Deskripsi alamat jalan tidak ditemukan).");
       }
     } catch {
-      setAddress("Gagal mengunduh deskripsi alamat.");
+      setAddress("Koordinat valid. (Deskripsi alamat tidak dapat dimuat karena keterbatasan jaringan).");
     }
   };
 
   const getMyLocation = () => {
-    if (!navigator.geolocation) {
+    if (typeof window === "undefined" || !navigator.geolocation) {
       setErrorMsg("Browser Anda tidak mendukung fitur Geolocation.");
       return;
     }
 
     setLoading(true);
     setCoords("Mengambil posisi GPS...");
-    setAddress("Menunggu persetujuan izin...");
+    setAddress("Menunggu persetujuan izin lokasi pada browser...");
     setErrorMsg("");
 
     navigator.geolocation.getCurrentPosition(
@@ -54,13 +59,13 @@ export default function IlalGps() {
         setCoords("Gagal mengambil posisi.");
         setAddress("-");
         if (err.code === err.PERMISSION_DENIED) {
-          setErrorMsg("Izin akses lokasi ditolak oleh pengguna.");
+          setErrorMsg("Izin akses lokasi ditolak oleh pengguna atau browser.");
         } else if (err.code === err.POSITION_UNAVAILABLE) {
           setErrorMsg("Informasi lokasi tidak tersedia saat ini.");
         } else if (err.code === err.TIMEOUT) {
-          setErrorMsg("Waktu permintaan lokasi habis (timeout).");
+          setErrorMsg("Waktu permintaan lokasi habis (timeout). Silakan coba lagi.");
         } else {
-          setErrorMsg("Terjadi kendala saat mengambil koordinat.");
+          setErrorMsg("Terjadi kendala saat mengambil koordinat lokasi.");
         }
       },
       { enableHighAccuracy: true, timeout: 10000 }
@@ -70,13 +75,13 @@ export default function IlalGps() {
   const searchManual = () => {
     const parts = manualInput.split(",");
     if (parts.length !== 2) {
-      setErrorMsg("Format koordinat manual harus: lat, lon (Contoh: -6.2, 106.8)");
+      setErrorMsg("Format koordinat manual harus: lat, lon (Contoh: -6.2088, 106.8456)");
       return;
     }
     const lat = parseFloat(parts[0]!.trim());
     const lon = parseFloat(parts[1]!.trim());
-    if (isNaN(lat) || isNaN(lon)) {
-      setErrorMsg("Nilai lat/lon tidak valid.");
+    if (isNaN(lat) || isNaN(lon) || lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+      setErrorMsg("Nilai latitude (-90 s/d 90) atau longitude (-180 s/d 180) tidak valid.");
       return;
     }
     updateLocation(lat, lon);
@@ -95,7 +100,40 @@ export default function IlalGps() {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "24px", maxWidth: "700px", marginInline: "auto" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "24px", maxWidth: "720px", marginInline: "auto" }}>
+      {/* Top Breadcrumb Bar */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "12px",
+          padding: "12px 18px",
+          backgroundColor: "var(--color-surface)",
+          border: "1px solid var(--color-border)",
+          borderRadius: "var(--radius-md)",
+        }}
+      >
+        <Link
+          href="/#tools"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            minHeight: "44px",
+            fontSize: "0.88rem",
+            fontWeight: 600,
+            color: "var(--color-primary-600)",
+          }}
+          aria-label="Kembali ke Tools ALLBASE"
+        >
+          <ChevronLeft size={18} />
+          <span>Kembali ke Tools</span>
+        </Link>
+      </div>
+
+      {/* Main GPS Card */}
       <div
         style={{
           backgroundColor: "var(--color-surface)",
@@ -123,9 +161,30 @@ export default function IlalGps() {
         </div>
 
         <h1 style={{ fontSize: "clamp(1.4rem, 4vw, 1.8rem)", marginBottom: "6px" }}>Deteksi Lokasi GPS</h1>
-        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", marginBottom: "24px", lineHeight: 1.6 }}>
-          Ambil koordinat presisi real-time dan deskripsi alamat perangkat Anda setelah penekanan tombol izin.
+        <p style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", marginBottom: "16px", lineHeight: 1.6 }}>
+          Ambil koordinat presisi latitude dan longitude serta deskripsi alamat perangkat Anda secara real-time.
         </p>
+
+        {/* Permission Info Callout */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "10px",
+            padding: "12px 16px",
+            backgroundColor: "var(--color-surface-soft)",
+            border: "1px solid var(--color-border)",
+            borderRadius: "var(--radius-sm)",
+            fontSize: "0.84rem",
+            color: "var(--color-text-secondary)",
+            marginBottom: "20px",
+          }}
+        >
+          <Info size={18} color="var(--color-primary-600)" style={{ flexShrink: 0, marginTop: "2px" }} />
+          <span>
+            Fitur ini memerlukan <strong>izin akses lokasi</strong> pada peramban/browser Anda saat tombol ditekan.
+          </span>
+        </div>
 
         {/* Display Box */}
         <div
@@ -162,7 +221,7 @@ export default function IlalGps() {
         </div>
 
         {errorMsg && (
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--color-danger)", marginBottom: "16px", fontWeight: 600, fontSize: "0.9rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--color-danger)", backgroundColor: "var(--color-danger-soft)", padding: "10px 14px", borderRadius: "var(--radius-sm)", marginBottom: "16px", fontWeight: 600, fontSize: "0.9rem" }}>
             <AlertCircle size={16} /> {errorMsg}
           </div>
         )}
@@ -253,10 +312,11 @@ export default function IlalGps() {
             type="text"
             value={manualInput}
             onChange={(e) => setManualInput(e.target.value)}
-            placeholder="Contoh: -6.2, 106.8"
+            placeholder="Contoh: -6.2088, 106.8456"
             style={{
               width: "100%",
-              padding: "12px 14px",
+              minHeight: "44px",
+              padding: "10px 14px",
               borderRadius: "var(--radius-sm)",
               border: "1px solid var(--color-border)",
               backgroundColor: "var(--color-surface)",
