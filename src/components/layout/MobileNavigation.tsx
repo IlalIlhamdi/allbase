@@ -2,13 +2,25 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { Grid, Wrench, Send, Home, User, Code, Folder, Award, Mail } from "lucide-react";
+import {
+  Grid,
+  Wrench,
+  Send,
+  Home,
+  User,
+  Code,
+  Folder,
+  Award,
+  Mail,
+  Search,
+} from "lucide-react";
 import { mainNavItems } from "@/data/navigation";
 import styles from "./MobileNavigation.module.css";
 
 interface MobileNavigationProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenSearch?: () => void;
 }
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -21,7 +33,11 @@ const iconMap: Record<string, React.ReactNode> = {
   mail: <Mail size={18} />,
 };
 
-export default function MobileNavigation({ isOpen, onClose }: MobileNavigationProps) {
+export default function MobileNavigation({
+  isOpen,
+  onClose,
+  onOpenSearch,
+}: MobileNavigationProps) {
   useEffect(() => {
     if (!isOpen) return;
 
@@ -64,7 +80,21 @@ export default function MobileNavigation({ isOpen, onClose }: MobileNavigationPr
           isOpen ? styles.mobileMenuOpen : ""
         }`}
         aria-label="Navigasi Mobile"
+        aria-hidden={!isOpen}
       >
+        {/* Quick Search Action */}
+        {onOpenSearch && (
+          <button
+            type="button"
+            className={styles.mobileSearchTrigger}
+            onClick={onOpenSearch}
+            aria-label="Buka Pencarian Global"
+          >
+            <Search size={16} />
+            <span>Cari halaman, tools, proyek...</span>
+          </button>
+        )}
+
         <ul className={styles.navList}>
           {mainNavItems.map((item) => (
             <li key={item.href} className={styles.navItem}>
@@ -73,7 +103,9 @@ export default function MobileNavigation({ isOpen, onClose }: MobileNavigationPr
                 className={styles.mobileNavLink}
                 onClick={onClose}
               >
-                {item.icon && iconMap[item.icon]}
+                <div className={styles.navIcon}>
+                  {item.icon && iconMap[item.icon]}
+                </div>
                 <span>{item.label}</span>
               </Link>
             </li>

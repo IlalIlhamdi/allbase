@@ -11,12 +11,12 @@ export const certificatesData: readonly Certificate[] = [
   },
   {
     id: "cert-2",
-    title: "CCNA: Introduction to Networks",
+    title: "CCNA: Introduction to Networks — 2026",
     issuer: "Cisco Networking Academy",
     year: "2026",
     credentialUrl: "https://www.credly.com/badges/ddefb255-6d2c-488f-a53e-c4ad6f84c327/public_url",
     verifyText: "Verifikasi di Credly",
-    description: "Mempelajari dasar jaringan komputer, model OSI dan TCP/IP, IPv4 dan IPv6, Ethernet, switching, routing dasar, serta konfigurasi jaringan menggunakan perangkat Cisco.",
+    description: "Badge resmi Cisco Networking Academy: Mempelajari arsitektur jaringan, model OSI dan TCP/IP, IPv4 dan IPv6, Ethernet switching, routing dasar, serta konfigurasi router & switch Cisco.",
   },
   {
     id: "cert-3",

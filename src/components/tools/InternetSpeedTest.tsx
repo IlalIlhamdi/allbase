@@ -30,6 +30,8 @@ import {
   formatLatency,
 } from "@/lib/speedtest/calculations";
 import { evaluateConnectionQuality, speedToFraction } from "@/lib/speedTestQuality";
+import { useToast } from "@/components/providers/ToastProvider";
+import { useRecentTools } from "@/hooks/useRecentTools";
 import styles from "./InternetSpeedTest.module.css";
 
 // Scale ticks for dynamic semicircle gauge
@@ -61,6 +63,13 @@ export default function InternetSpeedTest() {
   const [copied, setCopied] = useState<boolean>(false);
   const [showDataWarningDetails, setShowDataWarningDetails] = useState<boolean>(false);
 
+  const { success } = useToast();
+  const { addRecentTool } = useRecentTools();
+
+  useState(() => {
+    addRecentTool("speedtest-tool");
+  });
+
   const copyResults = () => {
     if (phase !== "completed" && phase !== "cancelled") return;
 
@@ -69,17 +78,18 @@ export default function InternetSpeedTest() {
     const pingText = results.pingMs !== null ? `${formatLatency(results.pingMs)} ms` : "Tidak tersedia";
     const jitterText = results.jitterMs !== null ? `${formatLatency(results.jitterMs)} ms` : "Tidak tersedia";
 
-    const text = `ALLBASE Internet Speed Test
-Download: ${dlText}
-Upload: ${ulText}
-Ping: ${pingText}
-Jitter: ${jitterText}
-Measurement engine: M-Lab NDT7
-Tested at: allbase.my.id`;
+    const text = `ALLBASE Internet Speed Test Result:
+- Download: ${dlText}
+- Upload: ${ulText}
+- Latency (Ping): ${pingText}
+- Jitter: ${jitterText}
+- Measurement Engine: M-Lab NDT7
+Dihitung via allbase.my.id/tools/internet-speed-test`;
 
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(text);
       setCopied(true);
+      success("Hasil pengujian kecepatan berhasil disalin!");
       setTimeout(() => setCopied(false), 2500);
     }
   };

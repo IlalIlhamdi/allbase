@@ -9,8 +9,26 @@ export const metadata: Metadata = constructMetadata({
 });
 
 export default function SubnetCalculatorPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Subnet Calculator IPv4 — ALLBASE",
+    "url": "https://allbase.my.id/tools/subnet-calculator",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "description": "Kalkulator subnet IPv4 presisi untuk pembagian network address, broadcast address, wildcard mask, dan jumlah usable host.",
+    "author": {
+      "@type": "Person",
+      "name": "Ilal Ilhamdi",
+    },
+  };
+
   return (
     <div className="container" style={{ paddingBlock: "48px" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <SubnetCalculator />
     </div>
   );

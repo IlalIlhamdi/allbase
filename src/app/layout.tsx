@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { ToastProvider } from "@/components/providers/ToastProvider";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { constructMetadata } from "@/lib/metadata";
@@ -35,14 +36,16 @@ export default function RootLayout({
     <html lang="id" className={`${inter.variable} ${outfit.variable} ${jetbrainsMono.variable}`}>
       <body>
         <ThemeProvider>
-          <a href="#main-content" className="skip-link">
-            Lewati ke konten utama
-          </a>
-          <Header />
-          <main id="main-content" style={{ flex: 1 }}>
-            {children}
-          </main>
-          <Footer />
+          <ToastProvider>
+            <a href="#main-content" className="skip-link">
+              Lewati ke konten utama
+            </a>
+            <Header />
+            <main id="main-content" style={{ flex: 1 }}>
+              {children}
+            </main>
+            <Footer />
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>

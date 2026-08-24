@@ -20,6 +20,24 @@
   }
 }
 
+@keyframes nodeFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes dataFlow {
+  0% {
+    stroke-dashoffset: 60;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
 .animate-fade-up {
   animation: fadeUp var(--transition-slow) ease both;
 }

@@ -9,8 +9,26 @@ export const metadata: Metadata = constructMetadata({
 });
 
 export default function NetworkConverterPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Konversi Satuan Jaringan — ALLBASE",
+    "url": "https://allbase.my.id/tools/network-converter",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "description": "Utilitas konversi kecepatan internet Mbps ke MB/s, biner, desimal, heksadesimal, dan prefix CIDR.",
+    "author": {
+      "@type": "Person",
+      "name": "Ilal Ilhamdi",
+    },
+  };
+
   return (
     <div className="container" style={{ paddingBlock: "48px" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <NetworkConverter />
     </div>
   );

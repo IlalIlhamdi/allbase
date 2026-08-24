@@ -1,3 +1,4 @@
+import { Cpu } from "lucide-react";
 import { skillsData } from "@/data/skills";
 import SkillCard from "@/components/cards/SkillCard";
 
@@ -5,27 +6,15 @@ export default function Skills() {
   return (
     <section id="skills" className="section" aria-labelledby="skills-title">
       <div className="container">
-        <div style={{ textAlign: "center", marginBottom: "clamp(32px, 5vw, 48px)" }}>
-          <span
-            style={{
-              padding: "4px 12px",
-              borderRadius: "var(--radius-pill)",
-              backgroundColor: "var(--color-primary-50)",
-              color: "var(--color-primary-600)",
-              fontSize: "0.82rem",
-              fontWeight: 600,
-              display: "inline-block",
-              marginBottom: "12px",
-              border: "1px solid var(--color-border)",
-            }}
-          >
-            Tech Stack
+        <div className="sectionHeader">
+          <span className="sectionBadge">
+            <Cpu size={14} /> Tech Stack &amp; Tools
           </span>
           <h2 id="skills-title" className="sectionTitle">
-            Keahlian &amp; Teknologi
+            Keahlian &amp; Penguasaan Teknologi
           </h2>
           <p className="sectionDescription">
-            Perangkat lunak, hardware jaringan, dan bahasa pemrosesan yang saya gunakan.
+            Perangkat lunak simulasi, hardware jaringan Cisco &amp; MikroTik, dan bahasa pemrograman modern yang saya kuasai.
           </p>
         </div>
 
