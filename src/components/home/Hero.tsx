@@ -33,11 +33,13 @@ export default function Hero() {
             {/* Hero CTAs */}
             <div className={styles.heroActions}>
               <Link href="/#projects" className={styles.btnPrimary}>
-                <Grid size={18} /> Lihat Proyek
+                <Grid size={18} />
+                <span>Lihat Proyek</span>
               </Link>
 
               <Link href="/#tools" className={styles.btnSecondary}>
-                <Wrench size={18} /> Buka Tools
+                <Wrench size={18} />
+                <span>Buka Tools</span>
               </Link>
             </div>
 
