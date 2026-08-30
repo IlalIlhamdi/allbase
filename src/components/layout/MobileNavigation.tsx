@@ -3,13 +3,11 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import {
-  Grid,
-  Wrench,
-  Send,
   Home,
   User,
   Code,
   Folder,
+  Wrench,
   Award,
   Mail,
   Search,
@@ -24,13 +22,13 @@ interface MobileNavigationProps {
 }
 
 const iconMap: Record<string, React.ReactNode> = {
-  home: <Home size={18} />,
-  user: <User size={18} />,
-  code: <Code size={18} />,
-  folder: <Folder size={18} />,
-  wrench: <Wrench size={18} />,
-  award: <Award size={18} />,
-  mail: <Mail size={18} />,
+  home: <Home size={17} />,
+  user: <User size={17} />,
+  code: <Code size={17} />,
+  folder: <Folder size={17} />,
+  wrench: <Wrench size={17} />,
+  award: <Award size={17} />,
+  mail: <Mail size={17} />,
 };
 
 export default function MobileNavigation({
@@ -82,64 +80,40 @@ export default function MobileNavigation({
         aria-label="Navigasi Mobile"
         aria-hidden={!isOpen}
       >
-        {/* Quick Search Action */}
-        {onOpenSearch && (
-          <button
-            type="button"
-            className={styles.mobileSearchTrigger}
-            onClick={onOpenSearch}
-            aria-label="Buka Pencarian Global"
-          >
-            <Search size={16} />
-            <span>Cari halaman, tools, proyek...</span>
-          </button>
-        )}
+        <div className={styles.mobileMenuInner}>
+          {/* Quick Search Trigger */}
+          {onOpenSearch && (
+            <button
+              type="button"
+              className={styles.mobileSearchTrigger}
+              onClick={onOpenSearch}
+              aria-label="Buka Pencarian Global"
+            >
+              <Search size={16} className={styles.searchIcon} />
+              <span className={styles.searchPlaceholder}>
+                Cari halaman, tools, proyek...
+              </span>
+              <kbd className={styles.searchKbd}>⌘K</kbd>
+            </button>
+          )}
 
-        <ul className={styles.navList}>
-          {mainNavItems.map((item) => (
-            <li key={item.href} className={styles.navItem}>
-              <Link
-                href={item.href}
-                className={styles.mobileNavLink}
-                onClick={onClose}
-              >
-                <div className={styles.navIcon}>
-                  {item.icon && iconMap[item.icon]}
-                </div>
-                <span>{item.label}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        {/* Mobile Quick Action Buttons */}
-        <div className={styles.mobileQuickActions}>
-          <Link
-            href="/#projects"
-            className={`${styles.mobileQuickAction} ${styles.btnLihatProyek}`}
-            onClick={onClose}
-          >
-            <Grid size={18} aria-hidden="true" />
-            <span>Lihat Proyek</span>
-          </Link>
-
-          <Link
-            href="/#tools"
-            className={`${styles.mobileQuickAction} ${styles.btnBukaTools}`}
-            onClick={onClose}
-          >
-            <Wrench size={18} aria-hidden="true" />
-            <span>Buka Tools</span>
-          </Link>
-
-          <Link
-            href="/#contact"
-            className={`${styles.mobileQuickAction} ${styles.btnHubungiSaya}`}
-            onClick={onClose}
-          >
-            <Send size={18} aria-hidden="true" />
-            <span>Hubungi Saya</span>
-          </Link>
+          {/* Navigation Links */}
+          <ul className={styles.navList}>
+            {mainNavItems.map((item) => (
+              <li key={item.href} className={styles.navItem}>
+                <Link
+                  href={item.href}
+                  className={styles.mobileNavLink}
+                  onClick={onClose}
+                >
+                  <div className={styles.navIcon}>
+                    {item.icon && iconMap[item.icon]}
+                  </div>
+                  <span className={styles.navLabel}>{item.label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </nav>
     </>

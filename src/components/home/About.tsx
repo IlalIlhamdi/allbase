@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { BookOpen, Activity, Code2, Sparkles, MapPin, GraduationCap } from "lucide-react";
 
 export default function About() {
@@ -21,62 +20,23 @@ export default function About() {
         <div
           className="baseCard"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
-            gap: "28px",
-            alignItems: "center",
-            padding: "clamp(20px, 4vw, 36px)",
+            padding: "clamp(20px, 4vw, 32px)",
             marginBottom: "24px",
           }}
         >
-          <div
-            style={{
-              position: "relative",
-              width: "120px",
-              height: "120px",
-              borderRadius: "50%",
-              overflow: "hidden",
-              border: "4px solid var(--color-border)",
-              boxShadow: "var(--shadow-md)",
-              marginInline: "auto",
-              flexShrink: 0,
-            }}
-          >
-            <Image
-              src="/profile.jpg"
-              alt="Ilal Ilhamdi"
-              fill
-              sizes="120px"
-              style={{ objectFit: "cover", objectPosition: "center 30%" }}
-            />
-          </div>
-
-          <div style={{ flex: 1, textAlign: "left" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "6px" }}>
+          <div style={{ textAlign: "left" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "8px" }}>
               <h3 style={{ fontSize: "1.35rem", fontWeight: 800 }}>Ilal Ilhamdi</h3>
-              <span
-                style={{
-                  padding: "3px 10px",
-                  borderRadius: "var(--radius-pill)",
-                  backgroundColor: "var(--color-primary-50)",
-                  color: "var(--color-primary-600)",
-                  fontSize: "0.75rem",
-                  fontWeight: 700,
-                  border: "1px solid var(--color-border)",
-                }}
-              >
-                TRJT 2A
-              </span>
             </div>
-            <p style={{ fontSize: "0.95rem", color: "var(--color-text-secondary)", lineHeight: 1.6, marginBottom: "12px" }}>
+            <p style={{ fontSize: "0.98rem", color: "var(--color-text-secondary)", lineHeight: 1.65, marginBottom: "16px" }}>
               Network &amp; Technology Enthusiast yang aktif mendalami konfigurasi perangkat jaringan Cisco &amp; MikroTik, analisis pengalamatan IPv4/IPv6, serta pembuatan alat bantu utilitas teknis berbasis web yang presisi.
             </p>
-            <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", fontSize: "0.84rem", color: "var(--color-text-muted)" }}>
+            <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", fontSize: "0.86rem", color: "var(--color-text-muted)" }}>
               <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                <GraduationCap size={15} color="var(--color-primary-500)" /> Teknik Telekomunikasi &amp; Jaringan
+                <GraduationCap size={16} color="var(--color-primary-500)" /> Teknik Telekomunikasi &amp; Jaringan
               </span>
               <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                <MapPin size={15} color="var(--color-primary-500)" /> Padang, Indonesia
+                <MapPin size={16} color="var(--color-primary-500)" /> Padang, Indonesia
               </span>
             </div>
           </div>

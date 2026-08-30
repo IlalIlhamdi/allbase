@@ -3,8 +3,8 @@
   --color-primary-navy: #0F3D91;
   --color-primary-blue: #2F80ED;
   --color-primary-light: #DCEEFF;
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dceeff;
+  --color-primary-50: rgba(47, 128, 237, 0.08);
+  --color-primary-100: rgba(47, 128, 237, 0.14);
   --color-primary-200: #bfdbfe;
   --color-primary-300: #93c5fd;
   --color-primary-400: #60a5fa;
@@ -14,48 +14,53 @@
   --color-primary-800: #0F3D91;
   --color-primary-900: #0a2b66;
 
-  /* Neutrals & Surfaces */
+  /* Neutrals & Glass Surfaces */
   --color-white: #ffffff;
   --color-light-gray: #EEF3F8;
   --color-gray-text: #4B5563;
-  --color-background: #f7faff;
-  --color-surface: #ffffff;
-  --color-surface-soft: #EEF3F8;
-  --color-surface-secondary: #f8fafc;
+  --color-background: #f4f8fc;
+
+  /* Glassmorphism Surface Tokens */
+  --color-surface: rgba(255, 255, 255, 0.76);
+  --color-surface-solid: #ffffff;
+  --color-surface-soft: rgba(238, 243, 248, 0.65);
+  --color-surface-secondary: rgba(248, 250, 252, 0.8);
+  --glass-blur: blur(16px) saturate(180%);
+  --glass-border: rgba(255, 255, 255, 0.65);
 
   /* Typography Colors */
   --color-text-primary: #0f1d3a;
-  --color-text-secondary: #4B5563;
-  --color-text-muted: #6b7280;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
 
   /* Borders */
-  --color-border: #dbe5f1;
-  --color-border-strong: #bfdbfe;
+  --color-border: rgba(203, 213, 225, 0.65);
+  --color-border-strong: rgba(47, 128, 237, 0.35);
 
   /* Status Colors */
   --color-success: #16a34a;
-  --color-success-soft: #dcfce7;
+  --color-success-soft: rgba(22, 163, 74, 0.12);
   --color-warning: #f59e0b;
-  --color-warning-soft: #fef3c7;
+  --color-warning-soft: rgba(245, 158, 11, 0.12);
   --color-danger: #dc2626;
-  --color-danger-soft: #fee2e2;
+  --color-danger-soft: rgba(220, 38, 38, 0.12);
   --color-info: #2F80ED;
-  --color-info-soft: #DCEEFF;
+  --color-info-soft: rgba(47, 128, 237, 0.12);
 
   /* Spacing & Radii */
-  --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 26px;
   --radius-pill: 9999px;
 
   /* Elevation Shadows */
   --shadow-xs: 0 1px 3px rgba(15, 61, 145, 0.04);
-  --shadow-sm: 0 4px 12px rgba(15, 61, 145, 0.05);
-  --shadow-md: 0 10px 25px -3px rgba(15, 61, 145, 0.08), 0 4px 6px -2px rgba(15, 61, 145, 0.04);
-  --shadow-lg: 0 20px 40px -4px rgba(15, 61, 145, 0.12);
-  --shadow-glow: 0 0 20px rgba(47, 128, 237, 0.25);
+  --shadow-sm: 0 6px 20px rgba(15, 61, 145, 0.06);
+  --shadow-md: 0 12px 32px rgba(15, 61, 145, 0.09);
+  --shadow-lg: 0 20px 48px rgba(15, 61, 145, 0.13);
+  --shadow-glow: 0 0 24px rgba(47, 128, 237, 0.25);
 
   /* Layout */
   --container-width: 1200px;
@@ -76,23 +81,25 @@
 }
 
 [data-theme="dark"] {
-  --color-background: #091224;
-  --color-surface: #0f1c36;
-  --color-surface-soft: #16284a;
-  --color-surface-secondary: #12213f;
+  --color-background: #070d1a;
+  --color-surface: rgba(13, 23, 44, 0.72);
+  --color-surface-solid: #0d172c;
+  --color-surface-soft: rgba(20, 35, 66, 0.6);
+  --color-surface-secondary: rgba(15, 27, 52, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
 
   --color-text-primary: #f8fbff;
-  --color-text-secondary: #a3b8d4;
-  --color-text-muted: #748aa8;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
 
-  --color-border: #1e355c;
-  --color-border-strong: #2c4c80;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(96, 165, 250, 0.35);
 
-  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.2);
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 10px 25px -3px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 20px 40px -4px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 24px rgba(47, 128, 237, 0.35);
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 16px 40px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 30px rgba(47, 128, 237, 0.35);
 
   --color-success-soft: rgba(22, 163, 74, 0.2);
   --color-warning-soft: rgba(245, 158, 11, 0.2);

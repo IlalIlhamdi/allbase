@@ -3,17 +3,19 @@
 import { useState } from "react";
 import { projectsData } from "@/data/projects";
 import ProjectCard from "@/components/cards/ProjectCard";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
+import styles from "./Projects.module.css";
 
-const categories = ["all", "Networking", "Web Development", "Pendidikan", "Personal"];
+const categories = ["all", "Networking", "Web Development", "Pendidikan", "Personal"] as const;
 
 export default function Projects() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredProjects = projectsData.filter((project) => {
     const matchesCategory =
-      selectedCategory === "all" || project.category.toLowerCase() === selectedCategory.toLowerCase();
+      selectedCategory === "all" ||
+      project.category.toLowerCase() === selectedCategory.toLowerCase();
     const q = searchQuery.toLowerCase().trim();
     const matchesSearch =
       !q ||
@@ -22,6 +24,13 @@ export default function Projects() {
       project.tags.some((tag) => tag.toLowerCase().includes(q));
     return matchesCategory && matchesSearch;
   });
+
+  const getCategoryCount = (cat: string) => {
+    if (cat === "all") return projectsData.length;
+    return projectsData.filter(
+      (p) => p.category.toLowerCase() === cat.toLowerCase()
+    ).length;
+  };
 
   return (
     <section id="projects" className="section" aria-labelledby="projects-title">
@@ -39,76 +48,64 @@ export default function Projects() {
         </div>
 
         {/* Toolbar Filter & Search */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginBottom: "36px" }}>
-          <div
-            style={{
-              position: "relative",
-              maxWidth: "500px",
-              marginInline: "auto",
-              width: "100%",
-            }}
-          >
-            <Search
-              size={18}
-              style={{
-                position: "absolute",
-                left: "14px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                color: "var(--color-text-muted)",
-              }}
-            />
+        <div className={styles.toolbar}>
+          {/* Search Input Bar */}
+          <div className={styles.searchWrapper}>
+            <Search size={18} className={styles.searchIcon} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari nama proyek, deskripsi, atau tag..."
-              style={{
-                width: "100%",
-                padding: "12px 16px 12px 42px",
-                borderRadius: "var(--radius-sm)",
-                border: "1px solid var(--color-border)",
-                backgroundColor: "var(--color-surface)",
-                fontSize: "1rem",
-                color: "var(--color-text-primary)",
-              }}
+              className={styles.searchInput}
+              aria-label="Cari proyek"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className={styles.clearSearchBtn}
+                aria-label="Hapus pencarian"
+                title="Hapus pencarian"
+              >
+                <X size={14} />
+              </button>
+            )}
           </div>
 
-          <div
-            className="filterScroll"
-            style={{
-              justifyContent: "center",
-              flexWrap: "wrap",
-            }}
-            role="tablist"
-            aria-label="Kategori Proyek"
-          >
-            {categories.map((cat) => {
-              const isActive = selectedCategory === cat;
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  aria-pressed={isActive}
-                  style={{
-                    padding: "8px 18px",
-                    minHeight: "44px",
-                    borderRadius: "var(--radius-pill)",
-                    fontSize: "0.88rem",
-                    fontWeight: 600,
-                    border: "1px solid var(--color-border)",
-                    backgroundColor: isActive ? "var(--color-primary-600)" : "var(--color-surface)",
-                    color: isActive ? "#ffffff" : "var(--color-text-primary)",
-                    transition: "all var(--transition-fast)",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {cat === "all" ? "Semua Kategori" : cat}
-                </button>
-              );
-            })}
+          {/* Clean Category Filter Pills */}
+          <div className={styles.filterBarWrapper}>
+            <div
+              className={styles.filterBar}
+              role="tablist"
+              aria-label="Kategori Proyek"
+            >
+              {categories.map((cat) => {
+                const isActive = selectedCategory === cat;
+                const count = getCategoryCount(cat);
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat)}
+                    aria-pressed={isActive}
+                    className={`${styles.filterPill} ${
+                      isActive ? styles.filterPillActive : ""
+                    }`}
+                  >
+                    <span>{cat === "all" ? "Semua Kategori" : cat}</span>
+                    <span className={styles.filterCount}>{count}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
+
+          {searchQuery && (
+            <p className={styles.resultCount}>
+              Menampilkan {filteredProjects.length} hasil untuk &quot;{searchQuery}&quot;
+            </p>
+          )}
         </div>
 
         {/* Projects Grid */}

@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { Project } from "@/types/project";
-import { ExternalLink, GitBranch, Layers, CheckSquare, Calendar, Heart, BarChart3 } from "lucide-react";
+import { ExternalLink, GitBranch, Layers, CheckSquare, Calendar, Handshake, BarChart3 } from "lucide-react";
 
 const iconMap: Record<string, React.ReactNode> = {
   layers: <Layers size={20} />,
   "check-square": <CheckSquare size={20} />,
   calendar: <Calendar size={20} />,
-  heart: <Heart size={20} />,
+  handshake: <Handshake size={20} />,
+  heart: <Handshake size={20} />,
   "bar-chart-3": <BarChart3 size={20} />,
 };
 
@@ -21,6 +22,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     <article
       style={{
         backgroundColor: "var(--color-surface)",
+        backdropFilter: "var(--glass-blur)",
+        WebkitBackdropFilter: "var(--glass-blur)",
         border: "1px solid var(--color-border)",
         borderRadius: "var(--radius-md)",
         padding: "clamp(18px, 4vw, 24px)",
@@ -31,7 +34,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         transition: "transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal)",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
+      <div>
         <div
           style={{
             width: "44px",
@@ -46,18 +49,6 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         >
           {iconMap[project.icon] || <Layers size={20} />}
         </div>
-        <span
-          style={{
-            padding: "4px 10px",
-            borderRadius: "var(--radius-pill)",
-            fontSize: "0.75rem",
-            fontWeight: 600,
-            backgroundColor: project.status === "completed" ? "var(--color-success-soft)" : "var(--color-warning-soft)",
-            color: project.status === "completed" ? "var(--color-success)" : "var(--color-warning)",
-          }}
-        >
-          {project.status === "completed" ? "Selesai" : "Pengembangan"}
-        </span>
       </div>
 
       <div>

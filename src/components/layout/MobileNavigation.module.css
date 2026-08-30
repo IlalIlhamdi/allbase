@@ -1,8 +1,8 @@
 .mobileMenuOverlay {
   position: fixed;
-  inset: var(--mobile-header-height, 86px) 0 0;
+  inset: var(--header-height, 68px) 0 0;
   z-index: 1100;
-  background: rgba(1, 10, 28, 0.65);
+  background: rgba(2, 6, 23, 0.6);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   opacity: 0;
@@ -21,30 +21,22 @@
 
 .mobileMenu {
   position: fixed;
-  top: var(--mobile-header-height, 86px);
+  top: var(--header-height, 68px);
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 1200;
 
-  display: flex;
-  flex-direction: column;
-
   width: 100%;
-  height: calc(100dvh - var(--mobile-header-height, 86px));
-  max-height: calc(100dvh - var(--mobile-header-height, 86px));
-
-  padding:
-    20px
-    max(20px, env(safe-area-inset-right))
-    max(24px, calc(env(safe-area-inset-bottom) + 16px))
-    max(20px, env(safe-area-inset-left));
-
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  height: calc(100dvh - var(--header-height, 68px));
+  max-height: calc(100dvh - var(--header-height, 68px));
 
   background: var(--color-surface);
   border-top: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xl);
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
 
   opacity: 0;
   visibility: hidden;
@@ -58,7 +50,8 @@
 }
 
 [data-theme="dark"] .mobileMenu {
-  background: var(--color-surface);
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
 }
 
 .mobileMenuOpen {
@@ -68,34 +61,77 @@
   transform: translateY(0);
 }
 
+.mobileMenuInner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 500px;
+  margin: 0 auto;
+  padding:
+    16px
+    max(16px, env(safe-area-inset-right))
+    max(24px, calc(env(safe-area-inset-bottom) + 16px))
+    max(16px, env(safe-area-inset-left));
+}
+
+/* Quick Search Trigger */
 .mobileSearchTrigger {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
-  min-height: 48px;
-  padding: 10px 16px;
+  min-height: 44px;
+  padding: 8px 14px;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   background-color: var(--color-surface-soft);
   color: var(--color-text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
-  margin-bottom: 12px;
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
-.mobileSearchTrigger:hover {
+.mobileSearchTrigger:hover,
+.mobileSearchTrigger:active {
   border-color: var(--color-primary-500);
   background-color: var(--color-surface);
   color: var(--color-text-primary);
 }
 
+.searchIcon {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.searchPlaceholder {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.searchKbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  font-size: 0.72rem;
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  border-radius: 4px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+/* Navigation Links List */
 .navList {
   list-style: none;
-  display: grid;
-  gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -103,6 +139,21 @@
 
 .navItem {
   width: 100%;
+}
+
+.mobileNavLink {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .navIcon {
@@ -115,6 +166,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 [data-theme="dark"] .navIcon {
@@ -122,96 +174,19 @@
   color: #60a5fa;
 }
 
-.mobileNavLink {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-  min-height: 52px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 650;
-  color: var(--color-text-primary);
-  transition: background-color var(--transition-fast), color var(--transition-fast);
+.navLabel {
+  flex: 1;
+  text-align: left;
 }
 
 .mobileNavLink:hover,
-.mobileNavLink:focus-visible {
+.mobileNavLink:active {
   background-color: var(--color-surface-soft);
   color: var(--color-primary-600);
 }
 
 [data-theme="dark"] .mobileNavLink:hover,
-[data-theme="dark"] .mobileNavLink:focus-visible {
+[data-theme="dark"] .mobileNavLink:active {
   background-color: var(--color-surface-soft);
   color: var(--color-primary-400);
-}
-
-.mobileQuickActions {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  width: 100%;
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid var(--color-border);
-}
-
-.mobileQuickAction {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  min-height: 50px;
-  padding: 11px 16px;
-  border-radius: 13px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  text-decoration: none;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
-}
-
-.btnLihatProyek {
-  background-color: var(--color-primary-600);
-  color: #ffffff;
-  border: 1px solid var(--color-primary-600);
-}
-
-.btnLihatProyek:hover {
-  background-color: var(--color-primary-700);
-  border-color: var(--color-primary-700);
-}
-
-.btnBukaTools {
-  background-color: var(--color-surface-soft);
-  border: 1px solid var(--color-primary-600);
-  color: var(--color-primary-600);
-}
-
-[data-theme="dark"] .btnBukaTools {
-  background-color: rgba(37, 99, 235, 0.15);
-  color: var(--color-primary-300);
-  border-color: var(--color-primary-500);
-}
-
-.btnBukaTools:hover {
-  background-color: rgba(37, 99, 235, 0.22);
-}
-
-.btnHubungiSaya {
-  background-color: rgba(37, 99, 235, 0.08);
-  border: 1px solid var(--color-primary-600);
-  color: var(--color-primary-600);
-}
-
-[data-theme="dark"] .btnHubungiSaya {
-  background-color: rgba(37, 99, 235, 0.12);
-  color: #ffffff;
-  border-color: var(--color-primary-500);
-}
-
-.btnHubungiSaya:hover {
-  background-color: rgba(37, 99, 235, 0.22);
 }

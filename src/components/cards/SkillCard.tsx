@@ -31,6 +31,8 @@ export default function SkillCard({ category }: SkillCardProps) {
     <article
       style={{
         backgroundColor: "var(--color-surface)",
+        backdropFilter: "var(--glass-blur)",
+        WebkitBackdropFilter: "var(--glass-blur)",
         border: "1px solid var(--color-border)",
         borderRadius: "var(--radius-md)",
         padding: "24px",
