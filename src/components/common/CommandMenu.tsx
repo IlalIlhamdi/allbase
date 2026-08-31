@@ -307,7 +307,7 @@ export default function CommandMenu({ isOpen, onClose }: CommandMenuProps) {
             className={styles.searchInput}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Cari halaman, tools, proyek, sertifikasi, atau aksi..."
+            placeholder="Cari halaman, tools, atau proyek..."
             aria-label="Ketik untuk mencari"
           />
           {query && (
