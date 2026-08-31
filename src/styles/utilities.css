@@ -1,20 +1,8 @@
 .container {
-  width: min(100% - 32px, var(--container-width));
+  width: min(100% - clamp(40px, 8vw, 64px), var(--container-width));
   margin-inline: auto;
   padding-left: max(0px, env(safe-area-inset-left));
   padding-right: max(0px, env(safe-area-inset-right));
-}
-
-@media (max-width: 480px) {
-  .container {
-    width: min(100% - 24px, var(--container-width));
-  }
-}
-
-@media (max-width: 340px) {
-  .container {
-    width: min(100% - 20px, var(--container-width));
-  }
 }
 
 .section {

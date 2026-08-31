@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import LoadingScreen from "@/components/common/LoadingScreen";
 import { constructMetadata } from "@/lib/metadata";
 import "./globals.css";
 
@@ -33,10 +34,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${inter.variable} ${outfit.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang="id"
+      data-theme="light"
+      suppressHydrationWarning
+      className={`${inter.variable} ${outfit.variable} ${jetbrainsMono.variable}`}
+    >
       <body>
         <ThemeProvider>
           <ToastProvider>
+            <LoadingScreen />
             <a href="#main-content" className="skip-link">
               Lewati ke konten utama
             </a>

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { GitBranch, MessageCircle, Mail, Radio, Cpu } from "lucide-react";
+import { GitBranch, MessageCircle, Mail } from "lucide-react";
 import { socialLinks } from "@/data/social-links";
 import styles from "./Hero.module.css";
 
@@ -30,18 +30,6 @@ export default function Hero() {
             <p className={styles.description}>
               ALLBASE adalah pusat portofolio, proyek, dan berbagai tool yang saya bangun untuk pembelajaran jaringan telekomunikasi, teknologi, dan pengembangan aplikasi web modern.
             </p>
-
-            {/* Symmetrical Feature Chips */}
-            <div className={styles.featureChips}>
-              <div className={styles.chip}>
-                <Radio size={14} className={styles.chipIcon} />
-                <span>MikroTik &amp; Cisco</span>
-              </div>
-              <div className={styles.chip}>
-                <Cpu size={14} className={styles.chipIcon} />
-                <span>Next.js &amp; TypeScript</span>
-              </div>
-            </div>
           </div>
 
           {/* Right Column: Visual Profile Frame */}
@@ -59,12 +47,6 @@ export default function Hero() {
                     objectPosition: "center 35%",
                   }}
                 />
-
-                {/* Floating Status Badge */}
-                <div className={styles.floatingStatus}>
-                  <span className={styles.statusDot} />
-                  <span>Online &amp; Active</span>
-                </div>
 
                 <div className={styles.profileOverlay}>
                   <h3 className={styles.profileName}>Ilal Ilhamdi</h3>

@@ -9,8 +9,8 @@
   border-bottom: 1px solid var(--color-border);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   transition: background-color var(--transition-normal), border-color var(--transition-normal);
-  padding-left: max(16px, env(safe-area-inset-left));
-  padding-right: max(16px, env(safe-area-inset-right));
+  padding-left: max(0px, env(safe-area-inset-left));
+  padding-right: max(0px, env(safe-area-inset-right));
 }
 
 [data-theme="dark"] .header {

@@ -178,13 +178,15 @@
 /* Hero Heading - Balanced Precision */
 .title {
   font-family: var(--font-heading, system-ui, sans-serif);
-  font-size: clamp(2.1rem, 5.5vw, 3.8rem);
-  line-height: 1.12;
+  font-size: clamp(2rem, 5.4vw, 3.8rem);
+  line-height: 1.14;
   letter-spacing: -0.035em;
   text-wrap: balance;
   font-weight: 850;
   color: var(--color-text-primary);
   max-width: 24ch;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .titleHighlight {
@@ -209,43 +211,7 @@
   max-width: 54ch;
 }
 
-/* Symmetrical Feature Chips Row */
-.featureChips {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding-top: 4px;
-}
 
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--color-text-secondary);
-  background-color: var(--color-surface);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-xs);
-  transition: all var(--transition-fast);
-}
-
-.chip:hover {
-  border-color: var(--color-primary-500);
-  color: var(--color-primary-600);
-  background-color: var(--color-surface-soft);
-  transform: translateY(-1px);
-}
-
-.chipIcon {
-  color: var(--color-primary-500);
-  flex-shrink: 0;
-}
 
 /* Profile Visual Frame */
 .profileVisual {
@@ -290,34 +256,7 @@
   box-shadow: 0 24px 52px rgba(0, 0, 0, 0.16);
 }
 
-/* Floating Status Pill */
-.floatingStatus {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 5px 12px;
-  border-radius: var(--radius-pill);
-  background-color: rgba(7, 19, 38, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  font-size: 0.76rem;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  z-index: 2;
-}
 
-.statusDot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: #10b981;
-  box-shadow: 0 0 8px #10b981;
-}
 
 .profileOverlay {
   position: absolute;

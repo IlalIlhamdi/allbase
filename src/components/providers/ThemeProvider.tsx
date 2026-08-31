@@ -17,7 +17,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem("allbase-theme") as Theme | null;
-    const initialTheme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const initialTheme: Theme = saved === "dark" ? "dark" : "light";
     document.documentElement.setAttribute("data-theme", initialTheme);
     requestAnimationFrame(() => {
       setTheme(initialTheme);
