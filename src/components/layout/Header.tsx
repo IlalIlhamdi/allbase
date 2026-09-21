@@ -32,17 +32,18 @@ export default function Header() {
   return (
     <>
       <header className={styles.header}>
-        <div className={`container ${styles.inner}`}>
+        <div className={styles.inner}>
+          {/* Sebelah Kiri: Logo & Nama ALLBASE HUB */}
           <Link href="/" className={styles.brand} aria-label="ALLBASE Hub Beranda">
             <div className={styles.brandIcon}>
-              <Layers size={20} />
+              <Layers size={18} />
             </div>
             <div className={styles.brandName}>
               ALLBASE <span>HUB</span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation (Preserved semantically, hidden in capsule mode) */}
           <nav className={styles.nav} aria-label="Navigasi Utama">
             {mainNavItems.map((item) => {
               const isActive =
@@ -62,53 +63,41 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Header Controls */}
+          {/* Sebelah Kanan: 3 Tombol Kontrol (Search, Theme, Hamburger) */}
           <div className={styles.controls}>
-            {/* Desktop Quick Search Trigger */}
+            {/* 1. Tombol Search */}
             <button
               type="button"
-              className={styles.searchTriggerBtn}
+              className={styles.controlBtn}
               onClick={() => setIsSearchOpen(true)}
-              aria-label="Cari di ALLBASE (Tekan Ctrl+K)"
+              aria-label="Cari di ALLBASE (Ctrl+K)"
               title="Pencarian Global (Ctrl+K)"
             >
-              <Search size={15} className={styles.searchTriggerIcon} />
-              <span className={styles.searchTriggerText}>Cari...</span>
-              <kbd className={styles.searchKbd}>⌘K</kbd>
+              <Search size={17} />
             </button>
 
-            {/* Mobile Search Icon Button */}
+            {/* 2. Tombol Dark/Light Mode */}
             <button
               type="button"
-              className={`${styles.iconBtn} ${styles.mobileSearchBtn}`}
-              onClick={() => setIsSearchOpen(true)}
-              aria-label="Buka Pencarian"
-              title="Cari"
-            >
-              <Search size={18} />
-            </button>
-
-            {/* Theme Switcher Button */}
-            <button
-              type="button"
-              className={styles.iconBtn}
+              className={styles.controlBtn}
               onClick={toggleTheme}
               title={`Ganti ke Mode ${theme === "dark" ? "Terang" : "Gelap"}`}
               aria-label="Ganti Mode Terang atau Gelap"
             >
-              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
             </button>
 
-            {/* Hamburger Button for Mobile */}
+            {/* 3. Tombol Hamburger Menu (Paling Kanan) */}
             <button
               type="button"
-              className={`${styles.iconBtn} ${styles.menuBtn}`}
+              className={`${styles.controlBtn} ${styles.menuBtn} ${isMenuOpen ? styles.menuBtnActive : ""}`}
               aria-label={isMenuOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-navigation"
-              onClick={() => setIsMenuOpen((previous) => !previous)}
+              title={isMenuOpen ? "Tutup Menu Navigasi" : "Buka Menu Navigasi"}
+              onClick={() => setIsMenuOpen((prev) => !prev)}
             >
-              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>

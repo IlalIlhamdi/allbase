@@ -1,10 +1,10 @@
 .mobileMenuOverlay {
   position: fixed;
-  inset: var(--header-height, 68px) 0 0;
+  inset: 0;
   z-index: 1100;
-  background: rgba(2, 6, 23, 0.6);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(2, 6, 23, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -21,20 +21,22 @@
 
 .mobileMenu {
   position: fixed;
-  top: var(--header-height, 68px);
+  top: calc(var(--header-height, 72px) + 8px);
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 1200;
 
   width: 100%;
-  height: calc(100dvh - var(--header-height, 68px));
-  max-height: calc(100dvh - var(--header-height, 68px));
+  height: calc(100dvh - var(--header-height, 72px) - 8px);
+  max-height: calc(100dvh - var(--header-height, 72px) - 8px);
 
   background-color: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--color-border);
+  border-top-left-radius: var(--radius-lg, 20px);
+  border-top-right-radius: var(--radius-lg, 20px);
   box-shadow: var(--shadow-xl);
 
   overflow-y: auto;
@@ -192,3 +194,4 @@
   background-color: var(--color-surface-soft);
   color: var(--color-primary-400);
 }
+

@@ -1,7 +1,7 @@
 .heroSection {
-  padding-top: clamp(32px, 6vw, 64px);
+  padding-top: clamp(96px, 14vw, 130px);
   padding-bottom: clamp(48px, 8vw, 84px);
-  scroll-margin-top: calc(var(--header-height, 68px) + 16px);
+  scroll-margin-top: calc(var(--header-height, 72px) + 24px);
   position: relative;
   overflow: hidden;
 }
@@ -210,6 +210,7 @@
   color: var(--color-text-secondary);
   max-width: 54ch;
 }
+
 
 
 
