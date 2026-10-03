@@ -11,8 +11,12 @@ import {
   Award,
   Mail,
   Search,
+  Sun,
+  Moon,
+  ChevronRight,
 } from "lucide-react";
 import { mainNavItems } from "@/data/navigation";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import styles from "./MobileNavigation.module.css";
 
 interface MobileNavigationProps {
@@ -36,14 +40,13 @@ export default function MobileNavigation({
   onClose,
   onOpenSearch,
 }: MobileNavigationProps) {
+  const { theme, toggleTheme } = useTheme();
+
   useEffect(() => {
     if (!isOpen) return;
 
     const previousOverflow = document.body.style.overflow;
-    const previousTouchAction = document.body.style.touchAction;
-
     document.body.style.overflow = "hidden";
-    document.body.style.touchAction = "none";
 
     const closeWithEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -55,14 +58,13 @@ export default function MobileNavigation({
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.body.style.touchAction = previousTouchAction;
       window.removeEventListener("keydown", closeWithEscape);
     };
   }, [isOpen, onClose]);
 
   return (
     <>
-      {/* Mobile Menu Overlay */}
+      {/* Subtle Backdrop Overlay */}
       <div
         className={`${styles.mobileMenuOverlay} ${
           isOpen ? styles.mobileMenuOverlayOpen : ""
@@ -71,33 +73,17 @@ export default function MobileNavigation({
         aria-hidden="true"
       />
 
-      {/* Mobile Navigation Drawer */}
+      {/* Clean Floating Panel (Dropdown directly under navbar) */}
       <nav
         id="mobile-navigation"
-        className={`${styles.mobileMenu} ${
-          isOpen ? styles.mobileMenuOpen : ""
+        className={`${styles.mobilePanel} ${
+          isOpen ? styles.mobilePanelOpen : ""
         }`}
-        aria-label="Navigasi Mobile"
+        aria-label="Navigasi Menu Mobile"
         aria-hidden={!isOpen}
       >
-        <div className={styles.mobileMenuInner}>
-          {/* Quick Search Trigger */}
-          {onOpenSearch && (
-            <button
-              type="button"
-              className={styles.mobileSearchTrigger}
-              onClick={onOpenSearch}
-              aria-label="Buka Pencarian Global"
-            >
-              <Search size={16} className={styles.searchIcon} />
-              <span className={styles.searchPlaceholder}>
-                Cari halaman, tools, proyek...
-              </span>
-              <kbd className={styles.searchKbd}>⌘K</kbd>
-            </button>
-          )}
-
-          {/* Navigation Links */}
+        <div className={styles.panelContent}>
+          {/* Main Navigation Links */}
           <ul className={styles.navList}>
             {mainNavItems.map((item) => (
               <li key={item.href} className={styles.navItem}>
@@ -110,10 +96,56 @@ export default function MobileNavigation({
                     {item.icon && iconMap[item.icon]}
                   </div>
                   <span className={styles.navLabel}>{item.label}</span>
+                  <ChevronRight size={15} className={styles.navArrow} />
                 </Link>
               </li>
             ))}
           </ul>
+
+          <div className={styles.divider} />
+
+          {/* Quick Actions: Search & Theme Toggle */}
+          <div className={styles.actionsContainer}>
+            {/* 1. Global Search Trigger */}
+            {onOpenSearch && (
+              <button
+                type="button"
+                className={styles.actionBtn}
+                onClick={onOpenSearch}
+                aria-label="Buka Pencarian Global (Ctrl+K)"
+              >
+                <div className={styles.actionIcon}>
+                  <Search size={16} />
+                </div>
+                <div className={styles.actionText}>
+                  <span className={styles.actionTitle}>Cari di ALLBASE</span>
+                  <span className={styles.actionSubtitle}>Halaman, tools, &amp; proyek</span>
+                </div>
+                <kbd className={styles.kbdBadge}>⌘K</kbd>
+              </button>
+            )}
+
+            {/* 2. Dark / Light Mode Switcher */}
+            <button
+              type="button"
+              className={styles.actionBtn}
+              onClick={toggleTheme}
+              aria-label={`Ganti ke mode ${theme === "dark" ? "terang" : "gelap"}`}
+            >
+              <div className={styles.actionIcon}>
+                {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+              </div>
+              <div className={styles.actionText}>
+                <span className={styles.actionTitle}>Tampilan</span>
+                <span className={styles.actionSubtitle}>
+                  {theme === "dark" ? "Mode Gelap aktif" : "Mode Terang aktif"}
+                </span>
+              </div>
+              <span className={styles.themePill}>
+                {theme === "dark" ? "Gelap" : "Terang"}
+              </span>
+            </button>
+          </div>
         </div>
       </nav>
     </>

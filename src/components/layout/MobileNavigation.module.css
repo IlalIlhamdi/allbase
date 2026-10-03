@@ -1,16 +1,20 @@
+/* ==========================================================================
+   Mobile Navigation Floating Panel Dropdown
+   ========================================================================== */
+
 .mobileMenuOverlay {
   position: fixed;
   inset: 0;
-  z-index: 1100;
-  background: rgba(2, 6, 23, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  z-index: 1200;
+  background: rgba(2, 6, 23, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition:
-    opacity 180ms ease,
-    visibility 180ms ease;
+    opacity 200ms ease,
+    visibility 200ms ease;
 }
 
 .mobileMenuOverlayOpen {
@@ -19,26 +23,26 @@
   pointer-events: auto;
 }
 
-.mobileMenu {
+.mobilePanel {
   position: fixed;
-  top: calc(var(--header-height, 72px) + 8px);
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1200;
+  top: calc(12px + 58px + 8px);
+  left: max(16px, env(safe-area-inset-left));
+  right: max(16px, env(safe-area-inset-right));
+  margin: 0 auto;
+  max-width: 480px;
+  z-index: 1250;
 
-  width: 100%;
-  height: calc(100dvh - var(--header-height, 72px) - 8px);
-  max-height: calc(100dvh - var(--header-height, 72px) - 8px);
+  background-color: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1.5px solid rgba(203, 213, 225, 0.9);
+  border-radius: 20px;
+  box-shadow:
+    0 18px 44px rgba(15, 61, 145, 0.14),
+    0 4px 14px rgba(0, 0, 0, 0.05),
+    0 1px 0 rgba(255, 255, 255, 0.9) inset;
 
-  background-color: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--color-border);
-  border-top-left-radius: var(--radius-lg, 20px);
-  border-top-right-radius: var(--radius-lg, 20px);
-  box-shadow: var(--shadow-xl);
-
+  max-height: calc(100dvh - 96px);
   overflow-y: auto;
   overscroll-behavior: contain;
 
@@ -48,94 +52,41 @@
   transform: translateY(-8px);
 
   transition:
-    opacity 180ms ease,
-    visibility 180ms ease,
-    transform 180ms ease;
+    opacity 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 200ms ease;
 }
 
-[data-theme="dark"] .mobileMenu {
-  background-color: rgba(11, 20, 38, 0.98);
-  border-color: var(--color-border);
+[data-theme="dark"] .mobilePanel {
+  background-color: rgba(11, 20, 38, 0.96);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 22px 52px rgba(0, 0, 0, 0.65),
+    0 6px 18px rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
 }
 
-.mobileMenuOpen {
+.mobilePanelOpen {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
 }
 
-.mobileMenuInner {
+.panelContent {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 500px;
-  margin: 0 auto;
-  padding:
-    16px
-    max(16px, env(safe-area-inset-right))
-    max(24px, calc(env(safe-area-inset-bottom) + 16px))
-    max(16px, env(safe-area-inset-left));
+  padding: 10px;
 }
 
-/* Quick Search Trigger */
-.mobileSearchTrigger {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  min-height: 44px;
-  padding: 8px 14px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background-color: var(--color-surface-soft);
-  color: var(--color-text-secondary);
-  font-size: 0.88rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.mobileSearchTrigger:hover,
-.mobileSearchTrigger:active {
-  border-color: var(--color-primary-500);
-  background-color: var(--color-surface);
-  color: var(--color-text-primary);
-}
-
-.searchIcon {
-  color: var(--color-text-muted);
-  flex-shrink: 0;
-}
-
-.searchPlaceholder {
-  flex: 1;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.searchKbd {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px 6px;
-  font-size: 0.72rem;
-  font-family: var(--font-mono, monospace);
-  font-weight: 600;
-  border-radius: 4px;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-muted);
-}
-
-/* Navigation Links List */
+/* --------------------------------------------------------------------------
+   Navigation Links List
+   -------------------------------------------------------------------------- */
 .navList {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -148,33 +99,37 @@
 .mobileNavLink {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   width: 100%;
-  min-height: 48px;
-  padding: 8px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 0.95rem;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 0.92rem;
   font-weight: 600;
   color: var(--color-text-primary);
   text-decoration: none;
-  transition: background-color var(--transition-fast), color var(--transition-fast);
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 .navIcon {
   width: 32px;
   height: 32px;
-  border-radius: var(--radius-xs);
+  border-radius: 8px;
   background-color: var(--color-surface-soft);
   color: var(--color-primary-600);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background-color var(--transition-fast), color var(--transition-fast);
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 [data-theme="dark"] .navIcon {
-  background-color: rgba(47, 128, 237, 0.12);
+  background-color: rgba(47, 128, 237, 0.14);
   color: #60a5fa;
 }
 
@@ -183,15 +138,153 @@
   text-align: left;
 }
 
+.navArrow {
+  color: var(--color-text-muted);
+  opacity: 0.4;
+  flex-shrink: 0;
+  transition: transform 150ms ease, opacity 150ms ease;
+}
+
 .mobileNavLink:hover,
 .mobileNavLink:active {
   background-color: var(--color-surface-soft);
   color: var(--color-primary-600);
 }
 
+.mobileNavLink:hover .navArrow,
+.mobileNavLink:active .navArrow {
+  opacity: 0.8;
+  transform: translateX(2px);
+}
+
 [data-theme="dark"] .mobileNavLink:hover,
 [data-theme="dark"] .mobileNavLink:active {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #93c5fd;
+}
+
+/* --------------------------------------------------------------------------
+   Divider
+   -------------------------------------------------------------------------- */
+.divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: 8px 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Action Controls (Search & Theme)
+   -------------------------------------------------------------------------- */
+.actionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 46px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
   background-color: var(--color-surface-soft);
-  color: var(--color-primary-400);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.actionBtn:hover,
+.actionBtn:active {
+  border-color: var(--color-primary-500);
+  background-color: var(--color-surface);
+  transform: translateY(-0.5px);
+}
+
+[data-theme="dark"] .actionBtn {
+  background-color: rgba(22, 38, 70, 0.45);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .actionBtn:hover,
+[data-theme="dark"] .actionBtn:active {
+  background-color: rgba(47, 128, 237, 0.18);
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+.actionIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-primary-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .actionIcon {
+  background-color: rgba(15, 28, 54, 0.8);
+  color: #60a5fa;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.actionText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.actionTitle {
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: var(--color-text-primary);
+}
+
+.actionSubtitle {
+  font-size: 0.74rem;
+  color: var(--color-text-muted);
+}
+
+.kbdBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 7px;
+  font-size: 0.72rem;
+  font-family: var(--font-mono, monospace);
+  font-weight: 650;
+  border-radius: 6px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.themePill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  font-size: 0.74rem;
+  font-weight: 650;
+  border-radius: 9999px;
+  background-color: var(--color-primary-50);
+  color: var(--color-primary-600);
+  border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] .themePill {
+  background-color: rgba(47, 128, 237, 0.2);
+  color: #93c5fd;
+  border-color: rgba(96, 165, 250, 0.3);
 }
 

@@ -18,13 +18,8 @@ export default function Hero() {
         <div className={styles.heroGrid}>
           {/* Left Column: Hero Content */}
           <div className={styles.heroContent}>
-            <div className={styles.badge}>
-              <span className={styles.dot} />
-              <span className={styles.badgeText}>Network • Technology • Development</span>
-            </div>
-
             <h1 className={styles.title}>
-              Semua Proyek dan Tool, Dalam <span className={styles.titleHighlight}>Satu Base.</span>
+              Semua Proyek dan Tool,<span className={styles.titleBreak}> </span>Dalam <span className={styles.titleHighlight}>Satu Base.</span>
             </h1>
 
             <p className={styles.description}>
@@ -41,10 +36,10 @@ export default function Hero() {
                   alt="Ilal Ilhamdi"
                   fill
                   priority
-                  sizes="(max-width: 430px) 86vw, (max-width: 768px) 330px, 380px"
+                  sizes="(max-width: 430px) 310px, (max-width: 768px) 330px, 380px"
                   style={{
                     objectFit: "cover",
-                    objectPosition: "center 35%",
+                    objectPosition: "center 30%",
                   }}
                 />
 

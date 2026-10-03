@@ -180,69 +180,128 @@
   box-shadow: 0 2px 10px rgba(47, 128, 237, 0.4) !important;
 }
 
+.desktopOnlyControl {
+  display: flex;
+}
+
 /* --------------------------------------------------------------------------
-   Mobile Adjustments
+   Mobile Adjustments (< 768px)
    -------------------------------------------------------------------------- */
-@media (max-width: 480px) {
+@media (max-width: 767px) {
+  .desktopOnlyControl {
+    display: none !important;
+  }
+
   .header {
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-top: 12px;
+    padding-bottom: 6px;
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
   }
 
   .inner {
-    height: 52px;
-    min-height: 52px;
-    padding: 0 12px;
-    border-radius: 36px;
+    height: 58px;
+    min-height: 58px;
+    padding: 0 14px;
+    border-radius: 20px;
     gap: 8px;
+    box-shadow:
+      0 8px 24px rgba(15, 61, 145, 0.1),
+      0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  }
+
+  [data-theme="dark"] .inner {
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.55),
+      0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  }
+
+  .brand {
+    gap: 8px;
+    font-size: 14.5px;
+    font-weight: 700;
+  }
+
+  .brandIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  .brandIcon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .brandName {
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .controls {
+    gap: 0;
+  }
+
+  .controlBtn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    position: relative;
+  }
+
+  /* Ensure touch target meets 44px */
+  .controlBtn::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+  }
+
+  .controlBtn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 360px) {
+  .header {
+    padding-top: 10px;
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+
+  .inner {
+    height: 56px;
+    min-height: 56px;
+    padding: 0 12px;
+    border-radius: 18px;
   }
 
   .brand {
     gap: 7px;
-    font-size: 0.95rem;
+    font-size: 13.5px;
+  }
+
+  .brandName {
+    font-size: 13.5px;
   }
 
   .brandIcon {
-    width: 31px;
-    height: 31px;
+    width: 30px;
+    height: 30px;
   }
 
   .brandIcon svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  .controls {
-    gap: 6px;
+    width: 15px;
+    height: 15px;
   }
 
   .controlBtn {
-    width: 35px;
-    height: 35px;
-    min-width: 35px;
-    min-height: 35px;
-  }
-
-  .controlBtn svg {
-    width: 16px;
-    height: 16px;
-  }
-}
-
-@media (max-width: 350px) {
-  .brandName span {
-    display: none; /* In case of extremely tiny 320px screens */
-  }
-
-  .controls {
-    gap: 4px;
-  }
-
-  .controlBtn {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    min-height: 32px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
   }
 }

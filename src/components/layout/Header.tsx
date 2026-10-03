@@ -63,12 +63,12 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Sebelah Kanan: 3 Tombol Kontrol (Search, Theme, Hamburger) */}
+          {/* Sebelah Kanan: Kontrol (Desktop: Search, Theme, Hamburger; Mobile: Hamburger only) */}
           <div className={styles.controls}>
-            {/* 1. Tombol Search */}
+            {/* 1. Tombol Search (Desktop only) */}
             <button
               type="button"
-              className={styles.controlBtn}
+              className={`${styles.controlBtn} ${styles.desktopOnlyControl}`}
               onClick={() => setIsSearchOpen(true)}
               aria-label="Cari di ALLBASE (Ctrl+K)"
               title="Pencarian Global (Ctrl+K)"
@@ -76,10 +76,10 @@ export default function Header() {
               <Search size={17} />
             </button>
 
-            {/* 2. Tombol Dark/Light Mode */}
+            {/* 2. Tombol Dark/Light Mode (Desktop only) */}
             <button
               type="button"
-              className={styles.controlBtn}
+              className={`${styles.controlBtn} ${styles.desktopOnlyControl}`}
               onClick={toggleTheme}
               title={`Ganti ke Mode ${theme === "dark" ? "Terang" : "Gelap"}`}
               aria-label="Ganti Mode Terang atau Gelap"

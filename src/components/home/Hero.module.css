@@ -1,7 +1,7 @@
 .heroSection {
-  padding-top: clamp(96px, 14vw, 130px);
-  padding-bottom: clamp(48px, 8vw, 84px);
-  scroll-margin-top: calc(var(--header-height, 72px) + 24px);
+  padding-top: clamp(28px, 3.5vw, 44px);
+  padding-bottom: clamp(48px, 6vw, 80px);
+  scroll-margin-top: calc(var(--header-height, 72px) + 20px);
   position: relative;
   overflow: hidden;
 }
@@ -116,6 +116,11 @@
   .heroGrid {
     grid-template-columns: 1.15fr 0.85fr;
     gap: 48px;
+    align-items: start;
+  }
+
+  .heroContent {
+    padding-top: 18px; /* Optical alignment with the profile visual on desktop */
   }
 }
 
@@ -129,50 +134,9 @@
 .heroContent {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-}
-
-/* Glassmorphic Beacon Badge */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  width: fit-content;
-  max-width: 100%;
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  background-color: var(--color-surface);
-  color: var(--color-primary-600);
-  font-size: 0.84rem;
-  line-height: 1.2;
-  border: 1px solid var(--color-border);
-  font-weight: 650;
-  letter-spacing: 0.01em;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--shadow-xs);
-}
-
-[data-theme="dark"] .badge {
-  background-color: rgba(15, 28, 54, 0.7);
-  color: #60a5fa;
-  border-color: rgba(96, 165, 250, 0.25);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-}
-
-.badgeText {
-  letter-spacing: -0.01em;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: var(--color-primary-500);
-  box-shadow: 0 0 10px var(--color-primary-500);
-  display: inline-block;
-  flex-shrink: 0;
-  animation: pulseGlow 2.5s infinite ease-in-out;
+  gap: 14px;
+  align-items: flex-start;
+  text-align: left;
 }
 
 /* Hero Heading - Balanced Precision */
@@ -187,6 +151,7 @@
   max-width: 24ch;
   overflow-wrap: break-word;
   word-break: break-word;
+  margin: 0;
 }
 
 .titleHighlight {
@@ -204,11 +169,16 @@
   background-clip: text;
 }
 
+.titleBreak {
+  display: inline;
+}
+
 .description {
   font-size: clamp(0.98rem, 2.4vw, 1.12rem);
   line-height: 1.68;
   color: var(--color-text-secondary);
   max-width: 54ch;
+  margin: 0;
 }
 
 
@@ -217,7 +187,7 @@
 /* Profile Visual Frame */
 .profileVisual {
   width: min(100%, 340px);
-  margin: 8px auto 0;
+  margin: 0 auto;
 }
 
 @media (min-width: 900px) {
@@ -346,5 +316,166 @@
   50% {
     opacity: 0.45;
     transform: scale(0.85);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Adjustments (< 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  .heroSection {
+    /* Header element height is 76px (12px top + 58px inner + 6px bottom).
+       Navbar capsule pill bottom is at 70px.
+       26px padding-top places heading at Y = 76 + 26 = 102px.
+       Exact distance from navbar pill bottom to heading: 102 - 70 = 32px (target: 28px–36px) */
+    padding-top: 26px;
+    padding-bottom: 40px;
+    scroll-margin-top: 76px;
+  }
+
+  .heroGrid {
+    gap: 26px; /* Gap between description and photo (target: 24px - 28px) */
+  }
+
+  .heroContent {
+    padding-top: 0;
+    gap: 14px; /* Clean 14px gap between heading and description (target: 12px - 16px) */
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  /* Heading: 32px-36px, line-height 1.12, font-weight 750 */
+  .title {
+    font-size: clamp(32px, 8.5vw, 36px);
+    line-height: 1.12;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    margin: 0;
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .titleBreak {
+    display: block; /* Natural line break between "Semua Proyek dan Tool," & "Dalam Satu Base." */
+  }
+
+  /* Description: 14.5px, line-height 1.68, high-contrast, width 100% */
+  .description {
+    font-size: 14.5px;
+    line-height: 1.68;
+    color: #334155;
+    max-width: 100%;
+    margin: 0;
+    text-align: left;
+  }
+
+  [data-theme="dark"] .description {
+    color: #cbd5e1;
+  }
+
+  /* Profile Visual Frame: width 100%, max-width 310px, aspect-ratio 4/5 */
+  .profileVisual {
+    width: min(100%, 310px);
+    margin: 0 auto;
+  }
+
+  .profileCard {
+    border-radius: 20px;
+  }
+
+  .profileImageWrapper {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    max-height: 400px;
+    border-radius: 20px;
+    border-width: 2px;
+    border-color: var(--color-surface);
+    box-shadow: 0 10px 26px rgba(15, 61, 145, 0.08);
+  }
+
+  [data-theme="dark"] .profileImageWrapper {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+  }
+
+  .profileOverlay {
+    padding: 16px 14px 14px;
+  }
+
+  .profileName {
+    font-size: 1.15rem;
+    font-weight: 750;
+  }
+
+  .profileRole {
+    font-size: 0.8rem;
+  }
+
+  .profileSocialLinks {
+    margin-top: 14px;
+    gap: 10px;
+  }
+
+  .profileSocialLink {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 10px;
+    position: relative;
+  }
+
+  /* Ensure touch target meets 44px */
+  .profileSocialLink::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 12px;
+  }
+
+  .profileSocialLink svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 360px) {
+  .heroSection {
+    /* Header element height is 72px (10px top + 56px inner + 6px bottom).
+       Navbar capsule pill bottom is at 66px.
+       24px padding-top places heading at Y = 72 + 24 = 96px.
+       Exact distance from navbar pill bottom to heading: 96 - 66 = 30px (target: 28px–36px) */
+    padding-top: 24px;
+    padding-bottom: 32px;
+  }
+
+  .heroGrid {
+    gap: 24px;
+  }
+
+  .heroContent {
+    gap: 12px;
+  }
+
+  .title {
+    font-size: 29px;
+    line-height: 1.12;
+    margin: 0;
+  }
+
+  .description {
+    font-size: 13.5px;
+    line-height: 1.62;
+    margin: 0;
+  }
+
+  .profileVisual {
+    width: min(100%, 280px);
+    margin: 0 auto;
+  }
+
+  .profileSocialLink {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
   }
 }
