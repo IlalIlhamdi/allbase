@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Layers, Moon, Sun, Menu, X, Search } from "lucide-react";
-import { useTheme } from "@/components/providers/ThemeProvider";
+import { Mail, Menu, X } from "lucide-react";
 import { mainNavItems } from "@/data/navigation";
 import MobileNavigation from "./MobileNavigation";
 import CommandMenu from "@/components/common/CommandMenu";
@@ -12,11 +12,10 @@ import styles from "./Header.module.css";
 
 export default function Header() {
   const pathname = usePathname();
-  const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [activeHash, setActiveHash] = useState("/#hero");
 
-  // Global Ctrl+K / Cmd+K shortcut listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
@@ -29,32 +28,68 @@ export default function Header() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    if (pathname !== "/") return;
+
+    const handleScroll = () => {
+      const sections = ["hero", "about", "projects", "tools", "contact"];
+      const scrollPos = window.scrollY + 140;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const secId = sections[i];
+        if (!secId) continue;
+        const el = document.getElementById(secId);
+        if (el && el.offsetTop <= scrollPos) {
+          setActiveHash(`/#${secId}`);
+          return;
+        }
+      }
+      setActiveHash("/#hero");
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [pathname]);
+
   return (
     <>
       <header className={styles.header}>
         <div className={styles.inner}>
-          {/* Sebelah Kiri: Logo & Nama ALLBASE HUB */}
-          <Link href="/" className={styles.brand} aria-label="ALLBASE Hub Beranda">
-            <div className={styles.brandIcon}>
-              <Layers size={18} />
+          {/* Left: Brand Logo & Name */}
+          <Link
+            href="/"
+            className={styles.brand}
+            aria-label="ALLBASE HUB Beranda"
+            onClick={() => setActiveHash("/#hero")}
+          >
+            <div className={styles.brandLogoWrap}>
+              <Image
+                src="/logo.png"
+                alt="Logo ALLBASE HUB"
+                width={38}
+                height={38}
+                priority
+                className={styles.brandLogo}
+              />
             </div>
             <div className={styles.brandName}>
               ALLBASE <span>HUB</span>
             </div>
           </Link>
 
-          {/* Desktop Navigation (Preserved semantically, hidden in capsule mode) */}
+          {/* Center: Desktop Navigation */}
           <nav className={styles.nav} aria-label="Navigasi Utama">
             {mainNavItems.map((item) => {
               const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href) || (item.href.startsWith("/#") && pathname === "/");
+                pathname === "/"
+                  ? activeHash === item.href
+                  : item.href !== "/#hero" && pathname.startsWith(item.href.replace("/#", "/"));
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
+                  onClick={() => setActiveHash(item.href)}
                   className={`${styles.navLink} ${isActive ? styles.navLinkActive : ""}`}
                 >
                   {item.label}
@@ -63,41 +98,22 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Sebelah Kanan: Kontrol (Desktop: Search, Theme, Hamburger; Mobile: Hamburger only) */}
+          {/* Right: CTA Button on Desktop & Hamburger Menu on Mobile */}
           <div className={styles.controls}>
-            {/* 1. Tombol Search (Desktop only) */}
-            <button
-              type="button"
-              className={`${styles.controlBtn} ${styles.desktopOnlyControl}`}
-              onClick={() => setIsSearchOpen(true)}
-              aria-label="Cari di ALLBASE (Ctrl+K)"
-              title="Pencarian Global (Ctrl+K)"
-            >
-              <Search size={17} />
-            </button>
+            <Link href="/#contact" className={styles.ctaButton}>
+              <Mail size={16} />
+              <span>Hubungi Saya</span>
+            </Link>
 
-            {/* 2. Tombol Dark/Light Mode (Desktop only) */}
             <button
               type="button"
-              className={`${styles.controlBtn} ${styles.desktopOnlyControl}`}
-              onClick={toggleTheme}
-              title={`Ganti ke Mode ${theme === "dark" ? "Terang" : "Gelap"}`}
-              aria-label="Ganti Mode Terang atau Gelap"
-            >
-              {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
-            </button>
-
-            {/* 3. Tombol Hamburger Menu (Paling Kanan) */}
-            <button
-              type="button"
-              className={`${styles.controlBtn} ${styles.menuBtn} ${isMenuOpen ? styles.menuBtnActive : ""}`}
+              className={`${styles.menuBtn} ${isMenuOpen ? styles.menuBtnActive : ""}`}
               aria-label={isMenuOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-navigation"
-              title={isMenuOpen ? "Tutup Menu Navigasi" : "Buka Menu Navigasi"}
               onClick={() => setIsMenuOpen((prev) => !prev)}
             >
-              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+              {isMenuOpen ? <X size={19} /> : <Menu size={19} />}
             </button>
           </div>
         </div>
@@ -112,7 +128,6 @@ export default function Header() {
         />
       </header>
 
-      {/* Global Command Palette Modal */}
       <CommandMenu isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );

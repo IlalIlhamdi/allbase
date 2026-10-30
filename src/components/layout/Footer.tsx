@@ -1,84 +1,55 @@
+import Image from "next/image";
 import Link from "next/link";
-import { Layers, ArrowUp } from "lucide-react";
+import { mainNavItems } from "@/data/navigation";
+import styles from "./Footer.module.css";
 
 export default function Footer() {
   return (
-    <footer
-      style={{
-        backgroundColor: "var(--color-surface)",
-        borderTop: "1px solid var(--color-border)",
-        paddingTop: "32px",
-        paddingBottom: "max(24px, calc(env(safe-area-inset-bottom) + 16px))",
-        marginTop: "auto",
-        transition: "background-color var(--transition-normal), border-color var(--transition-normal)",
-      }}
-    >
-      <div className="container">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "16px",
-            marginBottom: "16px",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <div
-              style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "var(--radius-sm)",
-                backgroundColor: "var(--color-primary-600)",
-                color: "#ffffff",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              <Layers size={18} />
+    <footer className={styles.footer}>
+      <div className={styles.inner}>
+        {/* Left (Desktop) / Top Centered (Mobile): Brand & Tagline */}
+        <div className={styles.leftGroup}>
+          <Link href="/" className={styles.brand}>
+            <div className={styles.brandLogoWrap}>
+              <Image
+                src="/logo.png"
+                alt="Logo ALLBASE"
+                width={28}
+                height={28}
+                className={styles.brandLogo}
+              />
             </div>
-            <div style={{ fontWeight: 800, fontSize: "1.1rem" }}>
-              ALLBASE <span style={{ color: "var(--color-primary-600)" }}>HUB</span>
+            <div>
+              ALLBASE <span className={styles.brandHub}>HUB</span>
             </div>
-          </div>
-
-          <Link
-            href="#hero"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              minHeight: "44px",
-              padding: "8px 16px",
-              borderRadius: "var(--radius-sm)",
-              border: "1px solid var(--color-border)",
-              fontSize: "0.88rem",
-              fontWeight: 600,
-              color: "var(--color-text-primary)",
-            }}
-            title="Kembali ke Atas"
-          >
-            <ArrowUp size={16} /> Kembali ke Atas
           </Link>
+
+          <span className={styles.tagline}>
+            Portofolio, proyek, dan tools jaringan oleh Ilal Ilhamdi.
+          </span>
         </div>
 
-        <div
-          style={{
-            borderTop: "1px solid var(--color-border)",
-            paddingTop: "16px",
-            fontSize: "0.88rem",
-            color: "var(--color-text-secondary)",
-            display: "flex",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "8px",
-          }}
-        >
-          <div>&copy; 2026 Ilal Ilhamdi. Seluruh Hak Cipta Dilindungi.</div>
-          <div>Network &amp; Technology Enthusiast</div>
+        {/* Center: Footer Navigation (Desktop) */}
+        <nav className={styles.footerNav} aria-label="Navigasi Footer">
+          {mainNavItems.map((item, idx) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`${styles.footerLink} ${idx === 0 ? styles.footerLinkActive : ""}`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Right (Desktop) / Bottom Centered (Mobile): Copyright */}
+        <div className={styles.copyright}>
+          <span className={styles.desktopCopy}>
+            &copy; 2025 ALLBASE HUB. All rights reserved.
+          </span>
+          <span className={styles.mobileCopy}>
+            &copy; 2026 Ilal Ilhamdi
+          </span>
         </div>
       </div>
     </footer>

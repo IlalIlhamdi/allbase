@@ -16,7 +16,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("allbase-theme") as Theme | null;
+    const saved = localStorage.getItem("allbase-theme-v2") as Theme | null;
     const initialTheme: Theme = saved === "dark" ? "dark" : "light";
     document.documentElement.setAttribute("data-theme", initialTheme);
     requestAnimationFrame(() => {
@@ -28,7 +28,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const toggleTheme = () => {
     const nextTheme: Theme = theme === "light" ? "dark" : "light";
     setTheme(nextTheme);
-    localStorage.setItem("allbase-theme", nextTheme);
+    localStorage.setItem("allbase-theme-v2", nextTheme);
     document.documentElement.setAttribute("data-theme", nextTheme);
   };
 

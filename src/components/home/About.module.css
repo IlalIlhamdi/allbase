@@ -1,0 +1,328 @@
+.aboutSection {
+  padding-block: 10px;
+  scroll-margin-top: calc(var(--header-height) + 16px);
+}
+
+.mobileAbout {
+  display: none;
+}
+
+/* ==========================================================================
+   Desktop About (>= 768px)
+   ========================================================================== */
+.aboutCard {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #d6e6f7;
+  border-radius: 22px;
+  padding: clamp(22px, 3.2vw, 32px);
+  box-shadow: 0 10px 30px rgba(15, 61, 145, 0.05);
+  display: grid;
+  grid-template-columns: 1.32fr 1fr;
+  gap: clamp(24px, 3.5vw, 40px);
+  overflow: hidden;
+}
+
+[data-theme="dark"] .aboutCard {
+  background: rgba(13, 23, 44, 0.88);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-right: clamp(12px, 2vw, 24px);
+  border-right: 1px solid #e3eefb;
+}
+
+[data-theme="dark"] .leftCol {
+  border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.userBadge {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2d82f0 0%, #165ec0 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(25, 100, 200, 0.25);
+}
+
+.title {
+  font-size: clamp(1.22rem, 2.2vw, 1.45rem);
+  font-weight: 800;
+  color: #0d264c;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+[data-theme="dark"] .title {
+  color: #f8fbff;
+}
+
+.bioText {
+  font-size: 0.92rem;
+  line-height: 1.68;
+  color: #465973;
+  margin: 0 0 18px;
+  padding-left: 50px;
+}
+
+[data-theme="dark"] .bioText {
+  color: #94a3b8;
+}
+
+.bioText strong {
+  color: #0d264c;
+  font-weight: 700;
+}
+
+[data-theme="dark"] .bioText strong {
+  color: #ffffff;
+}
+
+.moreBtn {
+  margin-left: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #2d82f0 0%, #1762c6 100%);
+  color: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid #1456b0;
+  box-shadow: 0 4px 14px rgba(23, 98, 198, 0.22);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.moreBtn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+.rightCol {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 185px;
+}
+
+.interestTitle {
+  font-size: 0.98rem;
+  font-weight: 750;
+  color: #0d264c;
+  margin: 4px 0 14px;
+}
+
+[data-theme="dark"] .interestTitle {
+  color: #f8fbff;
+}
+
+.interestList {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.interestPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 11px;
+  background: #eff6ff;
+  border: 1px solid #cde2fc;
+  color: #153c70;
+  font-size: 0.88rem;
+  font-weight: 650;
+  box-shadow: 0 2px 6px rgba(15, 61, 145, 0.04);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+[data-theme="dark"] .interestPill {
+  background: rgba(30, 52, 92, 0.55);
+  border-color: rgba(96, 165, 250, 0.28);
+  color: #e2e8f0;
+}
+
+.interestPill:hover {
+  transform: translateX(3px);
+  border-color: #7ab3f7;
+}
+
+.pillIcon {
+  color: #1d6fd8;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .pillIcon {
+  color: #60a5fa;
+}
+
+.laptopArtwork {
+  position: absolute;
+  right: -12px;
+  bottom: -18px;
+  width: 220px;
+  height: 165px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-theme="dark"] .laptopArtwork {
+  opacity: 0.35;
+}
+
+@media (max-width: 900px) {
+  .aboutCard {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .leftCol {
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 1px solid #e3eefb;
+    padding-bottom: 18px;
+  }
+
+  .rightCol {
+    min-height: auto;
+  }
+
+  .interestList {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .laptopArtwork {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Mobile & iOS "DI BALIK ALLBASE" (<= 767px)
+   ========================================================================== */
+@media (max-width: 767px) {
+  .aboutSection {
+    padding-top: 6px;
+    padding-bottom: 14px;
+  }
+
+  .desktopAbout {
+    display: none;
+  }
+
+  .mobileAbout {
+    display: block;
+    width: calc(100% - 40px);
+    margin: 0 auto;
+  }
+
+  .mobileAboutCard {
+    background: linear-gradient(135deg, #e9f3fe 0%, #e1edfd 100%);
+    border: 1px solid #d4e6fc;
+    border-radius: 22px;
+    padding: 18px;
+  }
+
+  [data-theme="dark"] .mobileAboutCard {
+    background: linear-gradient(135deg, rgba(16, 34, 66, 0.92) 0%, rgba(12, 26, 52, 0.92) 100%);
+    border-color: rgba(96, 165, 250, 0.2);
+  }
+
+  .mobileAboutBadge {
+    display: inline-flex;
+    align-items: center;
+    height: 23px;
+    padding: 0 10px;
+    border-radius: 9999px;
+    background: #d2e6fd;
+    color: #146cd6;
+    font-size: 0.63rem;
+    font-weight: 800;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  [data-theme="dark"] .mobileAboutBadge {
+    background: rgba(24, 130, 248, 0.24);
+    color: #60a5fa;
+  }
+
+  .mobileAboutTitle {
+    font-family: var(--font-heading, -apple-system, BlinkMacSystemFont, system-ui, sans-serif);
+    font-size: 1.18rem;
+    font-weight: 850;
+    color: #0a192f;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+    line-height: 1.2;
+  }
+
+  [data-theme="dark"] .mobileAboutTitle {
+    color: #f8fbff;
+  }
+
+  .mobileAboutBottom {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .mobileAboutDesc {
+    font-size: 0.78rem;
+    line-height: 1.48;
+    color: #465a75;
+    margin: 0;
+  }
+
+  [data-theme="dark"] .mobileAboutDesc {
+    color: #94a3b8;
+  }
+
+  .mobileTagGroup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .mobileTagPill {
+    display: inline-flex;
+    align-items: center;
+    height: 26px;
+    padding: 0 11px;
+    border-radius: 9999px;
+    background: #d2e6fd;
+    color: #0e4fa3;
+    font-size: 0.7rem;
+    font-weight: 750;
+  }
+
+  [data-theme="dark"] .mobileTagPill {
+    background: rgba(37, 119, 227, 0.25);
+    color: #93c5fd;
+  }
+}

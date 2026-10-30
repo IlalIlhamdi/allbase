@@ -1,134 +1,154 @@
-import { BookOpen, Activity, Code2, Sparkles, MapPin, GraduationCap } from "lucide-react";
+import Link from "next/link";
+import { User, ArrowRight, Network, Monitor, Router } from "lucide-react";
+import styles from "./About.module.css";
 
 export default function About() {
   return (
-    <section id="about" className="section section-alt" aria-labelledby="about-title">
-      <div className="container">
-        <div className="sectionHeader">
-          <span className="sectionBadge">
-            <Sparkles size={14} /> Profil Singkat
-          </span>
-          <h2 id="about-title" className="sectionTitle">
-            Tentang Saya
+    <section id="about" className={styles.aboutSection} aria-labelledby="about-title">
+      {/* ====================================================================
+          DESKTOP ABOUT (>= 768px)
+          ==================================================================== */}
+      <div className={`container ${styles.desktopAbout}`}>
+        <div className={styles.aboutCard}>
+          <div className={styles.leftCol}>
+            <div className={styles.headerRow}>
+              <div className={styles.userBadge} aria-hidden="true">
+                <User size={19} />
+              </div>
+              <h2 id="about-title" className={styles.title}>
+                Tentang Saya
+              </h2>
+            </div>
+
+            <p className={styles.bioText}>
+              Halo! Saya <strong>Ilal Ilhamdi</strong>, seorang Network &amp; Technology
+              Enthusiast yang tertarik pada jaringan telekomunikasi, teknologi, dan
+              pengembangan aplikasi web modern. Melalui ALLBASE HUB, saya membagikan
+              proyek, catatan pembelajaran, dan berbagai tools yang saya bangun untuk
+              mempermudah proses belajar dan bekerja.
+            </p>
+
+            <Link href="#skills" className={styles.moreBtn}>
+              <span>Lihat Selengkapnya</span>
+              <ArrowRight size={15} />
+            </Link>
+          </div>
+
+          <div className={styles.rightCol}>
+            <h3 className={styles.interestTitle}>Bidang Minat</h3>
+
+            <div className={styles.interestList}>
+              <div className={styles.interestPill}>
+                <Network size={16} className={styles.pillIcon} />
+                <span>Networking</span>
+              </div>
+
+              <div className={styles.interestPill}>
+                <Monitor size={16} className={styles.pillIcon} />
+                <span>Web Development</span>
+              </div>
+
+              <div className={styles.interestPill}>
+                <Router size={16} className={styles.pillIcon} />
+                <span>MikroTik</span>
+              </div>
+            </div>
+
+            <svg
+              className={styles.laptopArtwork}
+              viewBox="0 0 240 180"
+              fill="none"
+              aria-hidden="true"
+            >
+              <polygon points="20,165 75,95 115,165" fill="#dcecff" />
+              <polygon points="75,95 115,165 145,125" fill="#b7d8ff" />
+              <polygon points="150,165 195,80 235,165" fill="#e4f1ff" />
+              <polygon points="195,80 235,165 245,115" fill="#bfdcf9" />
+              <ellipse cx="145" cy="154" rx="72" ry="10" fill="#bfd9f8" opacity="0.55" />
+              <rect
+                x="92"
+                y="48"
+                width="98"
+                height="66"
+                rx="6"
+                transform="skewX(-8)"
+                fill="#1d6fd8"
+                stroke="#ffffff"
+                strokeWidth="2.5"
+              />
+              <rect
+                x="97"
+                y="53"
+                width="88"
+                height="56"
+                rx="3"
+                transform="skewX(-8)"
+                fill="#5aa6ff"
+              />
+              <rect
+                x="105"
+                y="62"
+                width="42"
+                height="6"
+                rx="3"
+                transform="skewX(-8)"
+                fill="#ffffff"
+                opacity="0.85"
+              />
+              <rect
+                x="105"
+                y="73"
+                width="64"
+                height="4"
+                rx="2"
+                transform="skewX(-8)"
+                fill="#d8ebff"
+                opacity="0.8"
+              />
+              <rect
+                x="105"
+                y="82"
+                width="52"
+                height="4"
+                rx="2"
+                transform="skewX(-8)"
+                fill="#d8ebff"
+                opacity="0.8"
+              />
+              <polygon
+                points="62,138 86,114 186,114 164,138"
+                fill="#e8f2ff"
+                stroke="#9ec5f5"
+                strokeWidth="1.5"
+              />
+              <polygon points="62,138 164,138 168,143 58,143" fill="#b5d4f8" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* ====================================================================
+          MOBILE & iOS "DI BALIK ALLBASE" (<= 767px)
+          ==================================================================== */}
+      <div className={styles.mobileAbout}>
+        <div className={styles.mobileAboutCard}>
+          <span className={styles.mobileAboutBadge}>DI BALIK ALLBASE</span>
+
+          <h2 className={styles.mobileAboutTitle}>
+            Belajar. Membangun. Berbagi.
           </h2>
-          <p className="sectionDescription">
-            Dedikasi dalam rekayasa jaringan telekomunikasi, infrastruktur switching &amp; routing, serta pengembangan perangkat lunak web modern.
-          </p>
-        </div>
 
-        {/* Profile Intro Banner */}
-        <div
-          className="baseCard"
-          style={{
-            padding: "clamp(20px, 4vw, 32px)",
-            marginBottom: "24px",
-          }}
-        >
-          <div style={{ textAlign: "left" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "8px" }}>
-              <h3 style={{ fontSize: "1.35rem", fontWeight: 800 }}>Ilal Ilhamdi</h3>
-            </div>
-            <p style={{ fontSize: "0.98rem", color: "var(--color-text-secondary)", lineHeight: 1.65, marginBottom: "16px" }}>
-              Network &amp; Technology Enthusiast yang aktif mendalami konfigurasi perangkat jaringan Cisco &amp; MikroTik, analisis pengalamatan IPv4/IPv6, serta pembuatan alat bantu utilitas teknis berbasis web yang presisi.
+          <div className={styles.mobileAboutBottom}>
+            <p className={styles.mobileAboutDesc}>
+              Seorang mahasiswa yang tertarik pada jaringan komputer, pengembangan
+              web, dan teknologi terbuka.
             </p>
-            <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", fontSize: "0.86rem", color: "var(--color-text-muted)" }}>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                <GraduationCap size={16} color="var(--color-primary-500)" /> Teknik Telekomunikasi &amp; Jaringan
-              </span>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
-                <MapPin size={16} color="var(--color-primary-500)" /> Padang, Indonesia
-              </span>
-            </div>
-          </div>
-        </div>
 
-        {/* 3 Core Focus Cards */}
-        <div className="cardsGrid">
-          <div
-            className="baseCard"
-            style={{
-              padding: "clamp(20px, 4vw, 28px)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "12px",
-            }}
-          >
-            <div
-              style={{
-                width: "44px",
-                height: "44px",
-                borderRadius: "var(--radius-sm)",
-                backgroundColor: "var(--color-primary-50)",
-                color: "var(--color-primary-600)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <BookOpen size={22} />
+            <div className={styles.mobileTagGroup}>
+              <span className={styles.mobileTagPill}>Networking</span>
+              <span className={styles.mobileTagPill}>Web Development</span>
+              <span className={styles.mobileTagPill}>MikroTik</span>
             </div>
-            <h3 style={{ fontSize: "1.18rem", fontWeight: 700 }}>Bidang Studi</h3>
-            <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)", lineHeight: 1.65 }}>
-              Mahasiswa Teknik Telekomunikasi &amp; Jaringan yang berfokus pada desain infrastruktur jaringan, IP routing, switching, dan pemantauan sistem telekomunikasi.
-            </p>
-          </div>
-
-          <div
-            className="baseCard"
-            style={{
-              padding: "clamp(20px, 4vw, 28px)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "12px",
-            }}
-          >
-            <div
-              style={{
-                width: "44px",
-                height: "44px",
-                borderRadius: "var(--radius-sm)",
-                backgroundColor: "rgba(6, 182, 212, 0.1)",
-                color: "#06b6d4",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Activity size={22} />
-            </div>
-            <h3 style={{ fontSize: "1.18rem", fontWeight: 700 }}>Fokus Pembelajaran</h3>
-            <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)", lineHeight: 1.65 }}>
-              Eksplorasi alat pemindai jaringan (Network Scanner), subnet calculator IPv4 presisi, analisis latency &amp; jitter, serta otomatisasi monitoring sistem.
-            </p>
-          </div>
-
-          <div
-            className="baseCard"
-            style={{
-              padding: "clamp(20px, 4vw, 28px)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "12px",
-            }}
-          >
-            <div
-              style={{
-                width: "44px",
-                height: "44px",
-                borderRadius: "var(--radius-sm)",
-                backgroundColor: "rgba(16, 185, 129, 0.1)",
-                color: "#10b981",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Code2 size={22} />
-            </div>
-            <h3 style={{ fontSize: "1.18rem", fontWeight: 700 }}>Web &amp; Software</h3>
-            <p style={{ fontSize: "0.9rem", color: "var(--color-text-secondary)", lineHeight: 1.65 }}>
-              Mengembangkan aplikasi web modern berbasis Next.js App Router, React, dan TypeScript yang responsif, cepat, serta mudah dipelihara di berbagai perangkat.
-            </p>
           </div>
         </div>
       </div>

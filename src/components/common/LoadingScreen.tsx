@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Layers } from "lucide-react";
+import Image from "next/image";
 import styles from "./LoadingScreen.module.css";
 
 export default function LoadingScreen() {
@@ -76,7 +76,14 @@ export default function LoadingScreen() {
         <div className={styles.logoWrapper}>
           <div className={styles.logoRing} />
           <div className={styles.logoInner}>
-            <Layers size={32} />
+            <Image
+              src="/logo.png"
+              alt="Logo ALLBASE HUB"
+              width={48}
+              height={48}
+              priority
+              className={styles.logoImg}
+            />
           </div>
         </div>
 

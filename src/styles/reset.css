@@ -2,13 +2,14 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
   width: 100%;
   max-width: 100%;
   overflow-x: clip;
-  font-family: var(--font-body, system-ui, -apple-system, sans-serif);
+  font-family: var(--font-body, -apple-system, BlinkMacSystemFont, system-ui, sans-serif);
   background-color: var(--color-background);
   color: var(--color-text-primary);
   line-height: 1.5;
@@ -30,6 +31,7 @@ body {
   flex-direction: column;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 

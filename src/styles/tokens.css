@@ -1,41 +1,41 @@
 :root {
   /* Brand Palette */
-  --color-primary-navy: #0F3D91;
-  --color-primary-blue: #2F80ED;
-  --color-primary-light: #DCEEFF;
-  --color-primary-50: rgba(47, 128, 237, 0.08);
-  --color-primary-100: rgba(47, 128, 237, 0.14);
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #2F80ED;
-  --color-primary-600: #1d6fd8;
-  --color-primary-700: #155bb5;
-  --color-primary-800: #0F3D91;
+  --color-primary-navy: #0c2340;
+  --color-primary-blue: #1d6fd8;
+  --color-primary-light: #e3f0ff;
+  --color-primary-50: #edf5ff;
+  --color-primary-100: #dceeff;
+  --color-primary-200: #b8dcff;
+  --color-primary-300: #8ec5ff;
+  --color-primary-400: #54a4ff;
+  --color-primary-500: #2577e3;
+  --color-primary-600: #1b66c9;
+  --color-primary-700: #1553a8;
+  --color-primary-800: #0f3d91;
   --color-primary-900: #0a2b66;
 
   /* Neutrals & Glass Surfaces */
   --color-white: #ffffff;
-  --color-light-gray: #EEF3F8;
-  --color-gray-text: #4B5563;
-  --color-background: #f4f8fc;
+  --color-light-gray: #eef4fb;
+  --color-gray-text: #475569;
+  --color-background: #eaf3fc;
 
   /* Glassmorphism Surface Tokens */
-  --color-surface: rgba(255, 255, 255, 0.76);
+  --color-surface: rgba(255, 255, 255, 0.94);
   --color-surface-solid: #ffffff;
-  --color-surface-soft: rgba(238, 243, 248, 0.65);
-  --color-surface-secondary: rgba(248, 250, 252, 0.8);
+  --color-surface-soft: #f2f7fd;
+  --color-surface-secondary: #f7faff;
   --glass-blur: blur(16px) saturate(180%);
-  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.85);
 
   /* Typography Colors */
-  --color-text-primary: #0f1d3a;
-  --color-text-secondary: #475569;
+  --color-text-primary: #0d223f;
+  --color-text-secondary: #47586e;
   --color-text-muted: #64748b;
 
   /* Borders */
-  --color-border: rgba(203, 213, 225, 0.65);
-  --color-border-strong: rgba(47, 128, 237, 0.35);
+  --color-border: #d6e6f7;
+  --color-border-strong: #9fc5f0;
 
   /* Status Colors */
   --color-success: #16a34a;
@@ -44,28 +44,28 @@
   --color-warning-soft: rgba(245, 158, 11, 0.12);
   --color-danger: #dc2626;
   --color-danger-soft: rgba(220, 38, 38, 0.12);
-  --color-info: #2F80ED;
-  --color-info-soft: rgba(47, 128, 237, 0.12);
+  --color-info: #1d6fd8;
+  --color-info-soft: rgba(29, 111, 216, 0.12);
 
   /* Spacing & Radii */
   --radius-xs: 6px;
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 20px;
-  --radius-xl: 26px;
+  --radius-xl: 24px;
   --radius-pill: 9999px;
 
   /* Elevation Shadows */
-  --shadow-xs: 0 1px 3px rgba(15, 61, 145, 0.04);
-  --shadow-sm: 0 6px 20px rgba(15, 61, 145, 0.06);
-  --shadow-md: 0 12px 32px rgba(15, 61, 145, 0.09);
+  --shadow-xs: 0 2px 6px rgba(15, 61, 145, 0.04);
+  --shadow-sm: 0 8px 24px rgba(15, 61, 145, 0.06);
+  --shadow-md: 0 14px 34px rgba(15, 61, 145, 0.09);
   --shadow-lg: 0 20px 48px rgba(15, 61, 145, 0.13);
-  --shadow-glow: 0 0 24px rgba(47, 128, 237, 0.25);
+  --shadow-glow: 0 0 24px rgba(29, 111, 216, 0.25);
 
   /* Layout */
-  --container-width: 1200px;
-  --header-height: 72px;
-  --mobile-header-height: 72px;
+  --container-width: 1120px;
+  --header-height: 70px;
+  --mobile-header-height: 60px;
 
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -73,10 +73,11 @@
   --transition-slow: 380ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   :root {
-    --header-height: 68px;
-    --mobile-header-height: 68px;
+    --color-background: #f5f9fe;
+    --header-height: 60px;
+    --mobile-header-height: 60px;
   }
 }
 

@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-background, #f4f8fc);
+  background-color: var(--color-background, #eaf3fc);
   transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.5s;
   pointer-events: auto;
   user-select: none;
@@ -101,8 +101,8 @@
 /* Animated Logo Wrapper */
 .logoWrapper {
   position: relative;
-  width: 72px;
-  height: 72px;
+  width: 76px;
+  height: 76px;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
@@ -111,13 +111,13 @@
 
 .logoRing {
   position: absolute;
-  inset: -6px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #2f80ed, #06b6d4, #8b5cf6, #2f80ed);
+  inset: -5px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #2f80ed, #06b6d4, #60a5fa, #2f80ed);
   background-size: 300% 300%;
   animation: rotateGradient 3s linear infinite;
-  opacity: 0.85;
-  filter: blur(4px);
+  opacity: 0.75;
+  filter: blur(5px);
 }
 
 .logoInner {
@@ -125,14 +125,20 @@
   z-index: 2;
   width: 100%;
   height: 100%;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #0f3d91 0%, #2f80ed 100%);
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid #d5e6f8;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  box-shadow: 0 8px 24px rgba(47, 128, 237, 0.35);
+  box-shadow: 0 10px 28px rgba(25, 100, 200, 0.22);
   animation: iconPulse 2s ease-in-out infinite;
+}
+
+.logoImg {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
 }
 
 @keyframes rotateGradient {

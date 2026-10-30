@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Outfit, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
@@ -27,6 +27,16 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = constructMetadata();
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f9fe" },
+    { media: "(prefers-color-scheme: dark)", color: "#070d1a" },
+  ],
+};
 
 export default function RootLayout({
   children,
