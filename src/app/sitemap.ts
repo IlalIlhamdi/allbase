@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://allbase.my.id";
-  const lastMod = "2026-07-29";
+  const lastMod = "2026-11-14";
 
   const routes = [
     "",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useId } from "react";
+import { useState, useEffect, useId } from "react";
 import Link from "next/link";
 import {
   Cpu,
@@ -41,9 +41,9 @@ export default function IpCalculator() {
   const { addRecentTool } = useRecentTools();
 
   // Track as recent tool
-  useState(() => {
+  useEffect(() => {
     addRecentTool("ip-calculator-tool");
-  });
+  }, [addRecentTool]);
 
   const handleCalculate = (e?: React.FormEvent) => {
     if (e) e.preventDefault();

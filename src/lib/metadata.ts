@@ -31,12 +31,13 @@ export function constructMetadata({
     metadataBase: new URL("https://allbase.my.id"),
     icons: {
       icon: [
-        { url: "/favicon.ico", sizes: "any" },
-        { url: "/icon.png", type: "image/png", sizes: "512x512" },
+        { url: "/favicon.ico?v=20261114", sizes: "any" },
+        { url: "/favicon-96.png?v=20261114", type: "image/png", sizes: "96x96" },
+        { url: "/icon.png?v=20261114", type: "image/png", sizes: "512x512" },
       ],
-      shortcut: ["/favicon.ico"],
+      shortcut: ["/favicon.ico?v=20261114"],
       apple: [
-        { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+        { url: "/apple-icon.png?v=20261114", sizes: "180x180", type: "image/png" },
       ],
     },
     alternates: {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import {
   Play,
@@ -23,6 +23,8 @@ import {
   Server,
   ShieldCheck,
   ExternalLink,
+  History,
+  Trash2,
 } from "lucide-react";
 import { useNdt7SpeedTest } from "@/hooks/useNdt7SpeedTest";
 import {
@@ -33,6 +35,19 @@ import { evaluateConnectionQuality, speedToFraction } from "@/lib/speedTestQuali
 import { useToast } from "@/components/providers/ToastProvider";
 import { useRecentTools } from "@/hooks/useRecentTools";
 import styles from "./InternetSpeedTest.module.css";
+
+const HISTORY_STORAGE_KEY = "allbase_speedtest_history_v1";
+const MAX_HISTORY_ITEMS = 8;
+
+interface SpeedTestHistoryItem {
+  id: string;
+  timestamp: number;
+  downloadMbps: number | null;
+  uploadMbps: number | null;
+  pingMs: number | null;
+  jitterMs: number | null;
+  serverLabel: string;
+}
 
 // Scale ticks for dynamic semicircle gauge
 const GAUGE_TICKS = [
@@ -62,13 +77,73 @@ export default function InternetSpeedTest() {
 
   const [copied, setCopied] = useState<boolean>(false);
   const [showDataWarningDetails, setShowDataWarningDetails] = useState<boolean>(false);
+  const [history, setHistory] = useState<SpeedTestHistoryItem[]>([]);
+  const recordedCompletionRef = useRef<boolean>(false);
 
   const { success } = useToast();
   const { addRecentTool } = useRecentTools();
 
-  useState(() => {
-    addRecentTool("speedtest-tool");
-  });
+  useEffect(() => {
+    addRecentTool("internet-speed-test");
+  }, [addRecentTool]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(HISTORY_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          setHistory(parsed.slice(0, MAX_HISTORY_ITEMS));
+        }
+      }
+    } catch {
+      // Ignore localStorage read errors
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isRunning || phase === "idle") {
+      recordedCompletionRef.current = false;
+      return;
+    }
+
+    if (phase === "completed" && !recordedCompletionRef.current) {
+      recordedCompletionRef.current = true;
+      const serverLabel = serverInfo
+        ? `${serverInfo.city ? `${serverInfo.city}, ` : ""}${serverInfo.country || "M-Lab Node"}`
+        : "M-Lab Node";
+
+      const entry: SpeedTestHistoryItem = {
+        id: `${Date.now()}`,
+        timestamp: Date.now(),
+        downloadMbps: results.downloadMbps,
+        uploadMbps: results.uploadMbps,
+        pingMs: results.pingMs,
+        jitterMs: results.jitterMs,
+        serverLabel,
+      };
+
+      setHistory((prev) => {
+        const next = [entry, ...prev].slice(0, MAX_HISTORY_ITEMS);
+        try {
+          localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(next));
+        } catch {
+          // Ignore localStorage write errors
+        }
+        return next;
+      });
+    }
+  }, [phase, isRunning, results, serverInfo]);
+
+  const clearHistory = () => {
+    setHistory([]);
+    try {
+      localStorage.removeItem(HISTORY_STORAGE_KEY);
+    } catch {
+      // Ignore localStorage removal errors
+    }
+    success("Riwayat pengujian berhasil dihapus");
+  };
 
   const copyResults = () => {
     if (phase !== "completed" && phase !== "cancelled") return;
@@ -404,10 +479,14 @@ Dihitung via allbase.my.id/tools/internet-speed-test`;
 
         {/* Discovered Server Info */}
         {serverInfo && (
-          <div className={styles.serverChip}>
+          <div
+            className={styles.serverChip}
+            title={serverInfo.hostname || serverInfo.metro || "M-Lab Node"}
+          >
             <Server size={12} />
             <span>
               Server: {serverInfo.city ? `${serverInfo.city}, ` : ""}{serverInfo.country || "M-Lab Node"}
+              {serverInfo.metro ? ` (${serverInfo.metro})` : ""}
             </span>
           </div>
         )}
@@ -467,15 +546,26 @@ Dihitung via allbase.my.id/tools/internet-speed-test`;
           )}
 
           {(phase === "cancelled" || phase === "error") && (
-            <button
-              type="button"
-              className={styles.startButton}
-              onClick={resetTest}
-              aria-label="Mulai Ulang Pengujian Kecepatan"
-            >
-              <RotateCcw size={18} />
-              <span>Mulai Ulang</span>
-            </button>
+            <div className={styles.resultActions}>
+              <button
+                type="button"
+                className={styles.restartButton}
+                onClick={consentAccepted ? startTest : resetTest}
+                aria-label="Coba Lagi Pengujian Kecepatan"
+              >
+                <Play size={16} fill="currentColor" />
+                <span>Coba Lagi</span>
+              </button>
+              <button
+                type="button"
+                className={styles.copyButton}
+                onClick={resetTest}
+                aria-label="Reset Pengujian Kecepatan"
+              >
+                <RotateCcw size={16} />
+                <span>Reset</span>
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -657,6 +747,56 @@ Dihitung via allbase.my.id/tools/internet-speed-test`;
                 ● {qualityEvaluation.browsing.level}
               </span>
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* Local Speed Test History */}
+      {history.length > 0 && (
+        <section className={styles.historySection} aria-label="Riwayat Pengujian Kecepatan Lokal">
+          <div className={styles.historyHeader}>
+            <h2 className={styles.historyTitle}>
+              <History size={18} color="var(--color-primary-600)" />
+              <span>Riwayat Tes Terakhir</span>
+            </h2>
+            <button
+              type="button"
+              className={styles.clearHistoryBtn}
+              onClick={clearHistory}
+              aria-label="Hapus Riwayat Pengujian"
+            >
+              <Trash2 size={13} />
+              <span>Hapus</span>
+            </button>
+          </div>
+
+          <div className={styles.historyList}>
+            {history.map((item) => (
+              <div key={item.id} className={styles.historyRow}>
+                <div className={styles.historyMeta}>
+                  <span className={styles.historyTime}>
+                    {new Intl.DateTimeFormat("id-ID", {
+                      day: "2-digit",
+                      month: "short",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }).format(new Date(item.timestamp))}
+                  </span>
+                  <span className={styles.historyServer}>{item.serverLabel}</span>
+                </div>
+                <div className={styles.historyMetrics}>
+                  <span className={styles.historyMetricDl}>
+                    ↓ {item.downloadMbps !== null ? `${formatSpeed(item.downloadMbps)} Mbps` : "—"}
+                  </span>
+                  <span className={styles.historyMetricUl}>
+                    ↑ {item.uploadMbps !== null ? `${formatSpeed(item.uploadMbps)} Mbps` : "—"}
+                  </span>
+                  <span className={styles.historyMetricPing}>
+                    {item.pingMs !== null ? `${formatLatency(item.pingMs)} ms` : "—"}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
       )}

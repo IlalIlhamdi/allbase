@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useId } from "react";
+import { useState, useEffect, useId } from "react";
 import Link from "next/link";
 import {
   Binary,
@@ -61,9 +61,9 @@ export default function NetworkConverter() {
   const { success, error: toastError } = useToast();
   const { addRecentTool } = useRecentTools();
 
-  useState(() => {
-    addRecentTool("network-converter-tool");
-  });
+  useEffect(() => {
+    addRecentTool("network-converter-module");
+  }, [addRecentTool]);
 
   // Handlers for Tab 1: Mbps <-> MB/s
   const handleMbpsChange = (val: string) => {

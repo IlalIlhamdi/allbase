@@ -10,6 +10,16 @@ export default function LoadingScreen() {
   const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
+    try {
+      if (sessionStorage.getItem("allbase_loading_shown") === "1") {
+        setIsDone(true);
+        return;
+      }
+      sessionStorage.setItem("allbase_loading_shown", "1");
+    } catch {
+      // Ignore sessionStorage errors in restricted contexts
+    }
+
     // Disable body scrolling during initial loading screen
     document.body.style.overflow = "hidden";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useId } from "react";
+import { useState, useEffect, useId } from "react";
 import Link from "next/link";
 import {
   Calculator,
@@ -39,9 +39,9 @@ export default function SubnetCalculator() {
   const { success } = useToast();
   const { addRecentTool } = useRecentTools();
 
-  useState(() => {
+  useEffect(() => {
     addRecentTool("subnet-calculator-tool");
-  });
+  }, [addRecentTool]);
 
   const handleCalculate = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
