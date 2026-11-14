@@ -3,22 +3,22 @@
   top: 0;
   z-index: 1300;
   width: 100%;
-  background: rgba(244, 249, 255, 0.88);
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
-  border-bottom: 1px solid rgba(203, 224, 247, 0.85);
+  background: rgba(245, 249, 254, 0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(218, 231, 247, 0.72);
   transition: background-color var(--transition-normal), border-color var(--transition-normal);
 }
 
 [data-theme="dark"] .header {
-  background: rgba(11, 20, 38, 0.9);
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  background: rgba(7, 13, 26, 0.88);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 .inner {
-  width: min(100% - clamp(28px, 5vw, 64px), var(--container-width));
+  width: min(100% - clamp(40px, 6vw, 80px), var(--container-width));
   margin: 0 auto;
-  height: 70px;
+  height: 68px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -32,9 +32,9 @@
   gap: 10px;
   text-decoration: none;
   font-family: var(--font-heading, system-ui, sans-serif);
-  font-weight: 800;
-  font-size: 1.18rem;
-  color: var(--color-text-primary);
+  font-weight: 850;
+  font-size: 1.14rem;
+  color: #0a192f;
   flex-shrink: 0;
   transition: transform var(--transition-fast);
 }
@@ -44,8 +44,8 @@
 }
 
 .brandLogoWrap {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,7 +56,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 3px 8px rgba(25, 100, 200, 0.22));
+  filter: drop-shadow(0 3px 8px rgba(13, 123, 242, 0.2));
   transition: transform var(--transition-fast);
 }
 
@@ -70,24 +70,20 @@
 
 .brandName {
   white-space: nowrap;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
   font-weight: 850;
-  color: #0d264c;
+  color: #0a192f;
 }
 
 [data-theme="dark"] .brandName {
   color: #f8fbff;
 }
 
-.brandName span {
-  color: #1d6fd8;
-}
-
 /* Desktop Navigation */
 .nav {
   display: flex;
   align-items: center;
-  gap: clamp(18px, 2.8vw, 34px);
+  gap: clamp(18px, 2.6vw, 32px);
   height: 100%;
 }
 
@@ -96,9 +92,9 @@
   display: inline-flex;
   align-items: center;
   height: 100%;
-  font-size: 0.94rem;
-  font-weight: 600;
-  color: #3b4e68;
+  font-size: 0.92rem;
+  font-weight: 650;
+  color: #5b6b82;
   text-decoration: none;
   transition: color var(--transition-fast);
   padding: 0 2px;
@@ -109,7 +105,7 @@
 }
 
 .navLink:hover {
-  color: #0d264c;
+  color: #0a192f;
 }
 
 [data-theme="dark"] .navLink:hover {
@@ -117,12 +113,12 @@
 }
 
 .navLinkActive {
-  color: #0d264c;
-  font-weight: 700;
+  color: #0d7bf2;
+  font-weight: 750;
 }
 
 [data-theme="dark"] .navLinkActive {
-  color: #ffffff;
+  color: #38bdf8;
 }
 
 .navLinkActive::after {
@@ -133,7 +129,7 @@
   right: 0;
   height: 3px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #1d6fd8 0%, #3b8ef3 100%);
+  background: linear-gradient(90deg, #0d7bf2 0%, #3898ff 100%);
 }
 
 /* Right Controls */
@@ -149,26 +145,21 @@
   align-items: center;
   gap: 8px;
   height: 40px;
-  padding: 0 18px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #2d82f0 0%, #1964c8 100%);
+  padding: 0 20px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #1b86f9 0%, #0b6ee3 100%);
   color: #ffffff;
-  font-size: 0.88rem;
-  font-weight: 650;
+  font-size: 0.86rem;
+  font-weight: 700;
   text-decoration: none;
-  box-shadow:
-    0 4px 14px rgba(25, 100, 200, 0.28),
-    0 1px 0 rgba(255, 255, 255, 0.25) inset;
-  border: 1px solid #1659b4;
+  box-shadow: 0 6px 16px rgba(13, 123, 242, 0.28);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
 }
 
 .ctaButton:hover {
   transform: translateY(-1px);
-  filter: brightness(1.05);
-  box-shadow:
-    0 6px 18px rgba(25, 100, 200, 0.36),
-    0 1px 0 rgba(255, 255, 255, 0.3) inset;
+  filter: brightness(1.04);
+  box-shadow: 0 8px 20px rgba(13, 123, 242, 0.34);
 }
 
 .menuBtn {

@@ -1,148 +1,35 @@
 .projectsSection {
-  padding-block: 10px;
+  padding-top: clamp(14px, 2vw, 24px);
+  padding-bottom: clamp(18px, 2.5vw, 30px);
   scroll-margin-top: calc(var(--header-height) + 16px);
 }
 
-.mobileProjects {
-  display: none;
-}
-
-/* ==========================================================================
-   Desktop Projects (>= 768px)
-   ========================================================================== */
-.sectionCard {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid #d6e6f7;
-  border-radius: 22px;
-  padding: clamp(22px, 3.2vw, 32px);
-  box-shadow: 0 10px 30px rgba(15, 61, 145, 0.05);
-}
-
-[data-theme="dark"] .sectionCard {
-  background: rgba(13, 23, 44, 0.88);
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-.headerRow {
+.projectsContainer {
+  width: min(100% - clamp(40px, 6vw, 80px), var(--container-width));
+  margin: 0 auto;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 16px;
-  margin-bottom: 22px;
 }
 
-.headerLeft {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.iconBadge {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  background: #eaf3ff;
-  border: 1px solid #c7e0ff;
-  color: #1d6fd8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-[data-theme="dark"] .iconBadge {
-  background: rgba(37, 119, 227, 0.2);
-  border-color: rgba(96, 165, 250, 0.35);
-  color: #60a5fa;
-}
-
-.title {
-  font-size: clamp(1.2rem, 2.2vw, 1.42rem);
-  font-weight: 800;
-  color: #0d264c;
-  margin: 0 0 2px;
-  letter-spacing: -0.02em;
-}
-
-[data-theme="dark"] .title {
-  color: #f8fbff;
-}
-
-.subtitle {
-  font-size: 0.85rem;
-  color: #5b6e88;
+.sectionTitle {
+  font-family: var(--font-heading, -apple-system, BlinkMacSystemFont, system-ui, sans-serif);
+  font-size: clamp(1.55rem, 2.4vw, 1.95rem);
+  font-weight: 850;
+  letter-spacing: -0.025em;
+  color: #0a192f;
   margin: 0;
 }
 
-[data-theme="dark"] .subtitle {
-  color: #94a3b8;
-}
-
-.viewAllBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.86rem;
-  font-weight: 700;
-  color: #1d6fd8;
-  background: none;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: transform var(--transition-fast), color var(--transition-fast);
-}
-
-[data-theme="dark"] .viewAllBtn {
-  color: #60a5fa;
-}
-
-.viewAllBtn:hover {
-  color: #1352a5;
-  transform: translateX(2px);
+[data-theme="dark"] .sectionTitle {
+  color: #f8fbff;
 }
 
 .projectsGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-.projectCard {
-  display: flex;
-  flex-direction: column;
-  background: #f8fbff;
-  border: 1px solid #d9e8f8;
-  border-radius: 16px;
-  overflow: hidden;
-  text-decoration: none;
-  color: inherit;
-  box-shadow: 0 4px 14px rgba(15, 61, 145, 0.04);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
-}
-
-[data-theme="dark"] .projectCard {
-  background: rgba(20, 35, 66, 0.55);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.projectCard:hover {
-  transform: translateY(-3px);
-  border-color: #8fc0f9;
-  box-shadow: 0 12px 28px rgba(15, 61, 145, 0.1);
-}
-
-.thumbnailWrap {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: #e6f1fe;
-  border-bottom: 1px solid #dceafa;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-[data-theme="dark"] .thumbnailWrap {
-  border-bottom-color: rgba(255, 255, 255, 0.08);
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  align-items: stretch;
 }
 
 .previewSvg {
@@ -151,78 +38,209 @@
   display: block;
 }
 
-.cardBody {
-  padding: 16px 18px 18px;
+/* Featured Card 1: ALLBASE Personal Hub Showcase */
+.showcaseCard {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid rgba(226, 235, 246, 0.85);
+  border-radius: 22px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 10px 28px rgba(15, 35, 65, 0.05);
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+[data-theme="dark"] .showcaseCard {
+  background: rgba(15, 27, 50, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.showcaseCard:hover {
+  transform: translateY(-3px);
+  border-color: #bdd8f9;
+  box-shadow: 0 14px 32px rgba(15, 35, 65, 0.08);
+}
+
+.showcaseCard:active {
+  transform: scale(0.985);
+}
+
+.showcasePreview {
+  width: 100%;
+  aspect-ratio: 360 / 185;
+  overflow: hidden;
+}
+
+.showcaseBody {
+  position: relative;
+  z-index: 2;
+  margin-top: -10px;
+  border-radius: 18px 18px 22px 22px;
+  background: #ffffff;
+  padding: 16px 20px 18px;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.cardTitleRow {
+[data-theme="dark"] .showcaseBody {
+  background: #0f1b32;
+}
+
+.categoryPill,
+.desktopCategoryPill {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: 9999px;
+  background: #e5f1ff;
+  color: #1573e5;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+[data-theme="dark"] .categoryPill,
+[data-theme="dark"] .desktopCategoryPill {
+  background: rgba(21, 115, 229, 0.22);
+  color: #60a5fa;
+}
+
+.showcaseBottom,
+.horizontalBottom {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 6px;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
 }
 
-.cardTitle {
-  font-size: 1.04rem;
-  font-weight: 800;
-  color: #0d264c;
-  margin: 0;
-  letter-spacing: -0.01em;
-}
-
-[data-theme="dark"] .cardTitle {
-  color: #f8fbff;
-}
-
-.externalIcon {
-  color: #2577e3;
-  flex-shrink: 0;
-}
-
-.cardDesc {
-  font-size: 0.84rem;
-  line-height: 1.5;
-  color: #52657e;
-  margin: 0 0 14px;
+.showcaseText,
+.horizontalInfo {
+  min-width: 0;
   flex: 1;
 }
 
-[data-theme="dark"] .cardDesc {
+.showcaseTitle,
+.horizontalTitle {
+  font-size: 1.12rem;
+  font-weight: 850;
+  color: #0a192f;
+  margin: 0 0 4px;
+  letter-spacing: -0.015em;
+}
+
+[data-theme="dark"] .showcaseTitle,
+[data-theme="dark"] .horizontalTitle {
+  color: #f8fbff;
+}
+
+.showcaseDesc,
+.horizontalSub {
+  font-size: 0.84rem;
+  line-height: 1.42;
+  color: #64748b;
+  margin: 0;
+}
+
+[data-theme="dark"] .showcaseDesc,
+[data-theme="dark"] .horizontalSub {
   color: #94a3b8;
 }
 
-.tagsRow {
+.blueCircleBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #1b86f9 0%, #0d74e7 100%);
+  color: #ffffff;
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.tagPill {
-  display: inline-flex;
   align-items: center;
-  height: 25px;
-  padding: 0 10px;
-  border-radius: 7px;
-  background: #eaf3ff;
-  border: 1px solid #cfe3fc;
-  color: #195eb8;
-  font-size: 0.74rem;
-  font-weight: 650;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 6px 14px rgba(13, 116, 231, 0.3);
 }
 
-[data-theme="dark"] .tagPill {
-  background: rgba(37, 119, 227, 0.2);
-  border-color: rgba(96, 165, 250, 0.3);
-  color: #93c5fd;
+/* Featured Card 2: Network Monitoring Card (Showcase on Desktop/Tablet, Compact Row on Mobile) */
+.horizontalCard {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid rgba(226, 235, 246, 0.85);
+  border-radius: 22px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 10px 28px rgba(15, 35, 65, 0.05);
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
 }
 
-@media (max-width: 960px) {
-  .projectsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+[data-theme="dark"] .horizontalCard {
+  background: rgba(15, 27, 50, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.horizontalCard:hover {
+  transform: translateY(-3px);
+  border-color: #bdd8f9;
+  box-shadow: 0 14px 32px rgba(15, 35, 65, 0.08);
+}
+
+.horizontalCard:active {
+  transform: scale(0.985);
+}
+
+.darkThumb {
+  width: 100%;
+  aspect-ratio: 360 / 185;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #081223;
+}
+
+.horizontalBody {
+  position: relative;
+  z-index: 2;
+  margin-top: -10px;
+  border-radius: 18px 18px 22px 22px;
+  background: #ffffff;
+  padding: 16px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+[data-theme="dark"] .horizontalBody {
+  background: #0f1b32;
+}
+
+.grayChevron {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #f4f7fb;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.horizontalCard:hover .grayChevron {
+  background: #e5f0ff;
+  color: #1577ea;
+}
+
+[data-theme="dark"] .grayChevron {
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
 }
 
 /* ==========================================================================
@@ -234,215 +252,80 @@
     padding-bottom: 14px;
   }
 
-  .desktopProjects {
-    display: none;
-  }
-
-  .mobileProjects {
-    display: flex;
-    flex-direction: column;
+  .projectsContainer {
     width: calc(100% - 40px);
-    margin: 0 auto;
     gap: 12px;
   }
 
-  .mobileSectionTitle {
-    font-family: var(--font-heading, -apple-system, BlinkMacSystemFont, system-ui, sans-serif);
+  .sectionTitle {
     font-size: 1.45rem;
-    font-weight: 850;
-    letter-spacing: -0.025em;
-    color: #0a192f;
     margin: 0 0 2px;
   }
 
-  [data-theme="dark"] .mobileSectionTitle {
-    color: #f8fbff;
-  }
-
-  /* Featured Card 1: ALLBASE Personal Hub Showcase */
-  .mobileShowcaseCard {
+  .projectsGrid {
     display: flex;
     flex-direction: column;
-    background: #ffffff;
-    border: 1px solid rgba(226, 235, 246, 0.85);
-    border-radius: 22px;
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    box-shadow: 0 10px 28px rgba(15, 35, 65, 0.05);
-    transition: transform 150ms ease;
-  }
-
-  [data-theme="dark"] .mobileShowcaseCard {
-    background: rgba(15, 27, 50, 0.9);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .mobileShowcaseCard:active {
-    transform: scale(0.985);
-  }
-
-  .mobileShowcasePreview {
-    width: 100%;
-    aspect-ratio: 360 / 185;
-    overflow: hidden;
-  }
-
-  .mobileShowcaseBody {
-    position: relative;
-    z-index: 2;
-    margin-top: -10px;
-    border-radius: 18px 18px 22px 22px;
-    background: #ffffff;
-    padding: 14px 16px 16px;
-  }
-
-  [data-theme="dark"] .mobileShowcaseBody {
-    background: #0f1b32;
-  }
-
-  .mobileCategoryPill {
-    display: inline-flex;
-    align-items: center;
-    height: 22px;
-    padding: 0 10px;
-    border-radius: 9999px;
-    background: #e5f1ff;
-    color: #1573e5;
-    font-size: 0.62rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  [data-theme="dark"] .mobileCategoryPill {
-    background: rgba(21, 115, 229, 0.22);
-    color: #60a5fa;
-  }
-
-  .mobileShowcaseBottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     gap: 12px;
   }
 
-  .mobileShowcaseText {
-    min-width: 0;
+  .showcaseBody {
+    padding: 14px 16px 16px;
   }
 
-  .mobileShowcaseTitle {
+  .showcaseTitle {
     font-size: 1.05rem;
-    font-weight: 850;
-    color: #0a192f;
     margin: 0 0 3px;
-    letter-spacing: -0.015em;
   }
 
-  [data-theme="dark"] .mobileShowcaseTitle {
-    color: #f8fbff;
-  }
-
-  .mobileShowcaseDesc {
+  .showcaseDesc {
     font-size: 0.78rem;
     line-height: 1.4;
-    color: #64748b;
-    margin: 0;
   }
 
-  [data-theme="dark"] .mobileShowcaseDesc {
-    color: #94a3b8;
-  }
-
-  .mobileBlueCircleBtn {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: linear-gradient(180deg, #1b86f9 0%, #0d74e7 100%);
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    box-shadow: 0 6px 14px rgba(13, 116, 231, 0.3);
-  }
-
-  /* Featured Card 2: Network Monitoring Compact Horizontal Card */
-  .mobileHorizontalCard {
-    display: flex;
+  /* Compact Horizontal Card on Mobile */
+  .horizontalCard {
+    flex-direction: row;
     align-items: center;
     gap: 13px;
-    background: #ffffff;
-    border: 1px solid rgba(226, 235, 246, 0.85);
     border-radius: 20px;
     padding: 10px 14px 10px 10px;
-    text-decoration: none;
-    color: inherit;
     box-shadow: 0 6px 20px rgba(15, 35, 65, 0.04);
-    transition: transform 150ms ease;
   }
 
-  [data-theme="dark"] .mobileHorizontalCard {
-    background: rgba(15, 27, 50, 0.9);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .mobileHorizontalCard:active {
-    transform: scale(0.985);
-  }
-
-  .mobileDarkThumb {
+  .darkThumb {
     width: 140px;
     height: 74px;
+    aspect-ratio: auto;
     border-radius: 13px;
-    overflow: hidden;
-    flex-shrink: 0;
-    background: #081223;
   }
 
-  .mobileHorizontalInfo {
-    flex: 1;
-    min-width: 0;
+  .horizontalBody {
+    margin-top: 0;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
   }
 
-  .mobileHorizontalTitle {
+  [data-theme="dark"] .horizontalBody {
+    background: transparent;
+  }
+
+  .desktopCategoryPill {
+    display: none;
+  }
+
+  .horizontalTitle {
     font-size: 0.94rem;
-    font-weight: 850;
-    color: #0a192f;
     margin: 0 0 3px;
-    letter-spacing: -0.015em;
   }
 
-  [data-theme="dark"] .mobileHorizontalTitle {
-    color: #f8fbff;
-  }
-
-  .mobileHorizontalSub {
+  .horizontalSub {
     font-size: 0.76rem;
-    color: #64748b;
-    margin: 0;
     line-height: 1.35;
   }
 
-  [data-theme="dark"] .mobileHorizontalSub {
-    color: #94a3b8;
-  }
-
-  .mobileGrayChevron {
+  .grayChevron {
     width: 28px;
     height: 28px;
-    border-radius: 50%;
-    background: #f4f7fb;
-    color: #1e293b;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  [data-theme="dark"] .mobileGrayChevron {
-    background: rgba(255, 255, 255, 0.08);
-    color: #cbd5e1;
   }
 }

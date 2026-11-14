@@ -32,7 +32,7 @@ export default function Header() {
     if (pathname !== "/") return;
 
     const handleScroll = () => {
-      const sections = ["hero", "about", "projects", "tools", "contact"];
+      const sections = ["hero", "tools", "projects", "about", "contact"];
       const scrollPos = window.scrollY + 140;
 
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -59,22 +59,20 @@ export default function Header() {
           <Link
             href="/"
             className={styles.brand}
-            aria-label="ALLBASE HUB Beranda"
+            aria-label="ALLBASE Beranda"
             onClick={() => setActiveHash("/#hero")}
           >
             <div className={styles.brandLogoWrap}>
               <Image
                 src="/logo.png"
-                alt="Logo ALLBASE HUB"
-                width={38}
-                height={38}
+                alt="Logo ALLBASE"
+                width={34}
+                height={34}
                 priority
                 className={styles.brandLogo}
               />
             </div>
-            <div className={styles.brandName}>
-              ALLBASE <span>HUB</span>
-            </div>
+            <div className={styles.brandName}>ALLBASE</div>
           </Link>
 
           {/* Center: Desktop Navigation */}

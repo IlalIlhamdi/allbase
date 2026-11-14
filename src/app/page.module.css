@@ -8,7 +8,7 @@
   order: 1;
 }
 
-.slotAbout {
+.slotTools {
   order: 2;
 }
 
@@ -16,48 +16,14 @@
   order: 3;
 }
 
-.slotTools {
+.slotAbout {
   order: 4;
 }
 
-.slotSkills {
+.slotQuickLinks {
   order: 5;
 }
 
-.slotQuickLinks {
-  order: 6;
-}
-
 .slotContact {
-  order: 7;
-}
-
-@media (max-width: 767px) {
-  .slotHero {
-    order: 1;
-  }
-
-  .slotTools {
-    order: 2;
-  }
-
-  .slotProjects {
-    order: 3;
-  }
-
-  .slotAbout {
-    order: 4;
-  }
-
-  .slotQuickLinks {
-    order: 5;
-  }
-
-  .slotContact {
-    order: 6;
-  }
-
-  .slotSkills {
-    display: none;
-  }
+  order: 6;
 }

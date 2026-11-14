@@ -1,107 +1,124 @@
 .contactSection {
-  padding-top: 10px;
-  padding-bottom: 24px;
+  padding-top: clamp(12px, 2vw, 22px);
+  padding-bottom: clamp(24px, 3.5vw, 40px);
   scroll-margin-top: calc(var(--header-height) + 16px);
 }
 
-.mobileContact {
-  display: none;
+.contactContainer {
+  width: min(100% - clamp(40px, 6vw, 80px), var(--container-width));
+  margin: 0 auto;
 }
 
-.bannerCard {
+.contactCard {
   position: relative;
-  border-radius: 22px;
-  background: linear-gradient(135deg, #1453b0 0%, #277ae7 52%, #1960c4 100%);
-  padding: clamp(28px, 4vw, 40px) clamp(24px, 5vw, 56px);
   overflow: hidden;
-  box-shadow:
-    0 16px 38px rgba(18, 78, 168, 0.25),
-    0 1px 0 rgba(255, 255, 255, 0.25) inset;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #04142c 0%, #071f43 56%, #041631 100%);
+  padding: clamp(28px, 3.6vw, 40px) clamp(28px, 4.2vw, 48px);
   color: #ffffff;
+  box-shadow: 0 16px 36px rgba(4, 20, 44, 0.22);
 }
 
-.bannerSvg {
+[data-theme="dark"] .contactCard {
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+}
+
+.prismSvg {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  right: -4px;
+  bottom: -6px;
+  width: 175px;
+  height: 162px;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
-.contentWrap {
+.cardInner {
   position: relative;
   z-index: 2;
-  max-width: 600px;
-  margin-left: clamp(110px, 16vw, 185px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.leftCol {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  min-width: 0;
 }
 
 .title {
-  font-size: clamp(1.45rem, 2.8vw, 1.95rem);
+  font-family: var(--font-heading, -apple-system, BlinkMacSystemFont, system-ui, sans-serif);
+  font-size: clamp(1.45rem, 2.4vw, 1.85rem);
   font-weight: 850;
-  color: #ffffff;
-  margin: 0 0 8px;
   letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0 0 6px;
+  line-height: 1.2;
 }
 
-.description {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9);
+.subtitle {
+  font-size: 0.94rem;
+  color: rgba(214, 228, 247, 0.85);
   margin: 0 0 20px;
+  line-height: 1.4;
 }
 
-.buttonsRow {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.socialBtn {
+.ctaBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  height: 42px;
-  padding: 0 20px;
-  border-radius: 10px;
+  gap: 8px;
+  height: 44px;
+  padding: 0 22px;
+  border-radius: 9999px;
   background: #ffffff;
-  color: #0d264c;
+  color: #0a192f;
   font-size: 0.88rem;
-  font-weight: 750;
+  font-weight: 800;
   text-decoration: none;
-  box-shadow: 0 6px 18px rgba(8, 35, 82, 0.2);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+  transition: transform 150ms ease, box-shadow 150ms ease;
 }
 
-.socialBtn:hover {
+.ctaBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(8, 35, 82, 0.28);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
 }
 
-.githubIcon {
-  color: #0f172a;
+.ctaBtn:active {
+  transform: scale(0.96);
+}
+
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-right: clamp(24px, 6vw, 72px);
   flex-shrink: 0;
 }
 
-.waIcon {
-  color: #16a34a;
-  flex-shrink: 0;
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 150ms ease, transform 150ms ease;
 }
 
-.mailIcon {
-  color: #1d6fd8;
-  flex-shrink: 0;
+.socialLink:hover {
+  opacity: 0.9;
+  transform: translateX(2px);
 }
 
-@media (max-width: 860px) {
-  .contentWrap {
-    margin-left: 0;
-  }
+.socialLink:active {
+  opacity: 0.75;
 }
 
 /* ==========================================================================
@@ -113,126 +130,65 @@
     padding-bottom: 14px;
   }
 
-  .desktopContact {
-    display: none;
-  }
-
-  .mobileContact {
-    display: block;
+  .contactContainer {
     width: calc(100% - 28px);
-    margin: 0 auto;
   }
 
-  .mobileCard {
-    position: relative;
-    overflow: hidden;
+  .contactCard {
     border-radius: 22px;
-    background: linear-gradient(135deg, #04142c 0%, #071f43 56%, #041631 100%);
     padding: 20px 20px;
-    color: #ffffff;
     box-shadow: 0 14px 32px rgba(4, 20, 44, 0.22);
   }
 
-  [data-theme="dark"] .mobileCard {
-    border: 1px solid rgba(96, 165, 250, 0.2);
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
-  }
-
-  .mobilePrismSvg {
-    position: absolute;
+  .prismSvg {
     right: -6px;
     bottom: -6px;
     width: 126px;
     height: 116px;
-    pointer-events: none;
-    z-index: 1;
   }
 
-  .mobileCardInner {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  .cardInner {
     gap: 14px;
   }
 
-  .mobileLeft {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    min-width: 0;
-  }
-
-  .mobileTitle {
-    font-family: var(--font-heading, -apple-system, BlinkMacSystemFont, system-ui, sans-serif);
+  .title {
     font-size: 1.16rem;
-    font-weight: 850;
-    letter-spacing: -0.02em;
-    color: #ffffff;
     margin: 0 0 3px;
-    line-height: 1.2;
   }
 
-  .mobileSubtitle {
+  .subtitle {
     font-size: 0.76rem;
     color: rgba(214, 228, 247, 0.82);
     margin: 0 0 14px;
     line-height: 1.35;
   }
 
-  .mobileCtaBtn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  .ctaBtn {
     gap: 6px;
     height: 36px;
     padding: 0 16px;
-    border-radius: 9999px;
-    background: #ffffff;
-    color: #0a192f;
     font-size: 0.78rem;
-    font-weight: 800;
-    text-decoration: none;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-    transition: transform 150ms ease;
   }
 
-  .mobileCtaBtn:active {
-    transform: scale(0.96);
-  }
-
-  .mobileRight {
-    display: flex;
-    flex-direction: column;
+  .rightCol {
     gap: 13px;
     margin-right: clamp(6px, 5vw, 30px);
-    flex-shrink: 0;
   }
 
-  .mobileSocialLink {
-    display: inline-flex;
-    align-items: center;
+  .socialLink {
     gap: 8px;
-    color: #ffffff;
     font-size: 0.8rem;
-    font-weight: 700;
-    text-decoration: none;
-    transition: opacity 150ms ease;
-  }
-
-  .mobileSocialLink:active {
-    opacity: 0.75;
   }
 }
 
 @media (max-width: 350px) {
-  .mobileCardInner {
+  .cardInner {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .mobileRight {
+  .rightCol {
     flex-direction: row;
     gap: 16px;
     margin-right: 0;

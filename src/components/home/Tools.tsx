@@ -3,10 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  Share2,
   ArrowRight,
   Network,
-  RefreshCw,
   Gauge,
   MapPin,
   Search,
@@ -19,9 +17,8 @@ import styles from "./Tools.module.css";
 interface ToolItem {
   id: string;
   title: string;
-  mobileTitle: string;
-  description: string;
-  mobileSubtitle: string;
+  subtitle: string;
+  searchKeywords: string;
   href: string;
   iconType: "ip" | "subnet" | "converter" | "speedtest" | "gps";
   pastelTheme: "blue" | "green" | "orange" | "purple" | "cyan";
@@ -31,9 +28,8 @@ const mainTools: ToolItem[] = [
   {
     id: "ip-calculator",
     title: "IP Calculator",
-    mobileTitle: "IP Calculator",
-    description: "Hitung informasi IP address dengan mudah dan cepat.",
-    mobileSubtitle: "Informasi alamat IP",
+    subtitle: "Informasi alamat IP",
+    searchKeywords: "Hitung informasi IP address dengan mudah dan cepat.",
     href: "/tools/ip-calculator",
     iconType: "ip",
     pastelTheme: "blue",
@@ -41,9 +37,8 @@ const mainTools: ToolItem[] = [
   {
     id: "subnet-calculator",
     title: "Subnet Calculator",
-    mobileTitle: "Subnet Calculator",
-    description: "Hitung subnet, range IP, jumlah host dan informasi lainnya.",
-    mobileSubtitle: "Hitung subnet & host",
+    subtitle: "Hitung subnet & host",
+    searchKeywords: "Hitung subnet, range IP, jumlah host dan informasi lainnya.",
     href: "/tools/subnet-calculator",
     iconType: "subnet",
     pastelTheme: "green",
@@ -51,44 +46,33 @@ const mainTools: ToolItem[] = [
   {
     id: "network-converter",
     title: "Network Converter",
-    mobileTitle: "Network Converter",
-    description: "Konversi berbagai format jaringan seperti IP, CIDR, netmask, dan wildcard.",
-    mobileSubtitle: "Konversi format jaringan",
+    subtitle: "Konversi format jaringan",
+    searchKeywords: "Konversi berbagai format jaringan seperti IP, CIDR, netmask, dan wildcard.",
     href: "/tools/network-converter",
     iconType: "converter",
     pastelTheme: "orange",
   },
   {
     id: "internet-speed-test",
-    title: "Internet Speed Test",
-    mobileTitle: "Speed Test",
-    description: "Uji kecepatan internet (download, upload) dan latensi secara real-time.",
-    mobileSubtitle: "Uji koneksi internet",
+    title: "Speed Test",
+    subtitle: "Uji koneksi internet",
+    searchKeywords: "Internet Speed Test Uji kecepatan internet download upload dan latensi secara real-time.",
     href: "/tools/internet-speed-test",
     iconType: "speedtest",
     pastelTheme: "purple",
   },
   {
     id: "ilal-gps",
-    title: "Koordinat GPS Tracker",
-    mobileTitle: "GPS Tracker",
-    description: "Alat pelacak lokasi geolokasi real-time dan pemetaan koordinat GPS perangkat.",
-    mobileSubtitle: "Lacak koordinat GPS",
+    title: "GPS Tracker",
+    subtitle: "Lacak koordinat GPS",
+    searchKeywords: "Koordinat GPS Tracker Alat pelacak lokasi geolokasi real-time dan pemetaan koordinat GPS perangkat.",
     href: "/ilal-gps",
     iconType: "gps",
     pastelTheme: "cyan",
   },
 ];
 
-function DesktopToolIcon({ type }: { type: ToolItem["iconType"] }) {
-  if (type === "ip") return <span className={styles.ipBadgeText}>IP</span>;
-  if (type === "subnet") return <Network size={26} strokeWidth={2.1} />;
-  if (type === "converter") return <RefreshCw size={25} strokeWidth={2.1} />;
-  if (type === "speedtest") return <Gauge size={26} strokeWidth={2.1} />;
-  return <MapPin size={25} strokeWidth={2.1} />;
-}
-
-function MobileToolIcon({ type }: { type: ToolItem["iconType"] }) {
+function ToolIcon({ type }: { type: ToolItem["iconType"] }) {
   if (type === "ip") return <Server size={20} strokeWidth={2.1} />;
   if (type === "subnet") return <Network size={20} strokeWidth={2.1} />;
   if (type === "converter") return <ArrowLeftRight size={20} strokeWidth={2.1} />;
@@ -114,9 +98,8 @@ export default function Tools() {
     const q = searchFilter.toLowerCase();
     return (
       tool.title.toLowerCase().includes(q) ||
-      tool.mobileTitle.toLowerCase().includes(q) ||
-      tool.description.toLowerCase().includes(q) ||
-      tool.mobileSubtitle.toLowerCase().includes(q)
+      tool.subtitle.toLowerCase().includes(q) ||
+      tool.searchKeywords.toLowerCase().includes(q)
     );
   });
 
@@ -125,72 +108,17 @@ export default function Tools() {
 
   return (
     <section id="tools" className={styles.toolsSection} aria-labelledby="tools-title">
-      {/* ====================================================================
-          DESKTOP TOOLS (>= 768px)
-          ==================================================================== */}
-      <div className={`container ${styles.desktopTools}`}>
-        <div className={styles.sectionCard}>
-          <div className={styles.headerRow}>
-            <div className={styles.headerLeft}>
-              <div className={styles.iconBadge} aria-hidden="true">
-                <Share2 size={20} />
-              </div>
-              <div>
-                <h2 id="tools-title" className={styles.title}>
-                  Tools Jaringan
-                </h2>
-                <p className={styles.subtitle}>
-                  Kumpulan tools jaringan yang bisa langsung kamu gunakan.
-                </p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              className={styles.viewAllBtn}
-              onClick={() => setShowAll((prev) => !prev)}
-            >
-              <span>{showAll ? "Tampilkan Utama" : "Lihat Semua Tools"}</span>
-              <ArrowRight size={15} />
-            </button>
-          </div>
-
-          <div className={styles.toolsGrid}>
-            {displayedTools.map((tool) => (
-              <Link key={tool.id} href={tool.href} className={styles.toolCard}>
-                <div className={styles.toolIconWrap} aria-hidden="true">
-                  <DesktopToolIcon type={tool.iconType} />
-                </div>
-
-                <div className={styles.toolContent}>
-                  <h3 className={styles.toolTitle}>{tool.title}</h3>
-                  <p className={styles.toolDescDesktop}>{tool.description}</p>
-                </div>
-
-                <span className={styles.openToolBtn}>
-                  <span>Buka Tool</span>
-                  <ArrowRight size={15} />
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ====================================================================
-          MOBILE & iOS TOOLS (<= 767px)
-          ==================================================================== */}
-      <div className={styles.mobileTools}>
-        <div className={styles.mobileHeaderRow}>
-          <h2 className={styles.mobileHeading}>
-            Tools untuk
+      <div className={styles.toolsContainer}>
+        <div className={styles.headerRow}>
+          <h2 id="tools-title" className={styles.heading}>
+            Tools untuk{" "}
             <br />
             <span>kerja lebih mudah.</span>
           </h2>
 
           <button
             type="button"
-            className={styles.mobileViewAll}
+            className={styles.viewAll}
             onClick={() => setShowAll((prev) => !prev)}
           >
             <span>{showAll ? "Ringkas" : "Lihat semua"}</span>
@@ -198,45 +126,60 @@ export default function Tools() {
           </button>
         </div>
 
-        {/* iOS Pill Search Input (16px font prevents iOS Safari auto-zoom) */}
-        <div className={styles.mobileSearchPill}>
-          <Search size={17} className={styles.mobileSearchIcon} />
+        {/* Pill Search Input (16px font on mobile prevents iOS Safari auto-zoom) */}
+        <div className={styles.searchPill}>
+          <Search size={17} className={styles.searchIcon} />
           <input
             type="search"
             value={searchFilter}
             onChange={(e) => setSearchFilter(e.target.value)}
             placeholder="Cari tool yang kamu butuhkan"
-            className={styles.mobileSearchInput}
+            className={styles.searchInput}
             aria-label="Cari tool yang kamu butuhkan"
           />
         </div>
 
-        {/* 2x2 Pastel Bento Tool Cards */}
-        <div className={styles.mobileBentoGrid}>
-          {displayedTools.map((tool) => (
-            <Link
-              key={tool.id}
-              href={tool.href}
-              className={styles.mobileBentoCard}
-            >
-              <div className={styles.mobileCardTop}>
-                <div
-                  className={`${styles.mobilePastelIcon} ${styles[`pastel_${tool.pastelTheme}`]}`}
-                  aria-hidden="true"
-                >
-                  <MobileToolIcon type={tool.iconType} />
+        {/* Responsive Pastel Bento Tool Cards Grid */}
+        {displayedTools.length > 0 ? (
+          <div className={styles.bentoGrid}>
+            {displayedTools.map((tool) => (
+              <Link
+                key={tool.id}
+                href={tool.href}
+                className={styles.bentoCard}
+              >
+                <div className={styles.cardTop}>
+                  <div
+                    className={`${styles.pastelIcon} ${styles[`pastel_${tool.pastelTheme}`]}`}
+                    aria-hidden="true"
+                  >
+                    <ToolIcon type={tool.iconType} />
+                  </div>
+
+                  <span className={styles.chevronCircle} aria-hidden="true">
+                    <ChevronRight size={15} strokeWidth={2.3} />
+                  </span>
                 </div>
 
-                <span className={styles.mobileChevronCircle} aria-hidden="true">
-                  <ChevronRight size={15} strokeWidth={2.3} />
-                </span>
-              </div>
-
-              <h3 className={styles.mobileCardTitle}>{tool.mobileTitle}</h3>
-              <p className={styles.mobileCardSub}>{tool.mobileSubtitle}</p>
-            </Link>
-          ))}
-        </div>
+                <h3 className={styles.cardTitle}>{tool.title}</h3>
+                <p className={styles.cardSub}>{tool.subtitle}</p>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className={styles.emptyState}>
+            <p className={styles.emptyText}>
+              Tool tidak ditemukan untuk &ldquo;{searchFilter}&rdquo;.
+            </p>
+            <button
+              type="button"
+              className={styles.resetBtn}
+              onClick={() => setSearchFilter("")}
+            >
+              Reset pencarian
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

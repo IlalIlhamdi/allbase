@@ -18,7 +18,7 @@
   --color-white: #ffffff;
   --color-light-gray: #eef4fb;
   --color-gray-text: #475569;
-  --color-background: #eaf3fc;
+  --color-background: #f5f9fe;
 
   /* Glassmorphism Surface Tokens */
   --color-surface: rgba(255, 255, 255, 0.94);
@@ -63,7 +63,7 @@
   --shadow-glow: 0 0 24px rgba(29, 111, 216, 0.25);
 
   /* Layout */
-  --container-width: 1120px;
+  --container-width: 1200px;
   --header-height: 70px;
   --mobile-header-height: 60px;
 

@@ -1,143 +1,147 @@
 .quickLinksSection {
-  padding-block: 10px;
+  padding-top: clamp(12px, 2vw, 22px);
+  padding-bottom: clamp(16px, 2.5vw, 28px);
 }
 
-.mobileRuang {
-  display: none;
+.ruangContainer {
+  width: min(100% - clamp(40px, 6vw, 80px), var(--container-width));
+  margin: 0 auto;
 }
 
-/* ==========================================================================
-   Desktop Quick Links (>= 768px)
-   ========================================================================== */
-.quickLinksGrid {
+.ruangTitle {
+  font-family: var(--font-heading, -apple-system, BlinkMacSystemFont, system-ui, sans-serif);
+  font-size: clamp(1.38rem, 2.2vw, 1.72rem);
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  color: #0a192f;
+  margin: 0 0 16px;
+}
+
+[data-theme="dark"] .ruangTitle {
+  color: #f8fbff;
+}
+
+.ruangList {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 18px;
 }
 
-.quickCard {
-  position: relative;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid #d6e6f7;
-  border-radius: 20px;
-  padding: 22px 24px;
+.ruangRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  overflow: hidden;
+  gap: 14px;
   text-decoration: none;
   color: inherit;
-  box-shadow: 0 8px 24px rgba(15, 61, 145, 0.05);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+  transition: transform 160ms ease;
 }
 
-[data-theme="dark"] .quickCard {
-  background: rgba(13, 23, 44, 0.88);
-  border-color: rgba(255, 255, 255, 0.12);
+.ruangRow:hover {
+  transform: translateY(-2px);
 }
 
-.quickCard:hover {
-  transform: translateY(-3px);
-  border-color: #8cc0fa;
-  box-shadow: 0 14px 32px rgba(15, 61, 145, 0.1);
+.ruangRow:active {
+  transform: scale(0.985);
 }
 
-.cardLeft {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-}
-
-.iconBox {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: #eaf3ff;
-  border: 1px solid #c6e0fd;
-  color: #1d6fd8;
+.squircle {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-[data-theme="dark"] .iconBox {
-  background: rgba(37, 119, 227, 0.22);
-  border-color: rgba(96, 165, 250, 0.35);
+.squircleBlue {
+  background: #e1effe;
+  color: #1577ea;
+}
+
+.squirclePurple {
+  background: #f0ebfe;
+  color: #7c3aed;
+}
+
+[data-theme="dark"] .squircleBlue {
+  background: rgba(21, 119, 234, 0.24);
   color: #60a5fa;
 }
 
-.textGroup {
+[data-theme="dark"] .squirclePurple {
+  background: rgba(124, 58, 237, 0.24);
+  color: #a78bfa;
+}
+
+.rowBody {
+  flex: 1;
+  min-width: 0;
+  min-height: 64px;
+  background: #ffffff;
+  border: 1px solid rgba(226, 235, 246, 0.85);
+  border-radius: 18px;
+  padding: 14px 18px;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 6px 20px rgba(15, 35, 65, 0.04);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
-.cardTitle {
-  font-size: 1.08rem;
+.ruangRow:hover .rowBody {
+  border-color: #bdd8f9;
+  box-shadow: 0 10px 26px rgba(15, 35, 65, 0.075);
+}
+
+[data-theme="dark"] .rowBody {
+  background: rgba(15, 27, 50, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.rowText {
+  min-width: 0;
+}
+
+.rowHeading {
+  font-size: 0.98rem;
   font-weight: 800;
-  color: #0d264c;
-  margin: 0 0 4px;
-  letter-spacing: -0.015em;
+  color: #0a192f;
+  margin: 0 0 3px;
+  letter-spacing: -0.01em;
 }
 
-[data-theme="dark"] .cardTitle {
+[data-theme="dark"] .rowHeading {
   color: #f8fbff;
 }
 
-.cardDesc {
-  font-size: 0.83rem;
-  color: #556882;
-  margin: 0 0 12px;
-  line-height: 1.45;
+.rowSub {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-[data-theme="dark"] .cardDesc {
+[data-theme="dark"] .rowSub {
   color: #94a3b8;
 }
 
-.actionPill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 14px;
-  border-radius: 8px;
-  background: #e8f2ff;
-  border: 1px solid #c3ddfc;
-  color: #1762c6;
-  font-size: 0.8rem;
-  font-weight: 700;
-  transition: background-color var(--transition-fast), color var(--transition-fast);
+.rowArrow {
+  color: #334155;
+  flex-shrink: 0;
+  transition: transform 150ms ease, color 150ms ease;
 }
 
-[data-theme="dark"] .actionPill {
-  background: rgba(37, 119, 227, 0.24);
-  border-color: rgba(96, 165, 250, 0.35);
-  color: #60a5fa;
+.ruangRow:hover .rowArrow {
+  color: #1577ea;
+  transform: translateX(2px);
 }
 
-.quickCard:hover .actionPill {
-  background: #1d6fd8;
-  border-color: #1d6fd8;
-  color: #ffffff;
-}
-
-.artworkWrap {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 155px;
-  height: 115px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-[data-theme="dark"] .artworkWrap {
-  opacity: 0.35;
+[data-theme="dark"] .rowArrow {
+  color: #94a3b8;
 }
 
 /* ==========================================================================
@@ -149,133 +153,45 @@
     padding-bottom: 14px;
   }
 
-  .desktopQuickLinks {
-    display: none;
-  }
-
-  .mobileRuang {
-    display: block;
+  .ruangContainer {
     width: calc(100% - 40px);
-    margin: 0 auto;
   }
 
-  .mobileRuangTitle {
-    font-family: var(--font-heading, -apple-system, BlinkMacSystemFont, system-ui, sans-serif);
+  .ruangTitle {
     font-size: 1.24rem;
-    font-weight: 850;
-    letter-spacing: -0.02em;
-    color: #0a192f;
     margin: 0 0 12px;
   }
 
-  [data-theme="dark"] .mobileRuangTitle {
-    color: #f8fbff;
-  }
-
-  .mobileRuangList {
+  .ruangList {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 
-  .mobileRuangRow {
-    display: flex;
-    align-items: center;
+  .ruangRow {
     gap: 10px;
-    text-decoration: none;
-    color: inherit;
-    transition: transform 150ms ease;
   }
 
-  .mobileRuangRow:active {
-    transform: scale(0.985);
-  }
-
-  .mobileSquircle {
+  .squircle {
     width: 52px;
     height: 52px;
     border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
   }
 
-  .squircleBlue {
-    background: #e1effe;
-    color: #1577ea;
-  }
-
-  .squirclePurple {
-    background: #f0ebfe;
-    color: #7c3aed;
-  }
-
-  [data-theme="dark"] .squircleBlue {
-    background: rgba(21, 119, 234, 0.24);
-    color: #60a5fa;
-  }
-
-  [data-theme="dark"] .squirclePurple {
-    background: rgba(124, 58, 237, 0.24);
-    color: #a78bfa;
-  }
-
-  .mobileRowBody {
-    flex: 1;
-    min-width: 0;
+  .rowBody {
     min-height: 52px;
-    background: #ffffff;
-    border: 1px solid rgba(226, 235, 246, 0.85);
     border-radius: 16px;
     padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     gap: 10px;
     box-shadow: 0 4px 16px rgba(15, 35, 65, 0.035);
   }
 
-  [data-theme="dark"] .mobileRowBody {
-    background: rgba(15, 27, 50, 0.9);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .mobileRowText {
-    min-width: 0;
-  }
-
-  .mobileRowHeading {
+  .rowHeading {
     font-size: 0.88rem;
-    font-weight: 800;
-    color: #0a192f;
     margin: 0 0 2px;
-    letter-spacing: -0.01em;
   }
 
-  [data-theme="dark"] .mobileRowHeading {
-    color: #f8fbff;
-  }
-
-  .mobileRowSub {
+  .rowSub {
     font-size: 0.74rem;
-    color: #64748b;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  [data-theme="dark"] .mobileRowSub {
-    color: #94a3b8;
-  }
-
-  .mobileRowArrow {
-    color: #334155;
-    flex-shrink: 0;
-  }
-
-  [data-theme="dark"] .mobileRowArrow {
-    color: #94a3b8;
   }
 }

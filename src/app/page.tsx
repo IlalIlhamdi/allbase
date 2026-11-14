@@ -1,8 +1,7 @@
 import Hero from "@/components/home/Hero";
-import About from "@/components/home/About";
-import Projects from "@/components/home/Projects";
 import Tools from "@/components/home/Tools";
-import Skills from "@/components/home/Skills";
+import Projects from "@/components/home/Projects";
+import About from "@/components/home/About";
 import Certifications from "@/components/home/Certifications";
 import Contact from "@/components/home/Contact";
 import styles from "./page.module.css";
@@ -14,7 +13,7 @@ export default function HomePage() {
       {
         "@type": "WebSite",
         "name": "ALLBASE",
-        "alternateName": "ALLBASE HUB",
+        "alternateName": "ALLBASE",
         "url": "https://allbase.my.id",
       },
       {
@@ -40,17 +39,14 @@ export default function HomePage() {
       <div className={styles.slotHero}>
         <Hero />
       </div>
-      <div className={styles.slotAbout}>
-        <About />
+      <div className={styles.slotTools}>
+        <Tools />
       </div>
       <div className={styles.slotProjects}>
         <Projects />
       </div>
-      <div className={styles.slotTools}>
-        <Tools />
-      </div>
-      <div className={styles.slotSkills}>
-        <Skills />
+      <div className={styles.slotAbout}>
+        <About />
       </div>
       <div className={styles.slotQuickLinks}>
         <Certifications />
